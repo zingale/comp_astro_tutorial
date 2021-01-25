@@ -24,11 +24,11 @@ jobs:
 
     - name: Build book TOC file 
       run: |
-        jupyter-book toc ./content
+        jupyter-book toc ./comp_astro_tutorial
 
     - name: Build book HTML 
       run: |
-        jupyter-book build ./content
+        jupyter-book build ./comp_astro_tutorial
 
     - name: Push _build/html to gh-pages
       run: |
