@@ -1,0 +1,7 @@
+# Table of content
+# Learn more at https://jupyterbook.org/customize/toc.html
+#
+- file: intro
+- file: floating-point
+  sections:
+    - file: numerical_error
