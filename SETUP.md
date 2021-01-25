@@ -6,6 +6,7 @@
 jupyter-book create comp_astro_tutorial
 ```
 
+and put it under github contol (on main)
 
 # create the empty `gh-pages` branch:
 
@@ -21,3 +22,10 @@ git add .
 git commit -a -m "First pages commit"
 git push origin gh-pages
 ```
+
+# Create the build gitub action.
+
+I based it off of:
+https://github.com/choldgraf/deploy_configurations/blob/master/.github/workflows/main.yml
+
+
