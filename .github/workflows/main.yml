@@ -24,11 +24,11 @@ jobs:
 
     - name: Build book TOC file 
       run: |
-        jupyter-book toc ./comp_astro_tutorial
+        jupyter-book toc .
 
     - name: Build book HTML 
       run: |
-        jupyter-book build ./comp_astro_tutorial
+        jupyter-book build .
 
     - name: Push _build/html to gh-pages
       run: |
@@ -37,6 +37,6 @@ jobs:
         git config --global user.name "$GITHUB_ACTOR"
         git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
 
-        ghp-import ./content/_build/html -f -p -n
+        ghp-import ./_build/html -f -p -n
       
 
