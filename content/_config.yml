@@ -35,3 +35,7 @@ html:
 sphinx:
   config:
     html_show_copyright: false
+
+launch_buttons:
+   binderhub_url: "https://mybinder.org"
+   colab_url: "https://colab.research.google.com"
