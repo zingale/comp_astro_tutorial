@@ -1,6 +1,6 @@
 name: Publish JupyterBook to GitHub Pages
 
-on: 
+on:
   push: # trigger build only when push to main
     branches:
       - main
@@ -14,7 +14,7 @@ jobs:
     - name: Set up Python
       uses: actions/setup-python@v1
       with:
-        python-version: 3.7 
+        python-version: 3.7
     - name: Install Python dependencies
       run: |
         sudo apt-get install python3-pip
@@ -22,13 +22,13 @@ jobs:
         pip install ghp-import
         PATH="${PATH}:${HOME}/.local/bin"
 
-    - name: Build book TOC file 
+    - name: Build book TOC file
       run: |
-        jupyter-book toc .
+        jupyter-book toc ./content
 
-    - name: Build book HTML 
+    - name: Build book HTML
       run: |
-        jupyter-book build .
+        jupyter-book build ./content
 
     - name: Push _build/html to gh-pages
       run: |
@@ -37,6 +37,4 @@ jobs:
         git config --global user.name "$GITHUB_ACTOR"
         git remote set-url origin "https://$GITHUB_ACTOR:${{ secrets.GITHUB_TOKEN }}@github.com/$GITHUB_REPOSITORY"
 
-        ghp-import ./_build/html -f -p -n
-      
-
+        ghp-import ./content/_build/html -f -p -n
