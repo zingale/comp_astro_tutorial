@@ -1,9 +1,9 @@
 name: Publish JupyterBook to GitHub Pages
 
 on: 
-  push: # trigger build only when push to master
+  push: # trigger build only when push to main
     branches:
-      - master
+      - main
 
 jobs:
   build:
