@@ -4,3 +4,4 @@
 4. advection
 5. poisson
 6. fluids
+7. projects
