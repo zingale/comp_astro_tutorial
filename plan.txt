@@ -1,0 +1,6 @@
+1. errors
+2. differentiation and integration
+3. ODEs
+4. advection
+5. poisson
+6. fluids
