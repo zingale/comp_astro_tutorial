@@ -8,3 +8,5 @@
 - file: 02-diff-int
   sections:
     - file: 02-differentiation
+    - file: 02-integration
+
