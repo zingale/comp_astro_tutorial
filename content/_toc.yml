@@ -6,3 +6,5 @@
   sections:
     - file: 01-numerical_error
 - file: 02-diff-int
+  sections:
+    - file: 02-differentiation
