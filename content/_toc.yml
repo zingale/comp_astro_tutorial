@@ -9,6 +9,7 @@
   sections:
     - file: 02-differentiation
     - file: 02-integration
+    - file: 02-exercises
 - file: 03-root-finding
 - file: 04-ODEs
 
