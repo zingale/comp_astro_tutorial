@@ -12,4 +12,8 @@
     - file: 02-exercises
 - file: 03-root-finding
 - file: 04-ODEs
+    - file: 04-ODES-partI
+    - file: 04-ODES-partII
+    - file: 04-exercies
+
 
