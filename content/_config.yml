@@ -3,7 +3,7 @@
 
 title: Tutorial on Computational Astrophysics
 author: <a href="https://zingale.github.io">Michael Zingale</a>
-#logo: logo.png
+logo: rt_small.png
 copyright: "2021"
 
 # Force re-execution of notebooks on each build.
