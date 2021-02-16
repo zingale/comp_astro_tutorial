@@ -43,16 +43,16 @@ def start():
              horizontalalignment="left", color="r", fontsize=20)
 
     plt.plot([t0,t0], [0, y0], ls=":", color="0.5")
-    plt.text(t0, 0, r"$t^n$",
+    plt.text(t0, -0.05, r"$t^n$",
              verticalalignment="top", horizontalalignment="center",
              fontsize=20)
 
 
     # illustrate where t^n+1 is
     plt.plot([t0+dt,t0+dt], [0, y0], ls=":", color="0.5")
-    plt.text(t0+dt, 0, r"$t^{n+1}$",
-               verticalalignment="top", horizontalalignment="center",
-               fontsize=20)
+    plt.text(t0+dt, -0.05, r"$t^{n+1}$",
+             verticalalignment="top", horizontalalignment="center",
+             fontsize=20)
 
 
 start()
@@ -62,6 +62,7 @@ plt.axis("off")
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
+plt.ylim(-0.05, 1.2)
 
 plt.tight_layout()
 plt.savefig("rk2_initial.png", bbox_inches='tight', dpi=150)
@@ -83,6 +84,7 @@ plt.text(tEuler[1]+0.015, yEuler[1], r"$y^{n+1}$",
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
+plt.ylim(-0.05, 1.2)
 
 plt.tight_layout()
 plt.savefig("rk2_Euler.png", bbox_inches='tight', dpi=150)
@@ -118,6 +120,7 @@ plt.plot(tSlope, ySlope, label=r"slope at $y^\star$", color="g", ls="--")
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
+plt.ylim(-0.05, 1.2)
 
 plt.tight_layout()
 plt.savefig("rk2_halfEuler.png", bbox_inches='tight', dpi=150)
@@ -136,6 +139,7 @@ plt.text(tFinal[1]+0.015, yRK2[1], r"$y^{n+1}$", color="r", fontsize=20)
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
+plt.ylim(-0.05, 1.2)
 
 plt.tight_layout()
 plt.savefig("rk2_final.png", bbox_inches='tight', dpi=150)

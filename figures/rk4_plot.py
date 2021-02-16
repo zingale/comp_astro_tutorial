@@ -41,20 +41,20 @@ def start():
 
     # label the current point
     plt.scatter([t0], [y0], color="r")
-    plt.text(t0, y0+0.03, r"$y^n$", 
-               horizontalalignment="left", color="r", fontsize=20) 
+    plt.text(t0, y0+0.03, r"$y^n$",
+             horizontalalignment="left", color="r", fontsize=20)
 
     plt.plot([t0,t0], [0, y0], ls=":", color="0.5")
-    plt.text(t0, -0.05, r"$t^n$", 
-               verticalalignment="top", horizontalalignment="center",
-               fontsize=20)
+    plt.text(t0, -0.05, r"$t^n$",
+             verticalalignment="top", horizontalalignment="center",
+             fontsize=20)
 
 
     # illustrate where t^n+1 is
     plt.plot([t0+dt,t0+dt], [0, y0], ls=":", color="0.5")
-    plt.text(t0+dt, -0.05, r"$t^{n+1}$", 
-               verticalalignment="top", horizontalalignment="center",
-               fontsize=20)
+    plt.text(t0+dt, -0.05, r"$t^{n+1}$",
+             verticalalignment="top", horizontalalignment="center",
+             fontsize=20)
 
 
 start()
@@ -66,7 +66,7 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_initial.png", bbox_inches='tight', dpi=150)
 
 
@@ -78,9 +78,9 @@ yEuler = y0 + slope*(tEuler-t0)
 plt.plot(tEuler, yEuler, label="Euler step")
 
 plt.scatter([tEuler[1]], [yEuler[1]], color="r")
-plt.text(tEuler[1]+0.015, yEuler[1], r"$y^{n+1}$", 
-           horizontalalignment="left", verticalalignment="center",
-           color="r", fontsize=20) 
+plt.text(tEuler[1]+0.015, yEuler[1], r"$y^{n+1}$",
+         horizontalalignment="left", verticalalignment="center",
+         color="r", fontsize=20)
 
 
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
@@ -88,12 +88,12 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_Euler.png", bbox_inches='tight', dpi=150)
 
 
 #----------------------------------------------------------------------------
-# show k1 slope 
+# show k1 slope
 plt.clf()
 start()
 
@@ -111,7 +111,7 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_k1.png", bbox_inches='tight', dpi=150)
 
 
@@ -131,7 +131,7 @@ tSlope = np.linspace(t0+0.5*dt-0.2*dt, t0+0.5*dt+0.2*dt, 2)
 ySlope = ytmp + k2*(tSlope - (t0 + 0.5*dt))
 
 plt.plot(tSlope, ySlope, color="g", ls="--", lw=2)
-plt.text(t0+0.5*dt-0.1*dt, ytmp, r"$k_2$", color="g", 
+plt.text(t0+0.5*dt-0.1*dt, ytmp, r"$k_2$", color="g",
          verticalalignment="top", fontsize="large")
 
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
@@ -139,7 +139,7 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_k2.png", bbox_inches='tight', dpi=150)
 
 
@@ -155,7 +155,7 @@ plt.scatter(t0+0.5*dt, ytmp, color="c")
 # draw slope there
 ySlope = ytmp + k3*(tSlope - (t0 + 0.5*dt))
 plt.plot(tSlope, ySlope, color="g", ls="--", lw=2)
-plt.text(t0+0.5*dt+0.05*dt, ytmp, r"$k_3$", color="g", 
+plt.text(t0+0.5*dt+0.05*dt, ytmp, r"$k_3$", color="g",
          verticalalignment="bottom", fontsize="large")
 
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
@@ -163,7 +163,7 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_k3.png", bbox_inches='tight', dpi=150)
 
 
@@ -180,7 +180,7 @@ plt.scatter(t0+dt, ytmp, color="0.5")
 tSlope2 = np.linspace(t0+dt-0.2*dt, t0+dt+0.2*dt, 2)
 ySlope = ytmp + k4*(tSlope2 - (t0 + dt))
 plt.plot(tSlope2, ySlope, color="g", ls="--", lw=2)
-plt.text(t0+dt-0.1*dt, ytmp, r"$k_4$", color="g", 
+plt.text(t0+dt-0.1*dt, ytmp, r"$k_4$", color="g",
          verticalalignment="top", fontsize="large")
 
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
@@ -188,7 +188,7 @@ leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_k4.png", bbox_inches='tight', dpi=150)
 
 
@@ -201,14 +201,13 @@ ynew = y0 + (dt/6.0)*(k1 + 2.0*k2 + 2.0*k3 + k4)
 # draw full RK-4 step
 plt.plot([t0, t0+dt], [y0, ynew], color="r", label="full 4th-order RK step")
 plt.scatter(t0+dt, ynew, color="r")
-plt.text(t0+1.05*dt, ynew+0.015, r"$y^{n+1}$", color = "r", 
-           horizontalalignment="left", fontsize=20)
+plt.text(t0+1.05*dt, ynew+0.015, r"$y^{n+1}$", color = "r",
+         horizontalalignment="left", fontsize=20)
 
 leg = plt.legend(frameon=False, fontsize="medium", loc=1)
 
 plt.xlim(t0-0.25*dt, t0+1.5*dt)
 plt.ylim(-0.05, 1.2)
 
-#plt.tight_layout()
+plt.tight_layout()
 plt.savefig("rk4_final.png", bbox_inches='tight', dpi=150)
-
