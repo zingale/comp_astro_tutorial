@@ -25,5 +25,7 @@
   sections:
     - file: 05-advection/05-advection-partI
     - file: 05-advection/05-advection-partII
+    - file: 05-advection/05-advection-partIII
+
 
 
