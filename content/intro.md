@@ -2,11 +2,14 @@ Introduction
 ============
 
 This is a collection of notebooks on computational (astro)physics,
-delivered for an undergraduate tutorial in Spring 2021.
+used to introduce finite-volume methods for solving the Euler equations.
 
-The goal for the semester is to work our way up to understanding how to
-do computational hydrodynamics using grid (finite-volume) techniques.
+Starting at the beginning, these notebooks introduce numerical methods
+for derivatives, intergration, rooting finding, and ODEs, focusing
+on the parts that we will need to solve the equations of hydrodynamics.
 
-The notebooks start with the basics that will be needed to understand
-how to work with discretized data and represent derivatives in space
-and integration in time.
+The next set of notebooks begin with the linear advection equation
+and then onto the compressible Euler equations.
+
+By clicking on the "rocket ship" icon, you can launch the notebook
+in google colab or binder to run it in the cloud.
