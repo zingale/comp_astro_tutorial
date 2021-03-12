@@ -27,5 +27,7 @@
     - file: 05-advection/05-advection-partII
     - file: 05-advection/05-advection-partIII
 
+- file: 06-burgers/06-burgers
+
 
 
