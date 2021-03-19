@@ -29,8 +29,8 @@
 
 - file: 06-burgers/06-burgers
   sections:
-    - file: 06-advection/06-burgers-methods
-    - file: 06-advection/06-exercises
+    - file: 06-burgers/06-burgers-methods
+    - file: 06-burgers/06-exercises
 
 - file: 07-euler/euler.md
 
