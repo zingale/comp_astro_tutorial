@@ -33,5 +33,8 @@
     - file: 06-burgers/06-exercises
 
 - file: 07-euler/euler.md
+  sections:
+    - file: 07-euler/07-euler-riemann
+    - file: 07-euler/07-euler-solver
 
 
