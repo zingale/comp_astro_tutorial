@@ -163,11 +163,47 @@ characteristic system still tells us a lot.
 > characteristic quantity away from the discontinuity at their
 > characteristic speed.
 
+![Riemann waves carrying a jump](riemann-waves-jump.png)
+
 The corresponding jump in the primitive variable is then just 
 
 $$d{\bf q} = {\bf L}^{-1} d{\bf w} = {\bf R}d{\bf w}$$
 
+Looking at the right eigenvectors, we see that all primitive variables
+jump across the left and right waves, but only density jumps across
+the middle wave.
 
+* The middle wave is called a *contact discontinuity*.  Since the velocity
+  does not jump across it, there can be no compression or expansion, so
+  shocks and rarefactions are not allowed.
+  
+* The left and right waves can be either a shock or a rarefaction.
 
+Here's an example of the solution of a Riemann problem for the Euler equations.
+The state on the left is initialized to:
+
+$$
+\begin{align*}
+\rho_L &= 1 \\
+u_L &= 0 \\
+p_L &= 1 \\
+\end{align*}
+$$
+
+and on the right:
+
+$$
+\begin{align*}
+\rho_L &= 1/8 \\
+u_L &= 0 \\
+p_L &= 1/10 \\
+\end{align*}
+$$
+
+![Riemann Sod problem](riemann-sod.png)
+
+The jumps we see are just as the right eigenvectors indicated.  Only
+the density jumps across the middle wave.  The left wave is a shock
+and the right wave is a rarefaction.
 
 
