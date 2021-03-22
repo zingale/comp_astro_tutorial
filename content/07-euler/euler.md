@@ -15,7 +15,7 @@ $$
 Here, $E$ is the specific total energy which is related to the specific internal energy as:
 
 $$
-\rho E = \rho e + \frac{1}{2} u^2
+\rho E = \rho e + \frac{1}{2} \rho u^2
 $$
 
 and the system is closed by an equation of state:
@@ -194,9 +194,9 @@ and on the right:
 
 $$
 \begin{align*}
-\rho_L &= 1/8 \\
-u_L &= 0 \\
-p_L &= 1/10 \\
+\rho_R &= 1/8 \\
+u_R &= 0 \\
+p_R &= 1/10 \\
 \end{align*}
 $$
 
