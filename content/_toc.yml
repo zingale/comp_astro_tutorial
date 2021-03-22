@@ -34,6 +34,7 @@
 
 - file: 07-euler/euler.md
   sections:
+    - file: 07-euler/07-euler-eigen
     - file: 07-euler/07-euler-riemann
     - file: 07-euler/07-euler-solver
 
