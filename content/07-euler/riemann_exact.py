@@ -40,6 +40,9 @@ class RiemannProblem:
         self.ustar = None
         self.pstar = None
 
+    def __str__(self):
+        return f"pstar = {self.pstar}, ustar = {self.ustar}"
+
     def u_hugoniot(self, p, side):
         """define the Hugoniot curve, u(p)."""
 
