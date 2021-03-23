@@ -36,6 +36,7 @@
   sections:
     - file: 07-euler/07-euler-eigen
     - file: 07-euler/07-euler-riemann
+    - file: 07-euler/07-euler-riemann-sampling
     - file: 07-euler/07-euler-solver
 
 
