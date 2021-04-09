@@ -156,6 +156,5 @@ You can compute the flux and the $p \partial u/\partial x$ term using the soluti
 Code this up and run the Sod problem -- how well do you agree with the exact solution?
 
 
-## Few-body integration and energy
 
 
