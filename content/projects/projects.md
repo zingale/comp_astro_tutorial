@@ -96,24 +96,40 @@ considerably simplifies things compared to that original paper.
 
 The basic idea is as follows:
 
-1. In each zone, we construct a parabola, given by CW Eq. 1.4.
+1. In each zone, we construct a parabola, given by CW Eq. 1.4.  The CW
+   paper uses $\xi$ as the space coordinate, were $\xi_i$ is a zone
+   center and $\xi_{i-1/2}$ and $\xi_{i+1/2}$ are the left and right
+   edges.  It also allows for a non-uniformly spaced grid.
+
+   The parabola has the form:
+
+   $$a(\xi) = a_{L,i} + x [ \Delta a_i + a_{6,i) (1 - x) ]$$
+
+   where
+
+   $$x = \frac{\xi - \xi_{i-1/2}}{\Delta x}$$
+
+   and
+   
+   $$\Delta a_i = a_{R,i} - a_{L,i}$$
+
+   $$a_{6,i} = 6 \left [ a_i - \frac{1}{2} (a_{L,i} + a_{R,i}) \right ]$$ 
+
    Eqs. 1.5 through 1.10 give the method for computing the 3
    coefficients of the parabola for each cell as well as limiting them
    so as to not introduce any new extrema.
-   
+
 2. For the method-of-lines scheme we are using, we simply evaluate the parabola
-   on each interface and this gives that's zones edge state.  The CW paper uses
-   $\xi$ as the space coordinate, were $\xi_i$ is a zone center and $\xi_{i-1/2}$
-   and $\xi_{i+1/2}$ are the left and right edges.  For a parabolic reconstruction
+   on each interface and this gives that's zones edge state.    For a parabolic reconstruction
    in zone $i$ of the form $a(\xi)$, our interface states are:
-   
+
    $$a_{i-1/2,R} = a(\xi_{i-1/2})$$
    $$a_{i+1/2,L} = a(\xi_{i+1/2})$$
 
 3. Compare the solution you get with PPM for the Sod problem to the
    one we got with piecewise linear slopes.
 
-## 5. 2-d advection
+## 5. Two-dimensional advection
 
 The linear advection equation in 2-d is:
 
@@ -125,11 +141,11 @@ $$\frac{\partial a}{\partial t} + \frac{\partial (u a)}{\partial x} + \frac{\par
 
 We can develop a finite volume method by defining an average as:
 
-$$\langle a \rangle_{i,j} = \frac{1}{\Delta x}{\Delta y} \int_{x_{i-1/2}}^{x_{i+1/2}} \int_{y_{j-1/2}}^{y_{j+1/2}} a(x, y) dx dy$$
+$$\langle a \rangle_{i,j} = \frac{1}{\Delta x \Delta y} \int_{x_{i-1/2}}^{x_{i+1/2}} \int_{y_{j-1/2}}^{y_{j+1/2}} a(x, y) dx dy$$
 
 and our final update would look like (dropping the $\langle \rangle$):
 
-$$\frac{\partial}{\partial t} a_{i,j} = - \frac{1}{\Delta x} (F^{(x)}_{i+1/2,j} - F^{(x)}_{i-1/2,j}) - \frac{1}{\Delta x} (F^{(y)}_{i,j+1/2} - F^{(y)}_{i,j-1/2})$$
+$$\frac{\partial}{\partial t} a_{i,j} = - \frac{1}{\Delta x} (F^{(x)}_{i+1/2,j} - F^{(x)}_{i-1/2,j}) - \frac{1}{\Delta y} (F^{(y)}_{i,j+1/2} - F^{(y)}_{i,j-1/2})$$
 
 where $F^{(x)} = u a$ and $F^{(y)} = v a$.
 
@@ -142,6 +158,10 @@ problem in that direction.
 
 Code up a 2-d advection solver and test it on advecting a Gaussian.
 
+The timestep limiter needs to be adapted a bit, and is now:
+
+$$\Delta t = C \left [ \frac{u}{\Delta x} + \frac{v}{\Delta y} \right ]^{-1}$$
+
 
 ## 6. Non-conservation?
 
@@ -151,10 +171,22 @@ equation:
 
 $$\frac{\partial (\rho e)}{\partial t} + \frac{\partial (\rho e u)}{\partial x} + p \frac{\partial u}{\partial x} = 0$$
 
-You can compute the flux and the $p \partial u/\partial x$ term using the solution from the Riemann problem.
+You can compute the flux and the $p \partial u/\partial x$ term using the solution from the Riemann problem as:
+
+$$p_i \frac{u_{i+1/2} - u_{i-1/2}}{\Delta x}$$
+
+Note that the pressure here is the cell-center (average) pressure.
 
 Code this up and run the Sod problem -- how well do you agree with the exact solution?
 
 
 
+## 7. Explore pyro
 
+Look at the python hydro solver pyro:
+
+https://pyro2.readthedocs.io/en/latest/
+
+Look at the list of solvers and work on running it and exploring the
+problems that it provides.  Then add a problem to the solver, based on
+something you find in the literature.
