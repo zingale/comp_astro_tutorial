@@ -2,7 +2,7 @@
 
 Here are some project ideas to help reinforce this material.
 
-## Measuring convergence of our Euler solver
+## 1. Measuring convergence of our Euler solver
 
 We measured convergence with advection by comparing to the exact
 solution.  But what about the case when we don't know the exact
@@ -40,7 +40,7 @@ optional: try a different integrator, like 4th order Runge-Kutta and
 see how that changes the convergence.
 
 
-## Sedov explosion and spherical symmetry
+## 2. Sedov explosion and spherical symmetry
 
 We solved the equations of hydrodynamics in 1-d Cartesian coordinates.
 If we want to model something that is spherically symmetric, we can do
@@ -74,7 +74,7 @@ To solve this with the method-of-lines approach, we would need to:
    and run and compare to the exact solution.
 
 
-## HLL Riemann solver
+## 3. HLL Riemann solver
 
 We solved the Riemann problem for the Euler equations exactly, but
 many times in practice we use approximate Riemann solvers.  The HLL
@@ -83,7 +83,7 @@ the Euler code and compare the solutions you get with it to those with
 the exact solver.
 
 
-## Piecewise parabolic reconstruction for advection
+## 4. Piecewise parabolic reconstruction for advection
 
 In class, we considered piecewise constant and piecewise linear
 reconstruction with advection.  The next step is piecewise parabolic
@@ -113,7 +113,7 @@ The basic idea is as follows:
 3. Compare the solution you get with PPM for the Sod problem to the
    one we got with piecewise linear slopes.
 
-## 2-d advection
+## 5. 2-d advection
 
 The linear advection equation in 2-d is:
 
@@ -143,7 +143,7 @@ problem in that direction.
 Code up a 2-d advection solver and test it on advecting a Gaussian.
 
 
-## Non-conservation?
+## 6. Non-conservation?
 
 Suppose instead of solving the total energy equation in the Euler
 solver, you instead discretized the internal energy evolution
