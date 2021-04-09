@@ -103,7 +103,7 @@ The basic idea is as follows:
 
    The parabola has the form:
 
-   $$a(\xi) = a_{L,i} + x [ \Delta a_i + a_{6,i) (1 - x) ]$$
+   $$a(\xi) = a_{L,i} + x [ \Delta a_i + a_{6,i} (1 - x) ]$$
 
    where
 
@@ -124,6 +124,7 @@ The basic idea is as follows:
    in zone $i$ of the form $a(\xi)$, our interface states are:
 
    $$a_{i-1/2,R} = a(\xi_{i-1/2})$$
+   
    $$a_{i+1/2,L} = a(\xi_{i+1/2})$$
 
 3. Compare the solution you get with PPM for the Sod problem to the
@@ -185,7 +186,7 @@ Code this up and run the Sod problem -- how well do you agree with the exact sol
 
 Look at the python hydro solver pyro:
 
-https://pyro2.readthedocs.io/en/latest/
+[https://pyro2.readthedocs.io/en/latest/](https://pyro2.readthedocs.io/en/latest/)
 
 Look at the list of solvers and work on running it and exploring the
 problems that it provides.  Then add a problem to the solver, based on
