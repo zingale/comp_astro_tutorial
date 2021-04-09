@@ -96,7 +96,7 @@ considerably simplifies things compared to that original paper.
 
 Here's an example of piecewise parabolic reconstruction of data in each zone:
 
-![ppm](piecewise_parabolic.png)
+![ppm](piecewise-parabolic.png)
 
 As with piecewise linear, we will need to limit the parabola to
 prevent overshoots.  The dotted lines in the figure above are
