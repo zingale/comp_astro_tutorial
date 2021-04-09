@@ -94,6 +94,14 @@ reconstruction.  This is described originally here:
 We want to try this with our method-of-lines integration scheme, which
 considerably simplifies things compared to that original paper.
 
+Here's an example of piecewise parabolic reconstruction of data in each zone:
+
+![ppm](piecewise_parabolic.png)
+
+As with piecewise linear, we will need to limit the parabola to
+prevent overshoots.  The dotted lines in the figure above are
+unlimited parabolas and the solid lines are the limited parabola.
+
 The basic idea is as follows:
 
 1. In each zone, we construct a parabola, given by CW Eq. 1.4.  The CW
@@ -110,10 +118,10 @@ The basic idea is as follows:
    $$x = \frac{\xi - \xi_{i-1/2}}{\Delta x}$$
 
    and
-   
+
    $$\Delta a_i = a_{R,i} - a_{L,i}$$
 
-   $$a_{6,i} = 6 \left [ a_i - \frac{1}{2} (a_{L,i} + a_{R,i}) \right ]$$ 
+   $$a_{6,i} = 6 \left [ a_i - \frac{1}{2} (a_{L,i} + a_{R,i}) \right ]$$
 
    Eqs. 1.5 through 1.10 give the method for computing the 3
    coefficients of the parabola for each cell as well as limiting them
@@ -124,7 +132,7 @@ The basic idea is as follows:
    in zone $i$ of the form $a(\xi)$, our interface states are:
 
    $$a_{i-1/2,R} = a(\xi_{i-1/2})$$
-   
+
    $$a_{i+1/2,L} = a(\xi_{i+1/2})$$
 
 3. Compare the solution you get with PPM for the Sod problem to the
