@@ -28,7 +28,7 @@ convergence.  Here's how it works.
    * Coarsen the problem with 2N zones down to N zones by averaging
      2 fine zones into a single coarse zone.
 
-   * Compute the :math:`L_2` norm of the difference between the
+   * Compute the $L_2$norm of the difference between the
      coarsened 2N zone run and the N zone run.
 
    * Do this for all pairs, so for the 4 runs proposed above, you'd
