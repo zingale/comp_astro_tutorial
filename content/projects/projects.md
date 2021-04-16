@@ -180,13 +180,35 @@ The basic idea is as follows:
    coefficients of the parabola for each cell as well as limiting them
    so as to not introduce any new extrema.
 
+   For a uniform grid, the steps are:
+
+   * Find the first guess at the interface values:
+
+     $$a_{i+1/2} = \frac{1}{2} (a_i + a_{i+1}) + \frac{1}{6} (\delta a_i - \delta a_{i+1} )$$
+
+     with
+
+
+     $$\delta a_i = \left \{ \begin{array}{cc}
+              \min\left (\frac{1}{2}|a_{i+1} - a_{i-1}|, 2 |a_{i+1} - a_i|, 2 |a_i - a_{i-1}|\right )
+               \mathrm{sign}(a_{i+1} - a_{i-1})  & \mbox{if}\ (a_{i+1} - a_i)(a_i - a_{i-1}) > 0  \\
+              0 & \mbox{otherwise} \end{array} \right .$$
+
+    * Next, for zone $i$, set the left and right interface values using the above:
+    
+      $$a_{L,i} = a_{i-1/2}$$
+      $$a_{R,i} = a_{i+1/2}$$
+      
+    * Now limit the data according to Eq. 1.10.
+
+
 2. For the method-of-lines scheme we are using, we simply evaluate the parabola
    on each interface and this gives that's zones edge state.    For a parabolic reconstruction
    in zone $i$ of the form $a(\xi)$, our interface states are:
 
-   $$a_{i-1/2,R} = a(\xi_{i-1/2})$$
+   $$a_{i-1/2,R} = a(\xi_{i-1/2}) = a_{L,i}$$
 
-   $$a_{i+1/2,L} = a(\xi_{i+1/2})$$
+   $$a_{i+1/2,L} = a(\xi_{i+1/2}) = a_{R,i}$$
 
 3. Compare the solution you get with PPM for the Sod problem to the
    one we got with piecewise linear slopes.
