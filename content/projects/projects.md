@@ -27,14 +27,14 @@ convergence.  Here's how it works.
 
    * Coarsen the problem with 2N zones down to N zones by averaging
      2 fine zones into a single coarse zone.  This is shown below:
-     
+
      ![restriction from a fine grid to a coarse grid](fvrestrict.png)
 
      Here, $\phi^f$ is a variable on the finer resolution grid and
      $\phi^c$ is the variable on the coarse grid.  We see that $\phi^c_j$
      has two fine grid counterparts: $\phi^f_i$ and $\phi^f_{i+1}$, so
      we would do:
-     
+
      $$\phi^c_j = \frac{1}{2} \left ( \phi^f_i + \phi^f_{i+1} \right )$$
 
    * Compute the $L_2$norm of the difference between the
@@ -84,9 +84,9 @@ To solve this with the method-of-lines approach, we would need to:
    (e.g., same distance away from the boundary).  But for the
    velocity, we switch the sign, such that the velocity moving toward
    the interface will go to zero.
-   
+
    This would look like:
-   
+
    $$\begin{align*}
       \rho_{\mathrm{lo}-1} &= \rho_{\mathrm{lo}} \\
       \rho_{\mathrm{lo}-2} &= \rho_{\mathrm{lo+1}} \\
@@ -103,9 +103,29 @@ To solve this with the method-of-lines approach, we would need to:
    \end{align*}$$
 
 
-3. Setup the Sedov problem (a lot of sources can give the initial conditions)
+3. Setup the Sedov problem (I give a common implementation of the initial conditions below)
    and run and compare to the exact solution.
 
+   For the initial conditions, it is common to specify an initial radius of the explosion, $r_0$.  Then
+   initialize the pressure as:
+
+   $$p = \left \{ \begin{array}{cc} p_\mathrm{expl} & r \le r_0 \\
+                                    p_\mathrm{ambient} & r > r_0 \end{array} \right . $$
+
+   with
+
+   $$p_\mathrm{ambient} = 10^{-5}$$
+
+   and
+
+   $$p_\mathrm{expl} = (\gamma -1) \frac{E_\mathrm{Sedov}}{4 \pi r_0^2}$$
+
+   and $E_\mathrm{Sedov} = 1$ is the initial explosion energy.  This
+   formulation finds the pressure corresponding to spreading that
+   energy over a sphere of radius $r_0$.  The initial velocity is set to 0.0.
+
+   Here's the analytic solution for a case with $\gamma = 1$:
+   {download}`spherical_sedov.txt`
 
 ## 3. HLL Riemann solver
 
