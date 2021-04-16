@@ -148,7 +148,7 @@ The basic idea is as follows:
 
    where
 
-   $$x = \frac{\xi - \xi_{i-1/2}}{\Delta x}$$
+   $$x = \frac{\xi - \xi_{i-1/2}}{\Delta \xi}$$
 
    and
 
