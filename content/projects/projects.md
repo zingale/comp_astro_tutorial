@@ -26,7 +26,16 @@ convergence.  Here's how it works.
    zones as follows:
 
    * Coarsen the problem with 2N zones down to N zones by averaging
-     2 fine zones into a single coarse zone.
+     2 fine zones into a single coarse zone.  This is shown below:
+     
+     ![restriction from a fine grid to a coarse grid](fvrestrict.png)
+
+     Here, $\phi^f$ is a variable on the finer resolution grid and
+     $\phi^c$ is the variable on the coarse grid.  We see that $\phi^c_j$
+     has two fine grid counterparts: $\phi^f_i$ and $\phi^f_{i+1}$, so
+     we would do:
+     
+     $$\phi^c_j = \frac{1}{2} \left ( \phi^f_i + \phi^f_{i+1} \right )$$
 
    * Compute the $L_2$norm of the difference between the
      coarsened 2N zone run and the N zone run.
@@ -66,11 +75,35 @@ can be compared to.
 
 To solve this with the method-of-lines approach, we would need to:
 
-1. add the $r$ terms to the conservative update.
+1. Add the $r$ terms to the conservative update.
 
-2. implement reflecting boundary conditions at the origin of coordinates.
+2. Implement reflecting boundary conditions at the origin of coordinates.
 
-3. setup the Sedov problem (a lot of sources can give the initial conditions)
+   Reflecting boundary conditions mean that each zone in the ghost
+   cells has the same value as the corresponding zone in the interior
+   (e.g., same distance away from the boundary).  But for the
+   velocity, we switch the sign, such that the velocity moving toward
+   the interface will go to zero.
+   
+   This would look like:
+   
+   $$\begin{align*}
+      \rho_{\mathrm{lo}-1} &= \rho_{\mathrm{lo}} \\
+      \rho_{\mathrm{lo}-2} &= \rho_{\mathrm{lo+1}} \\
+   \end{align*}$$
+
+   $$\begin{align*}
+      (\rho u)_{\mathrm{lo}-1} &= -(\rho u)_{\mathrm{lo}} \\
+      (\rho u)_{\mathrm{lo}-2} &= -(\rho u)_{\mathrm{lo+1}} \\
+   \end{align*}$$
+
+   $$\begin{align*}
+      (\rho E)_{\mathrm{lo}-1} &= (\rho E)_{\mathrm{lo}} \\
+      (\rho E)_{\mathrm{lo}-2} &= (\rho E)_{\mathrm{lo+1}} \\
+   \end{align*}$$
+
+
+3. Setup the Sedov problem (a lot of sources can give the initial conditions)
    and run and compare to the exact solution.
 
 
@@ -161,7 +194,11 @@ where $F^{(x)} = u a$ and $F^{(y)} = v a$.
 This can be solved using the same method-of-lines technique we did in
 1-d, but now we need to create and manage a 2-d grid, fill ghost cells
 on both $x$ and $y$ boundaries, and compute fluxes through both $x$
-and $y$ interfaces.  But the flux computations are done simply by
+and $y$ interfaces.
+
+![an example 2-d grid showing the interface states](2dgrid.png)
+
+The flux computations are done simply by
 reconstructing in one coordinate direction and solving the Riemann
 problem in that direction.
 

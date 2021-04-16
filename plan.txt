@@ -1,9 +1,0 @@
-1. errors
-2. differentiation and integration
-3. roots
-4. ODEs
-5. advection
-6. Burgers
-7. poisson
-8. fluids
-9. projects
