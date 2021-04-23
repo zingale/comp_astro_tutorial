@@ -118,7 +118,7 @@ To solve this with the method-of-lines approach, we would need to:
 
    and
 
-   $$p_\mathrm{expl} = (\gamma -1) \frac{E_\mathrm{Sedov}}{4 \pi r_0^2}$$
+   $$p_\mathrm{expl} = (\gamma -1) \frac{E_\mathrm{Sedov}}{(4/3) \pi r_0^3}$$
 
    and $E_\mathrm{Sedov} = 1$ is the initial explosion energy.  This
    formulation finds the pressure corresponding to spreading that
