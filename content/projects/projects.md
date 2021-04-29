@@ -201,6 +201,8 @@ The basic idea is as follows:
       
     * Now limit the data according to Eq. 1.10.
 
+   Note: you'll need 3 ghost cells in order to compute all of the information needed.
+
 
 2. For the method-of-lines scheme we are using, we simply evaluate the parabola
    on each interface and this gives that's zones edge state.    For a parabolic reconstruction
