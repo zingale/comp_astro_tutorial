@@ -128,7 +128,7 @@ To solve this with the method-of-lines approach, we would need to:
 
    The density everywhere is 1.0.
     
-   Here's the analytic solution for a case with $\gamma = 1$:
+   Here's the analytic solution for a case with $\gamma = 1.4$:
    {download}`spherical_sedov.txt`
 
 ## 3. HLL Riemann solver
