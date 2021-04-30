@@ -122,8 +122,12 @@ To solve this with the method-of-lines approach, we would need to:
 
    and $E_\mathrm{Sedov} = 1$ is the initial explosion energy.  This
    formulation finds the pressure corresponding to spreading that
-   energy over a sphere of radius $r_0$.  The initial velocity is set to 0.0.
+   energy over a sphere of radius $r_0$.
+   
+   The initial velocity is set to 0.0.
 
+   The density everywhere is 1.0.
+    
    Here's the analytic solution for a case with $\gamma = 1$:
    {download}`spherical_sedov.txt`
 
