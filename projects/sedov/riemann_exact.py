@@ -43,7 +43,7 @@ class RiemannProblem:
     def __str__(self):
         return f"pstar = {self.pstar}, ustar = {self.ustar}"
 
-    def u_hugoniot(self, p, side):
+    def u_hugoniot(self, p, side, shock=False):
         """define the Hugoniot curve, u(p)."""
 
         if side == "left":
@@ -55,15 +55,22 @@ class RiemannProblem:
 
         c = np.sqrt(self.gamma*state.p/state.rho)
 
-        if p < state.p:
-            # rarefaction
-            u = state.u + s*(2.0*c/(self.gamma-1.0))* \
-                (1.0 - (p/state.p)**((self.gamma-1.0)/(2.0*self.gamma)))
-        else:
+        if shock:
             # shock
             beta = (self.gamma+1.0)/(self.gamma-1.0)
             u = state.u + s*(2.0*c/np.sqrt(2.0*self.gamma*(self.gamma-1.0)))* \
                 (1.0 - p/state.p)/np.sqrt(1.0 + beta*p/state.p)
+
+        else:
+            if p < state.p:
+                # rarefaction
+                u = state.u + s*(2.0*c/(self.gamma-1.0))* \
+                    (1.0 - (p/state.p)**((self.gamma-1.0)/(2.0*self.gamma)))
+            else:
+                # shock
+                beta = (self.gamma+1.0)/(self.gamma-1.0)
+                u = state.u + s*(2.0*c/np.sqrt(2.0*self.gamma*(self.gamma-1.0)))* \
+                    (1.0 - p/state.p)/np.sqrt(1.0 + beta*p/state.p)
 
         return u
 
@@ -76,6 +83,14 @@ class RiemannProblem:
             p_min, p_max)
         self.ustar = self.u_hugoniot(self.pstar, "left")
 
+    def find_2shock_star_state(self, p_min=0.001, p_max=1000.0):
+        """ root find the Hugoniot curve to find ustar, pstar """
+
+        # we need to root-find on
+        self.pstar = optimize.brentq(
+            lambda p: self.u_hugoniot(p, "left", shock=True) - self.u_hugoniot(p, "right", shock=True),
+            p_min, p_max)
+        self.ustar = self.u_hugoniot(self.pstar, "left", shock=True)
 
     def shock_solution(self, sgn, state):
         """return the interface solution considering a shock"""
