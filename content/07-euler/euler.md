@@ -22,6 +22,12 @@ and the system is closed by an equation of state:
 
 $$p = p(\rho, e)$$
 
+A common equation of state is a *gamma-law EOS*:
+
+$$ p = \rho e (\gamma - 1)$$
+
+where $\gamma$ is a constant.  For an ideal gas, $\gamma$ is the ratio of specific heats, $c_p / c_v$.
+
 
 ## Conservative form
 
@@ -69,6 +75,10 @@ where $\Gamma_1 = d \log p/d \log \rho |_s$
 or compactly:
 
 $${\bf q}_t + {\bf A}({\bf q}) {\bf q}_x = 0$$
+
+Another useful quantity is the speed of sound, defined as:
+
+$$c = \sqrt{\frac{\Gamma_1 p}{\rho}}$$
 
 
 ## Characteristic form
