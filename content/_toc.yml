@@ -3,35 +3,36 @@ root: intro
 parts:
   - caption: Basics
     chapters:
-    - file: 01-floating-point/01-floating-point
+    - file: basics/floating-point/floating-point
       sections:
-      - file: 01-floating-point/01-numerical_error
-    - file: 02-diff-int/02-diff-int
+      - file: basics/floating-point/numerical_error
+    - file: basics/diff-int/diff-int
       sections:
-      - file: 02-diff-int/02-differentiation
-      - file: 02-diff-int/02-integration
-      - file: 02-diff-int/02-exercises
-    - file: 03-roots/03-root-finding
-    - file: 04-ODEs/04-ODEs
+      - file: basics/diff-int/differentiation
+      - file: basics/diff-int/integration
+      - file: basics/diff-int/exercises
+    - file: basics/roots/root-finding
+    - file: basics/ODEs/ODEs
       sections:
-      - file: 04-ODEs/04-ODEs-partI
-      - file: 04-ODEs/04-ODEs-partII
-      - file: 04-ODEs/04-exercises
+      - file: basics/ODEs/ODEs-partI
+      - file: basics/ODEs/ODEs-partII
+      - file: basics/ODEs/exercises
+
   - caption: Advection and Hydrodynamics
     chapters:
-    - file: 05-advection/05-advection
+    - file: advection_euler/advection/advection
       sections:
-      - file: 05-advection/05-advection-partI
-      - file: 05-advection/05-advection-partII
-      - file: 05-advection/05-advection-partIII
-    - file: 06-burgers/06-burgers
+      - file: advection_euler/advection/advection-partI
+      - file: advection_euler/advection/advection-partII
+      - file: advection_euler/advection/advection-partIII
+    - file: advection_euler/burgers/burgers
       sections:
-      - file: 06-burgers/06-burgers-methods
-      - file: 06-burgers/06-exercises
-    - file: 07-euler/euler
+      - file: advection_euler/burgers/burgers-methods
+      - file: advection_euler/burgers/exercises
+    - file: advection_euler/euler/euler
       sections:
-      - file: 07-euler/07-euler-eigen
-      - file: 07-euler/07-euler-riemann
-      - file: 07-euler/07-euler-riemann-sampling
-      - file: 07-euler/07-euler-solver
+      - file: advection_euler/euler/euler-eigen
+      - file: advection_euler/euler/euler-riemann
+      - file: advection_euler/euler/euler-riemann-sampling
+      - file: advection_euler/euler/euler-solver
     - file: projects/projects.md
