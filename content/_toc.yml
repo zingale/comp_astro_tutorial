@@ -36,3 +36,12 @@ parts:
       - file: advection_euler/euler/euler-riemann-sampling
       - file: advection_euler/euler/euler-solver
     - file: advection_euler/projects/projects.md
+
+  - caption: Integrating Stiff Reaction Networks
+    chapters:
+    - file: reaction_networks/intro
+      sections:
+      - file: reaction_networks/ODEs-implicit
+      - file: reaction_networks/ODEs-implicit-systems
+
+    
