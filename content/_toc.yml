@@ -35,4 +35,4 @@ parts:
       - file: advection_euler/euler/euler-riemann
       - file: advection_euler/euler/euler-riemann-sampling
       - file: advection_euler/euler/euler-solver
-    - file: projects/projects.md
+    - file: advection_euler/projects/projects.md
