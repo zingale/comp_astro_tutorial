@@ -39,7 +39,8 @@ parts:
 
   - caption: Integrating Stiff Reaction Networks
     chapters:
-    - file: reaction_networks/intro
+    - file: reaction_networks/reactions
+    - file: reaction_networks/stiff-ODEs
       sections:
       - file: reaction_networks/ODEs-implicit
       - file: reaction_networks/ODEs-implicit-systems
