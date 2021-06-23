@@ -48,7 +48,16 @@ and we gain 1 nuclei $A$ for each $B + C$ reaction.  The factor of 1/2 in the fi
 term is because when $A$ reacts with itself, we don't want to double count the number
 of pairs.
 
-We can instead write this in terms of molar or mass fractions:
+We can instead write this in terms of molar or mass fractions.  Mass fractions are defined
+as the mass of the species relative to the total mass of all species in a volume, or
+
+$$X_k = \frac{\rho_k}{\rho}$$
+
+These have the property
+
+$$\sum_k X_k = 1$$
+
+Molar fractions are scaled by the atomic weight:
 
 $$Y_k = \frac{X_k}{A_k}$$
 
