@@ -35,12 +35,12 @@ we would describe these as a set of ODEs for each species.  In terms
 of number density, it is straightforward to write down:
 
 \begin{eqnarray*}
-\frac{dn(A)}{dt} &=& - 2 \frac{1}{2} n(A)^2 \langle \sigma v \rangle_{AA}
-                     + n(B) n(C) \langle \sigma v \rangle_{BC} \\
-\frac{dn(B)}{dt} &=& \frac{1}{2} n(A)^2 \langle \sigma v \rangle_{AA} 
-                     - n(B) n(C) \langle \sigma v \rangle_{BC} \\
-\frac{dn(C)}{dt} &=& - n(B) n(C) \langle \sigma v \rangle_{BC} \\
-\frac{dn(D)}{dt} &=&  n(B) n(C) \langle \sigma v \rangle_{BC} \\
+\frac{dn(A)}{dt} &=& - 2 \frac{1}{2} n_A^2 \langle \sigma v \rangle_{AA}
+                     + n_B n_C \langle \sigma v \rangle_{BC} \\
+\frac{dn(B)}{dt} &=& \frac{1}{2} n_A^2 \langle \sigma v \rangle_{AA} 
+                     - n_B n_C \langle \sigma v \rangle_{BC} \\
+\frac{dn(C)}{dt} &=& - n_B n_C \langle \sigma v \rangle_{BC} \\
+\frac{dn(D)}{dt} &=&  n_B n_C \langle \sigma v \rangle_{BC} \\
 \end{eqnarray*}
 
 Here the first equation says that we lose 2 nuclei $A$ for each $A + A$ reaction
