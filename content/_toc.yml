@@ -45,5 +45,4 @@ parts:
       - file: reaction_networks/ODEs-implicit
       - file: reaction_networks/ODEs-implicit-systems
       - file: reaction_networks/ODEs-implicit-nonlinear-systems
-
-    
+    - file: reaction_networks/integration-example

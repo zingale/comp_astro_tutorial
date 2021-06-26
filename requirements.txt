@@ -3,3 +3,4 @@ matplotlib
 numpy
 scipy
 sympy
+git+https://github.com/pynucastro/pynucastro@cno_example
