@@ -1,0 +1,997 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Implicit Methods for Systems of ODEs &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <link href="../_static/css/theme.css" rel="stylesheet" />
+  <link href="../_static/css/index.c5995385ac14fb8791e8eb36b4908be2.css" rel="stylesheet" />
+
+    
+  <link rel="stylesheet"
+    href="../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    
+      
+
+    
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/sphinx-book-theme.acff12b8f9c144ce68a297486a2fa670.css" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-main.c949a650a448cc0ae9fd3441c0e17fb0.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/panels-variables.06eb56fa6e07937060861dad626602ad.css" />
+    
+  <link rel="preload" as="script" href="../_static/js/index.1c5a1a01449ed65a7b51.js">
+
+    <script id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script src="../_static/jquery.js"></script>
+    <script src="../_static/underscore.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/togglebutton.js"></script>
+    <script src="../_static/clipboard.min.js"></script>
+    <script src="../_static/copybutton.js"></script>
+    <script >var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../_static/sphinx-book-theme.12a9622fbb08dcb3a2a40b2c02b83a57.js"></script>
+    <script async="async" src="https://unpkg.com/thebelab@latest/lib/index.js"></script>
+    <script >
+        const thebe_selector = ".thebe"
+        const thebe_selector_input = "pre"
+        const thebe_selector_output = ".output"
+    </script>
+    <script async="async" src="../_static/sphinx-thebe.js"></script>
+    <script async="async" src="https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.7/latest.js?config=TeX-AMS-MML_HTMLorMML"></script>
+    <script type="text/x-mathjax-config">MathJax.Hub.Config({"tex2jax": {"inlineMath": [["\\(", "\\)"]], "displayMath": [["\\[", "\\]"]], "processRefs": false, "processEnvironments": false}})</script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="Implicit Methods and Nonlinear Systems" href="ODEs-implicit-nonlinear-systems.html" />
+    <link rel="prev" title="Implicit Methods for ODEs" href="ODEs-implicit.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="en" />
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="80">
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<div class="col-12 col-md-3 bd-sidebar site-navigation show" id="site-navigation">
+    
+        <div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../index.html">
+      
+      <img src="../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main navigation">
+    <div class="bd-toc-item active">
+        <ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro.html">
+   Introduction
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../basics/floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../basics/diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../basics/roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../basics/ODEs/ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/ODEs/ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/ODEs/ODEs-partII.html">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../basics/ODEs/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection_euler/advection/advection.html">
+   Linear Advection Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/advection/advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/advection/advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/advection/advection-partIII.html">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection_euler/burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection_euler/euler/euler.html">
+   Euler Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/euler/euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/euler/euler-riemann.html">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/euler/euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection_euler/euler/euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../advection_euler/projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p class="caption">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav> <!-- To handle the deprecated key -->
+
+<div class="navbar_extra_footer">
+  Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+</div>
+
+</div>
+
+
+          
+
+
+          
+<main class="col py-md-3 pl-md-4 bd-content overflow-auto" role="main">
+    
+    <div class="topbar container-xl fixed-top">
+    <div class="topbar-contents row">
+        <div class="col-12 col-md-3 bd-topbar-whitespace site-navigation show"></div>
+        <div class="col pl-md-4 topbar-main">
+            
+            <button id="navbar-toggler" class="navbar-toggler ml-0" type="button" data-toggle="collapse"
+                data-toggle="tooltip" data-placement="bottom" data-target=".site-navigation" aria-controls="navbar-menu"
+                aria-expanded="true" aria-label="Toggle navigation" aria-controls="site-navigation"
+                title="Toggle navigation" data-toggle="tooltip" data-placement="left">
+                <i class="fas fa-bars"></i>
+                <i class="fas fa-arrow-left"></i>
+                <i class="fas fa-arrow-up"></i>
+            </button>
+            
+            
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn" aria-label="Download this page"><i
+            class="fas fa-download"></i></button>
+
+    <div class="dropdown-buttons">
+        <!-- ipynb file if we had a myst markdown file -->
+        
+        <!-- Download raw file -->
+        <a class="dropdown-buttons" href="../_sources/reaction_networks/ODEs-implicit-systems.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Download source file" data-toggle="tooltip"
+                data-placement="left">.ipynb</button></a>
+        <!-- Download PDF via print -->
+        <button type="button" id="download-print" class="btn btn-secondary topbarbtn" title="Print to PDF"
+            onClick="window.print()" data-toggle="tooltip" data-placement="left">.pdf</button>
+    </div>
+</div>
+
+            <!-- Source interaction buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Connect with source repository"><i class="fab fa-github"></i></button>
+    <div class="dropdown-buttons sourcebuttons">
+        <a class="repository-button"
+            href="https://github.com/zingale/comp_astro_tutorial"><button type="button" class="btn btn-secondary topbarbtn"
+                data-toggle="tooltip" data-placement="left" title="Source repository"><i
+                    class="fab fa-github"></i>repository</button></a>
+        <a class="issues-button"
+            href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Freaction_networks/ODEs-implicit-systems.html&body=Your%20issue%20content%20here."><button
+                type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip" data-placement="left"
+                title="Open an issue"><i class="fas fa-lightbulb"></i>open issue</button></a>
+        
+    </div>
+</div>
+
+            <!-- Full screen (wrap in <a> to have style consistency -->
+
+<a class="full-screen-button"><button type="button" class="btn btn-secondary topbarbtn" data-toggle="tooltip"
+        data-placement="bottom" onclick="toggleFullScreen()" aria-label="Fullscreen mode"
+        title="Fullscreen mode"><i
+            class="fas fa-expand"></i></button></a>
+
+            <!-- Launch buttons -->
+
+<div class="dropdown-buttons-trigger">
+    <button id="dropdown-buttons-trigger" class="btn btn-secondary topbarbtn"
+        aria-label="Launch interactive content"><i class="fas fa-rocket"></i></button>
+    <div class="dropdown-buttons">
+        
+        <a class="binder-button" href="https://mybinder.org/v2/gh/zingale/comp_astro_tutorial/main?urlpath=tree/content/reaction_networks/ODEs-implicit-systems.ipynb"><button type="button"
+                class="btn btn-secondary topbarbtn" title="Launch Binder" data-toggle="tooltip"
+                data-placement="left"><img class="binder-button-logo"
+                    src="../_static/images/logo_binder.svg"
+                    alt="Interact on binder">Binder</button></a>
+        
+        
+        
+        <a class="colab-button" href="https://colab.research.google.com/github/zingale/comp_astro_tutorial/blob/main/content/reaction_networks/ODEs-implicit-systems.ipynb"><button type="button" class="btn btn-secondary topbarbtn"
+                title="Launch Colab" data-toggle="tooltip" data-placement="left"><img class="colab-button-logo"
+                    src="../_static/images/logo_colab.png"
+                    alt="Interact on Colab">Colab</button></a>
+        
+        
+    </div>
+</div>
+
+        </div>
+
+        <!-- Table of contents -->
+        <div class="d-none d-md-block col-md-2 bd-toc show">
+            
+            <div class="tocsection onthispage pt-5 pb-3">
+                <i class="fas fa-list"></i> Contents
+            </div>
+            <nav id="bd-toc-nav">
+                <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#linear-system">
+   Linear system
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#discretization">
+     Discretization
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#runge-kutta">
+     Runge-Kutta
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#adaptive-timestepping-with-rk4">
+     Adaptive Timestepping with RK4
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#definition-of-stiffness">
+     Definition of Stiffness
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+            </nav>
+        </div>
+    </div>
+</div>
+    <div id="main-content" class="row">
+        <div class="col-12 col-md-9 pl-md-3 pr-md-0">
+        
+              <div>
+                
+  <div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="implicit-methods-for-systems-of-odes">
+<h1>Implicit Methods for Systems of ODEs<a class="headerlink" href="#implicit-methods-for-systems-of-odes" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="linear-system">
+<h2>Linear system<a class="headerlink" href="#linear-system" title="Permalink to this headline">¶</a></h2>
+<p>Consider the linear system of ODEs</p>
+<div class="math notranslate nohighlight">
+\[\frac{dX_A}{dt} = -\alpha X_A + \beta X_B\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{dX_B}{dt} = \alpha X_A - \beta X_B\]</div>
+<p>(system from F. Timmes summer school notes).  We will take:</p>
+<div class="math notranslate nohighlight">
+\[X_A + X_B = 1\]</div>
+<p>In matrix form, we can write this as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}\frac{d}{dt} \left ( \begin{array}{c}
+                                 X_A \\ X_B 
+                                \end{array} \right ) 
+    = \left ( \begin{array}{rr} 
+                           -\alpha &amp; \beta \\
+                            \alpha  &amp; -\beta 
+                 \end{array}   \right )
+ \left ( \begin{array}{c}
+                                 X_A \\ X_B 
+                                \end{array} \right )\end{split}\]</div>
+<p>or</p>
+<div class="math notranslate nohighlight">
+\[\dot{\bf Y} = {\bf A}{\bf Y}\]</div>
+<p>with <span class="math notranslate nohighlight">\({\bf Y} = (X_A \,\, X_B)^\intercal\)</span>.</p>
+<p>This has the solution (for <span class="math notranslate nohighlight">\(X_B(0) = 0\)</span>):</p>
+<div class="math notranslate nohighlight">
+\[\frac{X_B}{X_A} = \frac{e^{(\alpha + \beta)t} - 1}
+    {\tfrac{\beta}{\alpha} e^{(\alpha + \beta)t } + 1}\]</div>
+<p>and the long-time behavior:</p>
+<div class="math notranslate nohighlight">
+\[X_B/X_A \rightarrow \alpha/\beta\]</div>
+<p>The characteristic timescale for change is</p>
+<div class="math notranslate nohighlight">
+\[\tau_\mathrm{ref} = \frac{1}{\alpha + \beta}\]</div>
+<p>and we see that</p>
+<div class="math notranslate nohighlight">
+\[d(X_A + X_B)/dt = 0\]</div>
+<p>We’ll use <span class="math notranslate nohighlight">\(\alpha = 10^9\)</span> and <span class="math notranslate nohighlight">\(\beta = 10^{-5}\)</span> .</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span> <span class="o">=</span> <span class="mf">1.e9</span>
+<span class="n">beta</span> <span class="o">=</span> <span class="mf">1.e-5</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="section" id="discretization">
+<h3>Discretization<a class="headerlink" href="#discretization" title="Permalink to this headline">¶</a></h3>
+<p>The backward-Euler discretization of this system is:</p>
+<div class="math notranslate nohighlight">
+\[{\bf Y}^{n+1} = {\bf Y}^{n} + \tau {\bf A} {\bf Y}^{n+1}\]</div>
+<p>We can write this as a linear system:</p>
+<div class="math notranslate nohighlight">
+\[({\bf I} - \tau {\bf A}) {\bf Y}^{n+1} = {\bf Y}^n\]</div>
+<p>This is in the traditional “<span class="math notranslate nohighlight">\({\bf A}{\bf x} = {\bf b}\)</span>” form of a linear system.</p>
+<p>First we need the righthand side function:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; RHS of the system for explicit methods &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="o">-</span><span class="n">alpha</span><span class="o">*</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">],</span>
+                     <span class="o">+</span><span class="n">alpha</span><span class="o">*</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="n">beta</span><span class="o">*</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">]])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll also provide a funtion to compute the matrix <span class="math notranslate nohighlight">\({\bf A}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">ode_mat</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot; return the matrix A in the linear system of ODEs &quot;&quot;&quot;</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([[</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span>  <span class="n">beta</span><span class="p">],</span>
+                     <span class="p">[</span><span class="o">+</span><span class="n">alpha</span><span class="p">,</span> <span class="o">-</span><span class="n">beta</span><span class="p">]],</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can implement backward Euler.  We’ll use the NumPy linear algebra <code class="docutils literal notranslate"><span class="pre">solve</span></code> method to solve the linear system.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">integrate</span><span class="p">(</span><span class="n">Y_0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; perform a backward-Euler integration &quot;&quot;&quot;</span>
+
+    <span class="n">XA</span> <span class="o">=</span> <span class="n">Y_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">XB</span> <span class="o">=</span> <span class="n">Y_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tout</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+    <span class="n">xaout</span> <span class="o">=</span> <span class="p">[</span><span class="n">XA</span><span class="p">]</span>
+    <span class="n">xbout</span> <span class="o">=</span> <span class="p">[</span><span class="n">XB</span><span class="p">]</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">:</span>
+
+        <span class="c1"># create the matrix</span>
+        <span class="n">J</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">eye</span><span class="p">(</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">dt</span><span class="o">*</span><span class="n">ode_mat</span><span class="p">()</span>
+
+        <span class="n">b</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">])</span>
+
+        <span class="c1"># solve the linear system J x = b</span>
+        <span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linalg</span><span class="o">.</span><span class="n">solve</span><span class="p">(</span><span class="n">J</span><span class="p">,</span> <span class="n">b</span><span class="p">)</span>
+
+        <span class="n">XA</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+        <span class="n">XB</span> <span class="o">=</span> <span class="n">x</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span>
+
+        <span class="n">tout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">xaout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">XA</span><span class="p">)</span>
+        <span class="n">xbout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">XB</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tout</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xaout</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xbout</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>For comparison, we’ll use the analytic solution for the ratio of the species.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">analytic</span><span class="p">(</span><span class="n">t</span><span class="p">):</span>
+    <span class="k">return</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">alpha</span><span class="o">+</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">-</span> <span class="mf">1.0</span><span class="p">)</span> <span class="o">/</span> <span class="p">((</span><span class="n">beta</span><span class="o">/</span><span class="n">alpha</span><span class="p">)</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">((</span><span class="n">alpha</span><span class="o">+</span><span class="n">beta</span><span class="p">)</span><span class="o">*</span><span class="n">t</span><span class="p">)</span> <span class="o">+</span> <span class="mf">1.0</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Finally, a plotting function.  We’ll scale the ratio by the asymptotic limit at long times so the ratio should approach 1.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+    <span class="n">frac_equil</span> <span class="o">=</span> <span class="n">alpha</span> <span class="o">/</span> <span class="n">beta</span>
+    
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    
+    <span class="n">tfine</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="n">t</span><span class="o">.</span><span class="n">max</span><span class="p">(),</span> <span class="mi">1000</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">tfine</span><span class="p">,</span> <span class="n">analytic</span><span class="p">(</span><span class="n">tfine</span><span class="p">)</span> <span class="o">/</span> <span class="n">frac_equil</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="p">(</span><span class="n">XB</span><span class="o">/</span><span class="n">XA</span><span class="p">)</span> <span class="o">/</span> <span class="n">frac_equil</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;t&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$(X_B/X_A) / (\alpha/\beta)$&quot;</span><span class="p">)</span>
+    
+    <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">frameon</span><span class="o">=</span><span class="kc">False</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll work in terms of the characteristic timescale</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">tref</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="p">(</span><span class="n">alpha</span> <span class="o">+</span> <span class="n">beta</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s integrate using a <span class="math notranslate nohighlight">\(\tau &lt; \tau_\mathrm{ref}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">tref</span><span class="p">,</span> <span class="mi">200</span><span class="o">*</span><span class="n">tref</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ODEs-implicit-systems_18_0.png" src="../_images/ODEs-implicit-systems_18_0.png" />
+</div>
+</div>
+<p>Now let’s see what happens with <span class="math notranslate nohighlight">\(\tau &gt; \tau_\mathrm{ref}\)</span></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span> <span class="o">=</span> <span class="n">integrate</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="mi">5</span><span class="o">*</span><span class="n">tref</span><span class="p">,</span> <span class="mi">200</span><span class="o">*</span><span class="n">tref</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ODEs-implicit-systems_20_0.png" src="../_images/ODEs-implicit-systems_20_0.png" />
+</div>
+</div>
+<p>We see that we don’t get the position of the rise correct for either size timestep, but we do get the asymptotic limit correct at the end.</p>
+</div>
+<div class="section" id="runge-kutta">
+<h3>Runge-Kutta<a class="headerlink" href="#runge-kutta" title="Permalink to this headline">¶</a></h3>
+<p>We can compare the above solution with one from using Runge-Kutta</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">rk4_integrate</span><span class="p">(</span><span class="n">Y_0</span><span class="p">,</span> <span class="n">dt</span><span class="p">,</span> <span class="n">tmax</span><span class="p">):</span>
+    <span class="sd">&quot;&quot;&quot; 4th-order explicit Runge-Kutta for comparison &quot;&quot;&quot;</span>
+
+    <span class="n">XA</span> <span class="o">=</span> <span class="n">Y_0</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span>
+    <span class="n">XB</span> <span class="o">=</span> <span class="n">Y_0</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">tout</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.0</span><span class="p">]</span>
+    <span class="n">xaout</span> <span class="o">=</span> <span class="p">[</span><span class="n">XA</span><span class="p">]</span>
+    <span class="n">xbout</span> <span class="o">=</span> <span class="p">[</span><span class="n">XB</span><span class="p">]</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">:</span>
+
+        <span class="n">k1</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">]))</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">XA</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">k1</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">XB</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">k1</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+        <span class="n">k3</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">XA</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">XB</span><span class="o">+</span><span class="mf">0.5</span><span class="o">*</span><span class="n">dt</span><span class="o">*</span><span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+        <span class="n">k4</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="o">+</span><span class="n">dt</span><span class="p">,</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">XA</span><span class="o">+</span><span class="n">dt</span><span class="o">*</span><span class="n">k3</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">XB</span><span class="o">+</span><span class="n">dt</span><span class="o">*</span><span class="n">k3</span><span class="p">[</span><span class="mi">1</span><span class="p">]]))</span>
+
+        <span class="n">XA</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">k1</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">k2</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">k3</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">+</span> <span class="n">k4</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">XB</span> <span class="o">+=</span> <span class="p">(</span><span class="n">dt</span><span class="o">/</span><span class="mf">6.0</span><span class="p">)</span><span class="o">*</span><span class="p">(</span><span class="n">k1</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">k2</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">2.0</span><span class="o">*</span><span class="n">k3</span><span class="p">[</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="n">k4</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span>
+
+        <span class="n">tout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="n">xaout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">XA</span><span class="p">)</span>
+        <span class="n">xbout</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">XB</span><span class="p">)</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">tout</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xaout</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">asarray</span><span class="p">(</span><span class="n">xbout</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll look at the <span class="math notranslate nohighlight">\(\tau &gt; \tau_\mathrm{ref}\)</span> case:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span> <span class="o">=</span> <span class="n">rk4_integrate</span><span class="p">([</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span> <span class="mf">5.0</span><span class="o">*</span><span class="n">tref</span><span class="p">,</span> <span class="mi">200</span><span class="o">*</span><span class="n">tref</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">XA</span><span class="p">,</span> <span class="n">XB</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ODEs-implicit-systems_25_0.png" src="../_images/ODEs-implicit-systems_25_0.png" />
+</div>
+</div>
+<p>Now we see that we completely miss the correct long time solution.</p>
+</div>
+<div class="section" id="adaptive-timestepping-with-rk4">
+<h3>Adaptive Timestepping with RK4<a class="headerlink" href="#adaptive-timestepping-with-rk4" title="Permalink to this headline">¶</a></h3>
+<p>Just to be fair to RK4, let’s use the implementation in scipy, which can adapt the timestep as needed.  Let’s see how many steps it can solve this in.</p>
+<p>Integrators with adaptive stepping change the timestep to ensure that the local error in integration is below a specified tolerance.  We usually specify both a relative, <code class="docutils literal notranslate"><span class="pre">rtol</span></code>, and absolute, <code class="docutils literal notranslate"><span class="pre">atol</span></code>, tolerance and they are combined as:</p>
+<div class="math notranslate nohighlight">
+\[\epsilon_k = {\tt rtol} | y_k | + {\tt atol}\]</div>
+<p>where <span class="math notranslate nohighlight">\(y_k\)</span> is the <span class="math notranslate nohighlight">\(k\)</span>-th member of the integration state.</p>
+<p>For this problem, we need to make sure that <code class="docutils literal notranslate"><span class="pre">atol</span></code> is really small, or we miss the correct solution.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">scipy.integrate</span> <span class="kn">import</span> <span class="n">solve_ivp</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span> <span class="o">=</span> <span class="n">solve_ivp</span><span class="p">(</span><span class="n">rhs</span><span class="p">,</span> <span class="p">[</span><span class="mi">0</span><span class="p">,</span> <span class="mi">200</span><span class="o">*</span><span class="n">tref</span><span class="p">],</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">],</span>
+                <span class="n">method</span><span class="o">=</span><span class="s2">&quot;RK45&quot;</span><span class="p">,</span> <span class="n">dense_output</span><span class="o">=</span><span class="kc">True</span><span class="p">,</span>
+                <span class="n">rtol</span><span class="o">=</span><span class="mf">1.e-4</span><span class="p">,</span> <span class="n">atol</span><span class="o">=</span><span class="mf">1.e-17</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="nb">print</span><span class="p">(</span><span class="n">sol</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>  message: &#39;The solver successfully reached the end of the integration interval.&#39;
+     nfev: 734
+     njev: 0
+      nlu: 0
+      sol: &lt;scipy.integrate._ivp.common.OdeSolution object at 0x7f3bdb3f86d0&gt;
+   status: 0
+  success: True
+        t: array([0.00000000e+00, 1.00000000e-22, 1.10000000e-21, 1.11000000e-20,
+       1.11100000e-19, 1.11110000e-18, 1.11111000e-17, 1.11111100e-16,
+       1.11111110e-15, 1.11111111e-14, 1.11111111e-13, 1.11111111e-12,
+       1.11111111e-11, 1.11111111e-10, 5.13094363e-10, 1.02783760e-09,
+       1.60109918e-09, 2.19768815e-09, 2.80121521e-09, 3.40662809e-09,
+       4.01255936e-09, 4.61863718e-09, 5.22475731e-09, 5.83088981e-09,
+       6.43702596e-09, 7.04316319e-09, 7.64930074e-09, 8.25543839e-09,
+       8.86157606e-09, 9.46771375e-09, 1.00738514e-08, 1.06799891e-08,
+       1.12861268e-08, 1.18922645e-08, 1.24984022e-08, 1.31045399e-08,
+       1.37106776e-08, 1.43168153e-08, 1.49229529e-08, 1.55290907e-08,
+       1.61352284e-08, 1.67413661e-08, 1.73475040e-08, 1.79536419e-08,
+       1.85597800e-08, 1.91659185e-08, 1.97720577e-08, 2.03781981e-08,
+       2.09843408e-08, 2.15904877e-08, 2.21966423e-08, 2.28028109e-08,
+       2.34090053e-08, 2.40152470e-08, 2.46215753e-08, 2.52280622e-08,
+       2.58348397e-08, 2.64421485e-08, 2.70504273e-08, 2.76604710e-08,
+       2.82737063e-08, 2.88926516e-08, 2.95216306e-08, 3.01677421e-08,
+       3.08419186e-08, 3.15597239e-08, 3.23417387e-08, 3.32140878e-08,
+       3.42102521e-08, 3.53753799e-08, 3.67747086e-08, 3.85094970e-08,
+       4.07473751e-08, 4.37673075e-08, 4.78189733e-08, 5.11023422e-08,
+       5.43857111e-08, 5.78617828e-08, 6.13334381e-08, 6.45989959e-08,
+       6.77073296e-08, 7.08889354e-08, 7.43005618e-08, 7.78317418e-08,
+       8.12099007e-08, 8.43493972e-08, 8.74457652e-08, 9.07476020e-08,
+       9.42797605e-08, 9.77770092e-08, 1.01006722e-07, 1.04062608e-07,
+       1.07235208e-07, 1.10696673e-07, 1.14280758e-07, 1.17648234e-07,
+       1.20729985e-07, 1.23788843e-07, 1.27118401e-07, 1.30718324e-07,
+       1.34239714e-07, 1.37422263e-07, 1.40418806e-07, 1.43587053e-07,
+       1.47111015e-07, 1.50753458e-07, 1.54101346e-07, 1.57115434e-07,
+       1.60136370e-07, 1.63503670e-07, 1.67181918e-07, 1.70306486e-07,
+       1.73431054e-07, 1.76846203e-07, 1.80445723e-07, 1.83873810e-07,
+       1.86986987e-07, 1.90014269e-07, 1.93281779e-07, 1.96862032e-07,
+       2.00000000e-07])
+ t_events: None
+        y: array([[1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 9.99999999e-01, 9.99999989e-01, 9.99999889e-01,
+        9.99998889e-01, 9.99988889e-01, 9.99888895e-01, 9.98889506e-01,
+        9.88950389e-01, 8.94839317e-01, 5.98641635e-01, 3.57784746e-01,
+        2.01682389e-01, 1.11067366e-01, 6.07425378e-02, 3.31574186e-02,
+        1.80902033e-02, 9.86830503e-03, 5.38298682e-03, 2.93628830e-03,
+        1.60166796e-03, 8.73666763e-04, 4.76561552e-04, 2.59951391e-04,
+        1.41796424e-04, 7.73460980e-05, 4.21901954e-05, 2.30136056e-05,
+        1.25532967e-05, 6.84748234e-06, 3.73511561e-06, 2.03740411e-06,
+        1.11134860e-06, 6.06210471e-07, 3.30671345e-07, 1.80372237e-07,
+        9.83881563e-08, 5.36680673e-08, 2.92744735e-08, 1.59684308e-08,
+        8.71034589e-09, 4.75125774e-09, 2.59168271e-09, 1.41369319e-09,
+        7.71131907e-10, 4.20632181e-10, 2.29444102e-10, 1.25156199e-10,
+        6.82699812e-11, 3.72400954e-11, 2.03141371e-11, 1.10814894e-11,
+        6.04533592e-12, 3.29826022e-12, 1.79982182e-12, 9.82494713e-13,
+        5.36719292e-13, 2.93656305e-13, 1.61234259e-13, 8.92631611e-14,
+        5.03935840e-14, 2.97071231e-14, 1.90175686e-14, 1.37707836e-14,
+        1.13941951e-14, 1.04364968e-14, 1.01093938e-14, 1.00209697e-14,
+        1.00038774e-14, 1.00022739e-14, 1.00081263e-14, 1.00077867e-14,
+        1.00074613e-14, 1.00101440e-14, 1.00136829e-14, 1.00126873e-14,
+        1.00087790e-14, 1.00069657e-14, 1.00084354e-14, 1.00126469e-14,
+        1.00144142e-14, 1.00105726e-14, 1.00071537e-14, 1.00070918e-14,
+        1.00106509e-14, 1.00150370e-14, 1.00130477e-14, 1.00081841e-14,
+        1.00063856e-14, 1.00084578e-14, 1.00139150e-14, 1.00155545e-14,
+        1.00102406e-14, 1.00064592e-14, 1.00067374e-14, 1.00113949e-14,
+        1.00167910e-14, 1.00133463e-14, 1.00074921e-14, 1.00057984e-14,
+        1.00085832e-14, 1.00156267e-14, 1.00168552e-14, 1.00097771e-14,
+        1.00057445e-14, 1.00064192e-14, 1.00124284e-14, 1.00088651e-14,
+        1.00063234e-14, 1.00077064e-14, 1.00130247e-14, 1.00162479e-14,
+        1.00113452e-14, 1.00067453e-14, 1.00062771e-14, 1.00102583e-14,
+        1.00075028e-14],
+       [0.00000000e+00, 1.00000000e-13, 1.10000000e-12, 1.11000000e-11,
+        1.11100000e-10, 1.11110000e-09, 1.11110999e-08, 1.11111094e-07,
+        1.11111048e-06, 1.11110494e-05, 1.11104938e-04, 1.11049406e-03,
+        1.10496107e-02, 1.05160683e-01, 4.01358365e-01, 6.42215254e-01,
+        7.98317611e-01, 8.88932634e-01, 9.39257462e-01, 9.66842581e-01,
+        9.81909797e-01, 9.90131695e-01, 9.94617013e-01, 9.97063712e-01,
+        9.98398332e-01, 9.99126333e-01, 9.99523438e-01, 9.99740049e-01,
+        9.99858204e-01, 9.99922654e-01, 9.99957810e-01, 9.99976986e-01,
+        9.99987447e-01, 9.99993153e-01, 9.99996265e-01, 9.99997963e-01,
+        9.99998889e-01, 9.99999394e-01, 9.99999669e-01, 9.99999820e-01,
+        9.99999902e-01, 9.99999946e-01, 9.99999971e-01, 9.99999984e-01,
+        9.99999991e-01, 9.99999995e-01, 9.99999997e-01, 9.99999999e-01,
+        9.99999999e-01, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00, 1.00000000e+00, 1.00000000e+00, 1.00000000e+00,
+        1.00000000e+00]])
+ y_events: None
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plot</span><span class="p">(</span><span class="n">sol</span><span class="o">.</span><span class="n">t</span><span class="p">,</span> <span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">,:],</span> <span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">1</span><span class="p">,:])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../_images/ODEs-implicit-systems_31_0.png" src="../_images/ODEs-implicit-systems_31_0.png" />
+</div>
+</div>
+<p>We can see how many steps it took, but looking at the shape of the stored solution:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">sol</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">shape</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(2, 121)
+</pre></div>
+</div>
+</div>
+</div>
+<p>It took 121 steps to evolve for a timespan of 200 characteristic timescales, so it basically needed to step at / near the characteristic timescale to get a reasonable solution.</p>
+<p>This is the difficulty with stiff systems.  Even though the short timescale behavior may be only transient, explicitly methods (generally) need to resolve it in order to stay stable.</p>
+</div>
+<div class="section" id="definition-of-stiffness">
+<h3>Definition of Stiffness<a class="headerlink" href="#definition-of-stiffness" title="Permalink to this headline">¶</a></h3>
+<p>One common way to define stiffness is to look at the eigenvalues of the Jacobian of the system.  A stiff system has a wide separation between eigenvalues.  For our system, the eigenvalues are:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">from</span> <span class="nn">sympy</span> <span class="kn">import</span> <span class="n">init_session</span>
+
+<span class="n">init_session</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>IPython console for SymPy 1.8 (Python 3.7.10-64-bit) (ground types: python)
+
+These commands were executed:
+&gt;&gt;&gt; from __future__ import division
+&gt;&gt;&gt; from sympy import *
+&gt;&gt;&gt; x, y, z, t = symbols(&#39;x y z t&#39;)
+&gt;&gt;&gt; k, m, n = symbols(&#39;k m n&#39;, integer=True)
+&gt;&gt;&gt; f, g, h = symbols(&#39;f g h&#39;, cls=Function)
+&gt;&gt;&gt; init_printing()
+
+Documentation can be found at https://docs.sympy.org/1.8/
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span> <span class="o">=</span> <span class="n">symbols</span><span class="p">(</span><span class="s2">&quot;alpha beta&quot;</span><span class="p">)</span>
+
+<span class="n">J</span> <span class="o">=</span> <span class="n">Matrix</span><span class="p">([[</span><span class="o">-</span><span class="n">alpha</span><span class="p">,</span> <span class="n">beta</span><span class="p">],</span> <span class="p">[</span><span class="n">alpha</span><span class="p">,</span> <span class="o">-</span><span class="n">beta</span><span class="p">]])</span>
+<span class="n">J</span><span class="o">.</span><span class="n">eigenvals</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stderr highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>/opt/hostedtoolcache/Python/3.7.10/x64/lib/python3.7/site-packages/IPython/lib/latextools.py:126: MatplotlibDeprecationWarning: 
+The to_png function was deprecated in Matplotlib 3.4 and will be removed two minor releases later. Use mathtext.math_to_image instead.
+  mt.to_png(f, s, fontsize=12, dpi=dpi, color=color)
+/opt/hostedtoolcache/Python/3.7.10/x64/lib/python3.7/site-packages/IPython/lib/latextools.py:126: MatplotlibDeprecationWarning: 
+The to_rgba function was deprecated in Matplotlib 3.4 and will be removed two minor releases later. Use mathtext.math_to_image instead.
+  mt.to_png(f, s, fontsize=12, dpi=dpi, color=color)
+/opt/hostedtoolcache/Python/3.7.10/x64/lib/python3.7/site-packages/IPython/lib/latextools.py:126: MatplotlibDeprecationWarning: 
+The to_mask function was deprecated in Matplotlib 3.4 and will be removed two minor releases later. Use mathtext.math_to_image instead.
+  mt.to_png(f, s, fontsize=12, dpi=dpi, color=color)
+/opt/hostedtoolcache/Python/3.7.10/x64/lib/python3.7/site-packages/IPython/lib/latextools.py:126: MatplotlibDeprecationWarning: 
+The MathtextBackendBitmap class was deprecated in Matplotlib 3.4 and will be removed two minor releases later. Use mathtext.math_to_image instead.
+  mt.to_png(f, s, fontsize=12, dpi=dpi, color=color)
+</pre></div>
+</div>
+<img alt="../_images/ODEs-implicit-systems_37_1.png" src="../_images/ODEs-implicit-systems_37_1.png" />
+</div>
+</div>
+<p>Byrne &amp; Hindmarsh (1986) give a more pragmatic definition of a stiff system:</p>
+<blockquote>
+<div><p>Perhaps the most pragmatic way to determine the stiffness of a system of ODEs
+is simply to solve it with a non-stiff differential equation package …
+Then, record the cost of solving the problem.  By the way, it would be prudent to
+impose a limit on CPU time or the number of function evaluations.  Similarly, solve
+the problem with a stiff ODE package …  Upper bounds on the cost should again be imposed.
+Now compare the costs of the two solutions over the same time interval.  If the stiff
+ODE solver was substantially less expensive to use than the non-stiff solver, then
+the problem was stiff.</p>
+</div></blockquote>
+<p>This particular system is linear, so there is not too much difference in the performance of an implicit and explicit method (like using the <code class="docutils literal notranslate"><span class="pre">BDF</span></code> method in SciPy).  We’ll look at a nonlinear system next.</p>
+</div>
+</div>
+</div>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            kernelName: "python3",
+            path: "./reaction_networks"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+        
+        <div class='prev-next-bottom'>
+            
+    <a class='left-prev' id="prev-link" href="ODEs-implicit.html" title="previous page">Implicit Methods for ODEs</a>
+    <a class='right-next' id="next-link" href="ODEs-implicit-nonlinear-systems.html" title="next page">Implicit Methods and Nonlinear Systems</a>
+
+        </div>
+        
+        </div>
+    </div>
+    <footer class="footer mt-5 mt-md-0">
+    <div class="container">
+      <p>
+        
+          By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+        
+          <div class="extra_footer">
+            <p>
+&copy; 2021; CC-BY-NC-SA 4.0
+<p>
+
+          </div>
+      </p>
+    </div>
+  </footer>
+</main>
+
+
+      </div>
+    </div>
+  
+  <script src="../_static/js/index.1c5a1a01449ed65a7b51.js"></script>
+
+  
+  </body>
+</html>
