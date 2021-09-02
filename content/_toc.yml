@@ -46,3 +46,8 @@ parts:
       - file: reaction_networks/ODEs-implicit-systems
       - file: reaction_networks/ODEs-implicit-nonlinear-systems
     - file: reaction_networks/integration-example
+
+  - caption: Elliptic Problems and Multigrid
+    chapters:
+    - file: elliptic_multigrid/elliptic-problems.ipynb
+    - file: elliptic_multigrid/elliptic-relaxation.ipynb
