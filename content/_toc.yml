@@ -51,3 +51,4 @@ parts:
     chapters:
     - file: elliptic_multigrid/elliptic-problems.ipynb
     - file: elliptic_multigrid/elliptic-relaxation.ipynb
+    - file: elliptic_multigrid/elliptic-residual.ipynb
