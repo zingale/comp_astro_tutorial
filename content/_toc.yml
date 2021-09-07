@@ -49,7 +49,9 @@ parts:
 
   - caption: Elliptic Problems and Multigrid
     chapters:
-    - file: elliptic_multigrid/elliptic-problems.ipynb
-    - file: elliptic_multigrid/elliptic-relaxation.ipynb
-    - file: elliptic_multigrid/elliptic-residual.ipynb
-    - file: elliptic_multigrid/elliptic-modes.ipynb
+    - file: elliptic_multigrid/intro/elliptic-problems
+    - file: elliptic_multigrid/relaxation/relaxation
+      sections:
+      - file: elliptic_multigrid/relaxation/elliptic-relaxation
+      - file: elliptic_multigrid/relaxation/elliptic-residual
+      - file: elliptic_multigrid/relaxation/elliptic-modes
