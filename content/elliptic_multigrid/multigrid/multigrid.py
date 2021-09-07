@@ -140,7 +140,7 @@ class Grid:
         ng = self.ng
         nf = self.nx * 2
 
-        fine_data = numpy.zeros((nf + 2*ng), dtype=np.float64)
+        fine_data = np.zeros((nf + 2*ng), dtype=np.float64)
 
         ilo_f = ng
         ihi_f = ng + nf - 1
@@ -158,7 +158,7 @@ class Grid:
         fine_data[ilo_f+1:ihi_f+1:2] = \
             coarse_data[self.ilo:self.ihi+1] + 0.25 * m_x[self.ilo:self.ihi+1]
 
-        return fData
+        return fine_data
 
 
 class Multigrid:
@@ -187,6 +187,9 @@ class Multigrid:
 
         self.verbose = verbose
 
+        self.bc_left_type = bc_left_type
+        self.bc_right_type = bc_right_type
+
         # a function that gives the analytic solution (if available)
         # for diagnostics only
         self.true_function = true_function
@@ -206,29 +209,23 @@ class Multigrid:
         # store the solution, v, the rhs, f.
 
         nx_t = 2
-        for i in range(self.nlevels):
+        for _ in range(self.nlevels):
 
-            # create the grid
-            my_grid = patch1d.Grid1d(nx_t, ng=self.ng,
-                                     xmin=xmin, xmax=xmax)
-
-            # add a CellCenterData1d object for this level to our list
+            # add a grid for this level
             self.grids.append(Grid(nx_t, xmin=self.xmin, xmax=self.xmax,
                                    bc_left_type=self.bc_left_type,
                                    bc_right_type=self.bc_right_type))
 
-            nx_t = nx_t*2
+            nx_t *= 2
 
         # provide coordinate and indexing information for the solution mesh
-        soln_grid = self.grids[self.nlevels-1]
+        self.soln_grid = self.grids[self.nlevels-1]
 
-        self.ilo = soln_grid.ilo
-        self.ihi = soln_grid.ihi
+        self.ilo = self.soln_grid.ilo
+        self.ihi = self.soln_grid.ihi
 
-        self.x = soln_grid.x
-        self.dx = soln_grid.dx
-
-        self.soln_grid = soln_grid
+        self.x = self.soln_grid.x
+        self.dx = self.soln_grid.dx
 
         # store the source norm
         self.source_norm = 0.0
@@ -236,47 +233,29 @@ class Multigrid:
         # after solving, keep track of the number of cycles taken, the
         # relative error from the previous cycle, and the residual error
         # (normalized to the source norm)
+
         self.num_cycles = 0
         self.residual_error = 1.e33
         self.relative_error = 1.e33
-
 
     def get_solution(self):
         v = self.grids[self.nlevels-1].get_var("v")
         return v.copy()
 
-
     def get_solution_object(self):
         return self.grids[self.nlevels-1]
 
-
-    def init_solution(self, data):
+    def init_solution(self):
         """
-        initialize the solution to the elliptic problem by passing in
-        a value for all defined zones
+        initialize the solution to the elliptic problem as zero
         """
-        v = self.grids[self.nlevels-1].get_var("v")
-        v[:] = data.copy()
+        self.soln_grid.v[:] = 0.0
 
-        self.initialized_solution = 1
-
-
-    def init_zeros(self):
-        """
-        set the initial solution to zero
-        """
-        v = self.grids[self.nlevels-1].get_var("v")
-        v[:] = 0.0
-
-        self.initialized_solution = 1
-
-
-    def init_RHS(self, data):
-        f = self.grids[self.nlevels-1].get_var("f")
-        f[:] = data.copy()
+    def init_rhs(self, data):
+        self.soln_grid.f[:] = data.copy()
 
         # store the source norm
-        self.source_norm = _error(self.grids[self.nlevels-1].grid, f)
+        self.source_norm = self.soln_grid.norm(self.soln_grid.f)
 
         if self.verbose:
             print("Source norm = ", self.source_norm)
@@ -285,69 +264,50 @@ class Multigrid:
         # would modify the source term, f, here to include a boundary
         # charge
 
-        self.initialized_RHS = 1
-
-
     def _compute_residual(self, level):
         """ compute the residual and store it in the r variable"""
-
-        v = self.grids[level].get_var("v")
-        f = self.grids[level].get_var("f")
-        r = self.grids[level].get_var("r")
 
         myg = self.grids[level].grid
 
         # compute the residual
-        # r = f - alpha phi + beta L phi
-        r[myg.ilo:myg.ihi+1] = \
-            f[myg.ilo:myg.ihi+1] - self.alpha*v[myg.ilo:myg.ihi+1] + \
-            self.beta*((v[myg.ilo-1:myg.ihi] + v[myg.ilo+1:myg.ihi+2] -
-                        2.0*v[myg.ilo:myg.ihi+1])/(myg.dx*myg.dx))
-
+        # r = f - L phi
+        myg.r[myg.ilo:myg.ihi+1] = myg.f[myg.ilo:myg.ihi+1] - \
+            (myg.v[myg.ilo-1:myg.ihi] +
+             myg.v[myg.ilo+1:myg.ihi+2] -
+             2.0*myg.v[myg.ilo:myg.ihi+1]) / (myg.dx * myg.dx)
 
     def smooth(self, level, nsmooth):
         """ use Gauss-Seidel iterations to smooth """
-        v = self.grids[level].get_var("v")
-        f = self.grids[level].get_var("f")
 
         myg = self.grids[level].grid
 
-        self.grids[level].fill_BC("v")
+        myg.fill_bcs()
 
         # do red-black G-S
-        for i in range(nsmooth):
-            xcoeff = self.beta/myg.dx**2
+        for _ in range(nsmooth):
 
-            # do the red black updating in four decoupled groups
-            v[myg.ilo:myg.ihi+1:2] = \
-                (f[myg.ilo:myg.ihi+1:2] +
-                 xcoeff*(v[myg.ilo+1:myg.ihi+2:2] + v[myg.ilo-1:myg.ihi  :2])) / \
-                 (self.alpha + 2.0*xcoeff)
+            myg.v[myg.ilo:myg.ihi+1:2] = 0.5 * (
+                -myg.dx * myg.dx * myg.f[myg.ilo:myg.ihi+1:2] +
+                myg.v[myg.ilo+1:myg.ihi+2:2] + myg.v[myg.ilo-1:myg.ihi:2])
 
-            self.grids[level].fill_BC("v")
+            myg.fill_bcs()
 
-            v[myg.ilo+1:myg.ihi+1:2] = \
-                (f[myg.ilo+1:myg.ihi+1:2] +
-                 xcoeff*(v[myg.ilo+2:myg.ihi+2:2] + v[myg.ilo  :myg.ihi  :2])) / \
-                 (self.alpha + 2.0*xcoeff)
+            myg.v[myg.ilo+1:myg.ihi+1:2] = 0.5 * (
+                -myg.dx * myg.dx * myg.f[myg.ilo+1:myg.ihi+1:2] +
+                myg.v[myg.ilo+2:myg.ihi+2:2] + myg.v[myg.ilo:myg.ihi:2])
 
-            self.grids[level].fill_BC("v")
-
+            myg.fill_bcs()
 
     def solve(self, rtol=1.e-11):
+        """do V-cycles util the L2 norm of the relative solution difference is
+        < rtol
 
-        # start by making sure that we've initialized the solution
-        # and the RHS
-        if not self.initialized_solution or not self.initialized_RHS:
-            sys.exit("ERROR: solution and RHS are not initialized")
+        """
 
-        # for now, we will just do V-cycles, continuing until we
-        # achieve the L2 norm of the relative solution difference is <
-        # rtol
         if self.verbose:
             print("source norm = ", self.source_norm)
 
-        old_solution = self.grids[self.nlevels-1].get_var("v").copy()
+        old_soln = self.soln_grid.v.copy()
 
         residual_error = 1.e33
         cycle = 1
@@ -361,43 +321,34 @@ class Multigrid:
 
             # zero out the solution on all but the finest grid
             for level in range(self.nlevels-1):
-                v = self.grids[level].zero("v")
+                self.grids[level].v[:] = 0.0
 
             # descending part
             if self.verbose:
                 print("<<< beginning V-cycle (cycle {}) >>>\n".format(cycle))
 
-            level = self.nlevels-1
-            self.v_cycle(level)
-
+            self.v_cycle(self.nlevels-1)
 
             # compute the error with respect to the previous solution
-            # this is for diagnostic purposes only -- it is not used to
-            # determine convergence
-            solnP = self.grids[self.nlevels-1]
+            # this is for diagnostic purposes only
 
-            diff = (solnP.get_var("v") - old_solution)/ \
-                (solnP.get_var("v") + self.small)
+            diff = (self.soln_grid.v - old_soln) / (self.soln_grid.v + self.small)
+            relative_error = self.soln_grid.norm(diff)
 
-            relative_error = _error(solnP.grid, diff)
-
-            old_solution = solnP.get_var("v").copy()
+            old_soln = self.soln_grid.v.copy()
 
             # compute the residual error, relative to the source norm
             self._compute_residual(self.nlevels-1)
-            fP = self.grids[level]
-            r = fP.get_var("r")
 
+            residual_error = self.soln_grid.norm(self.soln_grid.r)
             if self.source_norm != 0.0:
-                residual_error = _error(fP.grid, r)/self.source_norm
-            else:
-                residual_error = _error(fP.grid, r)
+                residual_error /= self.source_norm
 
             if residual_error < rtol:
                 self.num_cycles = cycle
                 self.relative_error = relative_error
                 self.residual_error = residual_error
-                fP.fill_BC("v")
+                self.soln_grid.fill_bcs()
 
             if self.verbose:
                 print("cycle {}: relative err = {}, residual err = {}\n".format(
@@ -406,29 +357,23 @@ class Multigrid:
             rlist.append(residual_error)
 
             if self.true_function is not None:
-                elist.append(_error(fP.grid, (old_solution - self.true_function(fP.grid.x))))
+                elist.append(self.soln_grid.norm(old_soln - self.true_function(self.soln_grid.x)))
 
             cycle += 1
 
-
         return elist, rlist
-
 
     def v_cycle(self, level):
 
         if level > 0:
-
-            fP = self.grids[level]
-            cP = self.grids[level-1]
-
-            # access to the residual
-            r = fP.get_var("r")
+            fp = self.grids[level]
+            cp = self.grids[level-1]
 
             if self.verbose:
                 self._compute_residual(level)
 
-                print("  level = {}, nx = {}".format(level, fP.grid.nx))
-                print("  before G-S, residual L2 norm = {}".format(_error(fP.grid, r)))
+                print("  level = {}, nx = {}".format(level, fp.nx))
+                print("  before G-S, residual L2 norm = {}".format(fp.norm(fp.r)))
 
             # smooth on the current level
             self.smooth(level, self.nsmooth)
@@ -437,52 +382,39 @@ class Multigrid:
             self._compute_residual(level)
 
             if self.verbose:
-                print("  after G-S, residual L2 norm = {}\n".format(_error(fP.grid, r)))
-
+                print("  after G-S, residual L2 norm = {}\n".format(fp.norm(fp.r)))
 
             # restrict the residual down to the RHS of the coarser level
-            f_coarse = cP.get_var("f")
-            f_coarse[:] = fP.restrict("r")
+            cp.f[:] = fp.restrict("r")
 
             # solve the coarse problem
             self.v_cycle(level-1)
 
-
-            # ascending part
-
             # prolong the error up from the coarse grid
-            e = cP.prolong("v")
-
-            # correct the solution on the current grid
-            v = fP.get_var("v")
-            v += e
+            fp.v += cp.prolong("v")
 
             if self.verbose:
                 self._compute_residual(level)
-                r = fP.get_var("r")
-                print("  level = {}, nx = {}".format(level, fP.grid.nx))
-                print("  before G-S, residual L2 norm = {}".format(_error(fP.grid, r)))
+                print("  level = {}, nx = {}".format(level, fp.nx))
+                print("  before G-S, residual L2 norm = {}".format(fp.norm(fp.r)))
 
             # smooth
             self.smooth(level, self.nsmooth)
 
             if self.verbose:
                 self._compute_residual(level)
-                print("  after G-S, residual L2 norm = {}\n".format(_error(fP.grid, r)))
+                print("  after G-S, residual L2 norm = {}\n".format(fp.norm(fp.r)))
 
         else:
-            # solve the discrete coarse problem.  We could use any
-            # number of different matrix solvers here (like CG), but
-            # since we are 2 zone by design at this point, we will
-            # just smooth
+            # solve the discrete coarse problem just via smoothing
             if self.verbose:
                 print("  bottom solve:")
 
-            bP = self.grids[0]
+            bp = self.grids[0]
 
             if self.verbose:
-                print("  level = {}, nx = {}\n".format(level, bP.grid.nx))
+                print("  level = {}, nx = {}\n".format(level, bp.nx))
 
             self.smooth(0, self.nsmooth_bottom)
 
-            bP.fill_BC("v")
+            bp.fill_bcs()
