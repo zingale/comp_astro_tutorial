@@ -51,9 +51,9 @@ v = a.get_solution()
 # compute the error from the analytic solution
 e = v - true(a.x)
 
-print("L2 error from true solution = {}".format(a.soln_grid.norm(e)))
-print("rel. err from previous cycle = {}".format(a.relative_error))
-print("num. cycles = {}".format(a.num_cycles))
+print(f"L2 error from true solution = {a.soln_grid.norm(e)}")
+print(f"rel. err from previous cycle = {a.relative_error}")
+print(f"num. cycles = {a.num_cycles}")
 
 fig = plt.figure()
 ax = fig.add_subplot(111)

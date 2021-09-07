@@ -349,8 +349,7 @@ class Multigrid:
                 self.soln_grid.fill_bcs()
 
             if self.verbose:
-                print("cycle {}: relative err = {}, residual err = {}\n".format(
-                    cycle, relative_error, residual_error))
+                print(f"cycle {cycle}: relative err = {relative_error:11.6g}, residual err = {residual_error:11.6g}\n")
 
             rlist.append(residual_error)
 
