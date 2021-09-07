@@ -271,8 +271,7 @@ class Multigrid:
         # compute the residual
         # r = f - L phi
         myg.r[myg.ilo:myg.ihi+1] = myg.f[myg.ilo:myg.ihi+1] - \
-            (myg.v[myg.ilo-1:myg.ihi] +
-             myg.v[myg.ilo+1:myg.ihi+2] -
+            (myg.v[myg.ilo-1:myg.ihi] + myg.v[myg.ilo+1:myg.ihi+2] -
              2.0*myg.v[myg.ilo:myg.ihi+1]) / (myg.dx * myg.dx)
 
     def smooth(self, level, nsmooth):
