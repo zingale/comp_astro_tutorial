@@ -55,3 +55,7 @@ parts:
       - file: elliptic_multigrid/relaxation/elliptic-relaxation
       - file: elliptic_multigrid/relaxation/elliptic-residual
       - file: elliptic_multigrid/relaxation/elliptic-modes
+    - file: elliptic_multigrid/multigrid/multigrid
+      sections:
+      - file: elliptic_multigrid/multigrid/multigrid-restrict-prolong
+
