@@ -58,4 +58,6 @@ parts:
     - file: elliptic_multigrid/multigrid/multigrid
       sections:
       - file: elliptic_multigrid/multigrid/multigrid-restrict-prolong
+      - file: elliptic_multigrid/multigrid/multigrid-two-grid
+
 
