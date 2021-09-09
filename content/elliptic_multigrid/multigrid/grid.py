@@ -38,13 +38,17 @@ class Grid:
         """compute the L2 norm of e that lives on our grid"""
         return np.sqrt(self.dx * np.sum(e[self.ilo:self.ihi+1]**2))
 
+    def compute_residual(self):
+        """compute and store the residual"""
+        self.r[self.ilo:self.ihi+1] = self.f[self.ilo:self.ihi+1] - \
+            (self.v[self.ilo+1:self.ihi+2] -
+             2 * self.v[self.ilo:self.ihi+1] +
+             self.v[self.ilo-1:self.ihi]) / self.dx**2
+
     def residual_norm(self):
         """compute the residual norm"""
-        r = self.scratch_array()
-        r[self.ilo:self.ihi+1] = self.f[self.ilo:self.ihi+1] - (self.v[self.ilo+1:self.ihi+2] -
-                                                                2 * self.v[self.ilo:self.ihi+1] +
-                                                                self.v[self.ilo-1:self.ihi]) / self.dx**2
-        return self.norm(r)
+        self.compute_residual()
+        return self.norm(self.r)
 
     def source_norm(self):
         """compute the source norm"""
@@ -72,6 +76,7 @@ class Grid:
             raise ValueError("invalid bc_right_type")
 
     def restrict(self, comp="v"):
+        """restrict the data to a coarser (by 2x) grid"""
 
         # create a coarse array
         ng = self.ng
@@ -97,32 +102,8 @@ class Grid:
         return coarse_data
 
     def prolong(self, comp="v"):
-
-        """
-        prolong the data in the current (coarse) grid to a finer
-        (factor of 2 finer) grid.  Return an array with the resulting
-        data (and same number of ghostcells).
-
-        We will reconstruct the data in the zone from the
-        zone-averaged variables using the centered-difference slopes
-
-                  (x)
-        f(x,y) = m    x/dx + <f>
-
-        When averaged over the parent cell, this reproduces <f>.
-
-        Each zone's reconstrution will be averaged over 2 children.
-
-        |           |     |     |     |
-        |    <f>    | --> |     |     |
-        |           |     |  1  |  2  |
-        +-----------+     +-----+-----+
-
-        We will fill each of the finer resolution zones by filling all
-        the 1's together, using a stride 2 into the fine array.  Then
-        the 2's, this allows us to operate in a vector
-        fashion.  All operations will use the same slopes for their
-        respective parents.
+        """prolong the data in the current (coarse) grid to a finer (factor
+        of 2 finer) grid using linear reconstruction.
 
         """
 

@@ -103,17 +103,6 @@ class Multigrid:
         # would modify the source term, f, here to include a boundary
         # charge
 
-    def _compute_residual(self, level):
-        """ compute the residual and store it in the r variable"""
-
-        myg = self.grids[level]
-
-        # compute the residual
-        # r = f - L phi
-        myg.r[myg.ilo:myg.ihi+1] = myg.f[myg.ilo:myg.ihi+1] - \
-            (myg.v[myg.ilo-1:myg.ihi] + myg.v[myg.ilo+1:myg.ihi+2] -
-             2.0*myg.v[myg.ilo:myg.ihi+1]) / (myg.dx * myg.dx)
-
     def smooth(self, level, nsmooth):
         """ use Gauss-Seidel iterations to smooth """
 
@@ -176,9 +165,7 @@ class Multigrid:
             old_soln = self.soln_grid.v.copy()
 
             # compute the residual error, relative to the source norm
-            self._compute_residual(self.nlevels-1)
-
-            residual_error = self.soln_grid.norm(self.soln_grid.r)
+            residual_error = self.soln_grid.residual_norm()
             if self.source_norm != 0.0:
                 residual_error /= self.source_norm
 
@@ -207,14 +194,13 @@ class Multigrid:
             cp = self.grids[level-1]
 
             if self.verbose:
-                self._compute_residual(level)
-                old_res_norm = fp.norm(fp.r)
+                old_res_norm = fp.residual_norm()
 
             # smooth on the current level
             self.smooth(level, self.nsmooth)
 
             # compute the residual
-            self._compute_residual(level)
+            fp.compute_residual()
 
             if self.verbose:
                 print(f"  level = {level}, nx = {fp.nx:4}, residual change: {old_res_norm:11.6g} -> {fp.norm(fp.r):11.6g}")
@@ -229,15 +215,13 @@ class Multigrid:
             fp.v += cp.prolong("v")
 
             if self.verbose:
-                self._compute_residual(level)
-                old_res_norm = fp.norm(fp.r)
+                old_res_norm = fp.residual_norm()
 
             # smooth
             self.smooth(level, self.nsmooth)
 
             if self.verbose:
-                self._compute_residual(level)
-                print(f"  level = {level}, nx = {fp.nx:4}, residual change: {old_res_norm:11.6g} -> {fp.norm(fp.r):11.6g}")
+                print(f"  level = {level}, nx = {fp.nx:4}, residual change: {old_res_norm:11.6g} -> {fp.residual_norm():11.6g}")
 
         else:
             # solve the discrete coarse problem just via smoothing
