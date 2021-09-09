@@ -94,13 +94,6 @@ class Multigrid:
         # store the source norm
         self.source_norm = self.soln_grid.norm(self.soln_grid.f)
 
-        if self.verbose:
-            print("Source norm = ", self.source_norm)
-
-        # note: if we wanted to do inhomogeneous Dirichlet BCs, we
-        # would modify the source term, f, here to include a boundary
-        # charge
-
     def smooth(self, level, nsmooth):
         """ use Gauss-Seidel iterations to smooth """
 
