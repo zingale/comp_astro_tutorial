@@ -59,5 +59,6 @@ parts:
       sections:
       - file: elliptic_multigrid/multigrid/multigrid-restrict-prolong
       - file: elliptic_multigrid/multigrid/multigrid-two-grid
+      - file: elliptic_multigrid/multigrid/multigrid-vcycles
 
 

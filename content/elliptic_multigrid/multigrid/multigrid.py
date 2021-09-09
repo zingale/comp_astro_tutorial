@@ -70,13 +70,11 @@ class Multigrid:
         # store the source norm
         self.source_norm = 0.0
 
-        # after solving, keep track of the number of cycles taken, the
-        # relative error from the previous cycle, and the residual error
-        # (normalized to the source norm)
+        # after solving, keep track of the number of cycles taken and
+        # the residual error (normalized to the source norm)
 
         self.num_cycles = 0
         self.residual_error = 1.e33
-        self.relative_error = 1.e33
 
     def get_solution(self):
         return self.grids[self.nlevels-1].v.copy()
@@ -134,8 +132,6 @@ class Multigrid:
         if self.verbose:
             print("source norm = ", self.source_norm)
 
-        old_soln = self.soln_grid.v.copy()
-
         residual_error = 1.e33
         cycle = 1
 
@@ -156,14 +152,6 @@ class Multigrid:
 
             self.v_cycle(self.nlevels-1)
 
-            # compute the error with respect to the previous solution
-            # this is for diagnostic purposes only
-
-            diff = (self.soln_grid.v - old_soln) / (self.soln_grid.v + self.small)
-            relative_error = self.soln_grid.norm(diff)
-
-            old_soln = self.soln_grid.v.copy()
-
             # compute the residual error, relative to the source norm
             residual_error = self.soln_grid.residual_norm()
             if self.source_norm != 0.0:
@@ -171,17 +159,16 @@ class Multigrid:
 
             if residual_error < rtol:
                 self.num_cycles = cycle
-                self.relative_error = relative_error
                 self.residual_error = residual_error
                 self.soln_grid.fill_bcs()
 
             if self.verbose:
-                print(f"cycle {cycle}: relative err = {relative_error:11.6g}, residual err = {residual_error:11.6g}\n")
+                print(f"cycle {cycle}: residual err / source norm = {residual_error:11.6g}\n")
 
             rlist.append(residual_error)
 
             if self.true_function is not None:
-                elist.append(self.soln_grid.norm(old_soln - self.true_function(self.soln_grid.x)))
+                elist.append(self.soln_grid.norm(self.soln_grid.v - self.true_function(self.soln_grid.x)))
 
             cycle += 1
 
