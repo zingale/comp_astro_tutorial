@@ -34,9 +34,6 @@ class Multigrid:
         # for diagnostics only
         self.true_function = true_function
 
-        # a small number used in computing the error, so we don't divide by 0
-        self.small = 1.e-16
-
         # assume that self.nx = 2^(nlevels-1)
         # this defines nlevels such that we end exactly on a 2 zone grid
         self.nlevels = int(np.log(self.nx)/np.log(2.0))
