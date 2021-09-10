@@ -22,7 +22,7 @@ for n in range(nlevels-1):
     if n == 0:
         G.labels[node] = r"$\nabla^2 \phi^h = f^h$"
     else:
-        G.labels[node] = rf"$\nabla^2 e^{{{2*n}h}} = r^{{{2*n}h}}$"
+        G.labels[node] = rf"$\nabla^2 e^{{{2**n}h}} = r^{{{2**n}h}}$"
 
 # bottom
 node = "bottom"
@@ -40,7 +40,7 @@ for n in range(nlevels-1):
     if n == nlevels-2:
         G.labels[node] = r"$\nabla^2 \phi^h = f^h$"
     else:
-        G.labels[node] = rf"$\nabla^2 e^{{{2*(nlevels-2-n)}h}} = r^{{{2*(nlevels-2-n)}h}}$"
+        G.labels[node] = rf"$\nabla^2 e^{{{2**(nlevels-2-n)}h}} = r^{{{2**(nlevels-2-n)}h}}$"
 
 
 # now do the edges
