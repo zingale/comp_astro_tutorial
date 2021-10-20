@@ -16,6 +16,7 @@ parts:
       sections:
       - file: basics/ODEs/ODEs-partI
       - file: basics/ODEs/ODEs-partII
+      - file: basics/ODEs/boundary-value-problems
       - file: basics/ODEs/exercises
 
   - caption: Advection and Hydrodynamics

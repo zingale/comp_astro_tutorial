@@ -71,7 +71,7 @@ where $m_u$ is the atomic mass unit ($1/N_A$).
 Substituting these into the above expression we get
 
 \begin{eqnarray*}
-\frac{dY_A}{dt} &=& - 2 \frac{1}{2} Y_A^2 N_A \langle \sigma v \rangle_{AA}
+\frac{dY_A}{dt} &=& - 2 \frac{1}{2} \rho Y_A^2 N_A \langle \sigma v \rangle_{AA}
                      + \rho Y_B Y_C N_A \langle \sigma v \rangle_{BC} \\
 \frac{dY_B}{dt} &=& \frac{1}{2} \rho Y_A^2 N_A \langle \sigma v \rangle_{AA} 
                      - \rho Y_B Y_C N_A \langle \sigma v \rangle_{BC} \\
