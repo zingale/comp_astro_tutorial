@@ -37,16 +37,6 @@ parts:
       - file: advection_euler/euler/euler-solver
     - file: advection_euler/projects/projects.md
 
-  - caption: Integrating Stiff Reaction Networks
-    chapters:
-    - file: reaction_networks/reactions
-    - file: reaction_networks/stiff-ODEs
-      sections:
-      - file: reaction_networks/ODEs-implicit
-      - file: reaction_networks/ODEs-implicit-systems
-      - file: reaction_networks/ODEs-implicit-nonlinear-systems
-    - file: reaction_networks/integration-example
-
   - caption: Elliptic Problems and Multigrid
     chapters:
     - file: elliptic_multigrid/intro/elliptic-problems
@@ -60,5 +50,20 @@ parts:
       - file: elliptic_multigrid/multigrid/multigrid-restrict-prolong
       - file: elliptic_multigrid/multigrid/multigrid-two-grid
       - file: elliptic_multigrid/multigrid/multigrid-vcycles
+
+  - caption: Stars
+    chapters:
+    - file: stars/stars
+    - file: stars/lane-emden
+
+  - caption: Integrating Stiff Reaction Networks
+    chapters:
+    - file: reaction_networks/reactions
+    - file: reaction_networks/stiff-ODEs
+      sections:
+      - file: reaction_networks/ODEs-implicit
+      - file: reaction_networks/ODEs-implicit-systems
+      - file: reaction_networks/ODEs-implicit-nonlinear-systems
+    - file: reaction_networks/integration-example
 
 
