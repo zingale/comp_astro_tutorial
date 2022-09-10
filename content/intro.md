@@ -13,3 +13,6 @@ and then onto the compressible Euler equations.
 
 By clicking on the "rocket ship" icon, you can launch the notebook
 in google colab or binder to run it in the cloud.
+
+This will also be the basis for the forthcoming AST 390 course at Stony
+Brook.
