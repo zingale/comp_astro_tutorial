@@ -55,7 +55,7 @@ parts:
   - caption: Stars
     chapters:
     - file: stars/stars
-    - file: stars/lane-emden
+    #- file: stars/lane-emden
 
   - caption: Integrating Stiff Reaction Networks
     chapters:
