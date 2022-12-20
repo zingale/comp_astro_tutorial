@@ -18,6 +18,9 @@ parts:
       - file: basics/ODEs/ODEs-partII
       - file: basics/ODEs/boundary-value-problems
       - file: basics/ODEs/exercises
+    - file: basics/linear-algebra/la-overview
+      sections:
+      - file: basics/linear-algebra/la-basics
 
   - caption: Advection and Hydrodynamics
     chapters:
