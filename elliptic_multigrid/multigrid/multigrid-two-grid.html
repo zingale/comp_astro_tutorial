@@ -1,0 +1,1083 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Two Grid Correction &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="V-Cycles" href="multigrid-vcycles.html" />
+    <link rel="prev" title="Restriction and Prolongation" href="multigrid-restrict-prolong.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../basics/roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/ODEs/ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partII.html">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/boundary-value-problems.html">
+     Two Point Boundary Value Problems
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/linear-algebra/la-overview.html">
+   Linear Algebra
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/linear-algebra/la-basics.html">
+     Linear Algebra
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/advection/advection.html">
+   Linear Advection Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partIII.html">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/euler/euler.html">
+   Euler Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-riemann.html">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../advection_euler/projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Elliptic Problems and Multigrid
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../intro/elliptic-problems.html">
+   Poisson problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../relaxation/relaxation.html">
+   Relaxation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../relaxation/elliptic-relaxation.html">
+     Relaxation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../relaxation/elliptic-residual.html">
+     Residual
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../relaxation/elliptic-modes.html">
+     Behavior of Single Modes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="multigrid.html">
+   Multigrid
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="multigrid-restrict-prolong.html">
+     Restriction and Prolongation
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Two Grid Correction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="multigrid-vcycles.html">
+     V-Cycles
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Stars
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/stars.html">
+   Stars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/lane-emden.html">
+   Lane-Emden polytrope equation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reaction_networks/stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-systems.html">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/zingale/comp_astro_tutorial/main?urlpath=tree/content/elliptic_multigrid/multigrid/multigrid-two-grid.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://colab.research.google.com/github/zingale/comp_astro_tutorial/blob/main/content/elliptic_multigrid/multigrid/multigrid-two-grid.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="headerbtn__text-container">Colab</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Felliptic_multigrid/multigrid/multigrid-two-grid.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/elliptic_multigrid/multigrid/multigrid-two-grid.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Two Grid Correction</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="two-grid-correction">
+<h1>Two Grid Correction<a class="headerlink" href="#two-grid-correction" title="Permalink to this headline">#</a></h1>
+<p>Before we do multigrid, we can understand the basic flow by using 2 grids: a fine and coarse grid.</p>
+<p>We want to solve:</p>
+<div class="math notranslate nohighlight">
+\[\nabla^2 \phi = f\]</div>
+<p>with suitable boundary conditions.  Imagine that we have a approximate solution, <span class="math notranslate nohighlight">\(\tilde{\phi}\)</span>, then we can define the error with respect to the true solution, <span class="math notranslate nohighlight">\(\phi^{\mathrm{true}}\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[e = \phi^{\mathrm{true}} - \tilde{\phi}\]</div>
+<p>Our Poisson equation is linear, so we can apply the <span class="math notranslate nohighlight">\(\nabla^2\)</span> operator to our error:</p>
+<div class="math notranslate nohighlight">
+\[\nabla^2 e = \nabla^2 \phi^{\mathrm{true}} - \nabla^2 \tilde{\phi} = f - \nabla^2 \tilde{\phi}\]</div>
+<p>This since <span class="math notranslate nohighlight">\(\tilde{\phi}\)</span> is just our approximation to <span class="math notranslate nohighlight">\(\phi^{\mathrm{true}}\)</span>, this is just the residual, so:</p>
+<div class="math notranslate nohighlight">
+\[\nabla^2 e = r\]</div>
+<p>Notice that this is the same type of equation as our original equation.  But the boundary conditions are now homogeneous (of the same type as the original) regardless of whether they were inhomogeneous or homogeneous originally.  For example:</p>
+<ul>
+<li><p>If the BCs were inhomogenous Dirichlet, <span class="math notranslate nohighlight">\(\phi(a) = A\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[e(a) = \phi^{\mathrm{true}}(a) - \tilde{\phi}(a) = 0\]</div>
+<p>since both the true solution and our approximation satisfy the same boundary conditions.</p>
+</li>
+<li><p>Likewise, if the BCs were inhomogenous Neumann, <span class="math notranslate nohighlight">\(\phi^\prime(a) = C\)</span>, then</p>
+<div class="math notranslate nohighlight">
+\[e^{\prime}(a) = \phi^{\mathrm{true},\prime}(a) - \tilde{\phi}^{\prime}(a) = 0\]</div>
+</li>
+</ul>
+<p>The key idea in multigrid is that long wavelength errors take longer to smooth away.  But long wavelength errors look shorter wavelength on a coarser grid.  This suggests that we smooth a bit on a fine grid to get rid of the short wavelength errors and then transfer down to a coarser grid, and smooth the error equation there, and then bring the error back to the fine grid to correct the fine grid solution.</p>
+<p>We’ll use the superscript <span class="math notranslate nohighlight">\(h\)</span> to represent the fine grid and the superscript <span class="math notranslate nohighlight">\(2h\)</span> to represent a grid that is coarser by a factor of 2.</p>
+<p>Here’s the basic flow:</p>
+<div style="border: solid; padding: 10px; width: 80%; margin: 0 auto; background: #dddddd">
+<ul>
+<li><p>Smooth for <span class="math notranslate nohighlight">\(N_\mathrm{smooth}\)</span> iterations on the fine grid, solving <span class="math notranslate nohighlight">\(\nabla^2 \phi = f\)</span> to get an approximation <span class="math notranslate nohighlight">\(\tilde{\phi}\)</span></p></li>
+<li><p>Compute the residual, on the fine grid:</p>
+<div class="math notranslate nohighlight">
+\[r^h = f - \nabla^2 \tilde{\phi}\]</div>
+</li>
+<li><p>Restrict <span class="math notranslate nohighlight">\(r^h\)</span> to the coarse grid:</p>
+<div class="math notranslate nohighlight">
+\[r^{2h} \leftarrow r^h\]</div>
+</li>
+<li><p>Solve the error equation on the coarse grid:</p>
+<div class="math notranslate nohighlight">
+\[\nabla^2 e^{2h} = r^{2h}\]</div>
+</li>
+<li><p>Prolong the error from the coarse grid up to the fine grid:</p>
+<div class="math notranslate nohighlight">
+\[e^{2h} \rightarrow e^{h}\]</div>
+</li>
+<li><p>Correct the fine grid solution, since by the definition of <span class="math notranslate nohighlight">\(e\)</span>, <span class="math notranslate nohighlight">\(\phi^{\mathrm{true}} = \tilde{\phi} + e\)</span></p>
+<div class="math notranslate nohighlight">
+\[\tilde{\phi}^h \leftarrow \tilde{\phi}^h + e^h\]</div>
+</li>
+<li><p>This correction may have introduced some short wavelength noise (from the prolongation), so smooth <span class="math notranslate nohighlight">\(\nabla^2 \phi = f\)</span> on the fine grid for <span class="math notranslate nohighlight">\(N_\mathrm{smooth}\)</span> iterations.</p></li>
+</ul>
+</div><p>For now, to solve the error equation, we’ll resort to simply smoothing until all of residual is below our desired tolerance.  In a little bit though, we’ll see that we can just do this procedure recursively for that step.</p>
+<p>We’ll start with a grid class that has storage for the solution, righthand side, and residual, and knows how to fill boundary conditions, prolong, and restrict the data, and all of the operations we implemented previously (restriction, prolongation, computing the residual, taking the norm).</p>
+<p>We store the solution variable (<span class="math notranslate nohighlight">\(\phi\)</span> or <span class="math notranslate nohighlight">\(e\)</span>) as <code class="docutils literal notranslate"><span class="pre">Grid.v</span></code> in this class.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">grid</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">cat</span> grid.py
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>import numpy as np
+
+class Grid:
+    def __init__(self, nx, ng=1, xmin=0, xmax=1,
+                 bc_left_type=&quot;dirichlet&quot;, bc_left_val=0.0,
+                 bc_right_type=&quot;dirichlet&quot;, bc_right_val=0.0):
+
+        self.xmin = xmin
+        self.xmax = xmax
+        self.ng = ng
+        self.nx = nx
+
+        self.bc_left_type = bc_left_type
+        self.bc_left_val = bc_left_val
+
+        self.bc_right_type = bc_right_type
+        self.bc_right_val = bc_right_val
+
+        # python is zero-based.  Make easy intergers to know where the
+        # real data lives
+        self.ilo = ng
+        self.ihi = ng+nx-1
+
+        # physical coords -- cell-centered
+        self.dx = (xmax - xmin)/(nx)
+        self.x = xmin + (np.arange(nx+2*ng)-ng+0.5)*self.dx
+
+        # storage for the solution
+        self.v = self.scratch_array()
+        self.f = self.scratch_array()
+        self.r = self.scratch_array()
+
+    def scratch_array(self):
+        &quot;&quot;&quot;return a scratch array dimensioned for our grid &quot;&quot;&quot;
+        return np.zeros((self.nx+2*self.ng), dtype=np.float64)
+
+    def norm(self, e):
+        &quot;&quot;&quot;compute the L2 norm of e that lives on our grid&quot;&quot;&quot;
+        return np.sqrt(self.dx * np.sum(e[self.ilo:self.ihi+1]**2))
+
+    def compute_residual(self):
+        &quot;&quot;&quot;compute and store the residual&quot;&quot;&quot;
+        self.r[self.ilo:self.ihi+1] = self.f[self.ilo:self.ihi+1] - \
+            (self.v[self.ilo+1:self.ihi+2] -
+             2 * self.v[self.ilo:self.ihi+1] +
+             self.v[self.ilo-1:self.ihi]) / self.dx**2
+
+    def residual_norm(self):
+        &quot;&quot;&quot;compute the residual norm&quot;&quot;&quot;
+        self.compute_residual()
+        return self.norm(self.r)
+
+    def source_norm(self):
+        &quot;&quot;&quot;compute the source norm&quot;&quot;&quot;
+        return self.norm(self.f)
+
+    def fill_bcs(self):
+        &quot;&quot;&quot;fill the boundary conditions on phi&quot;&quot;&quot;
+
+        # we only deal with a single ghost cell here
+
+        # left
+        if self.bc_left_type.lower() == &quot;dirichlet&quot;:
+            self.v[self.ilo-1] = 2 * self.bc_left_val - self.v[self.ilo]
+        elif self.bc_left_type.lower() == &quot;neumann&quot;:
+            self.v[self.ilo-1] = self.v[self.ilo] - self.dx * self.bc_left_val
+        else:
+            raise ValueError(&quot;invalid bc_left_type&quot;)
+
+        # right
+        if self.bc_right_type.lower() == &quot;dirichlet&quot;:
+            self.v[self.ihi+1] = 2 * self.bc_right_val - self.v[self.ihi]
+        elif self.bc_right_type.lower() == &quot;neumann&quot;:
+            self.v[self.ihi+1] = self.v[self.ihi] - self.dx * self.bc_right_val
+        else:
+            raise ValueError(&quot;invalid bc_right_type&quot;)
+
+    def restrict(self, comp=&quot;v&quot;):
+        &quot;&quot;&quot;restrict the data to a coarser (by 2x) grid&quot;&quot;&quot;
+
+        # create a coarse array
+        ng = self.ng
+        nc = self.nx//2
+
+        ilo_c = ng
+        ihi_c = ng + nc - 1
+
+        coarse_data = np.zeros((nc + 2*ng), dtype=np.float64)
+
+        if comp == &quot;v&quot;:
+            fine_data = self.v
+        elif comp == &quot;f&quot;:
+            fine_data = self.f
+        elif comp == &quot;r&quot;:
+            fine_data = self.r
+        else:
+            raise ValueError(&quot;invalid component&quot;)
+
+        coarse_data[ilo_c:ihi_c+1] = 0.5 * (fine_data[self.ilo:self.ihi+1:2] +
+                                            fine_data[self.ilo+1:self.ihi+1:2])
+
+        return coarse_data
+
+    def prolong(self, comp=&quot;v&quot;):
+        &quot;&quot;&quot;prolong the data in the current (coarse) grid to a finer (factor
+        of 2 finer) grid using linear reconstruction.
+
+        &quot;&quot;&quot;
+
+        if comp == &quot;v&quot;:
+            coarse_data = self.v
+        elif comp == &quot;f&quot;:
+            coarse_data = self.f
+        elif comp == &quot;r&quot;:
+            coarse_data = self.r
+        else:
+            raise ValueError(&quot;invalid component&quot;)
+
+
+        # allocate an array for the coarsely gridded data
+        ng = self.ng
+        nf = self.nx * 2
+
+        fine_data = np.zeros((nf + 2*ng), dtype=np.float64)
+
+        ilo_f = ng
+        ihi_f = ng + nf - 1
+
+        # slopes for the coarse data
+        m_x = self.scratch_array()
+        m_x[self.ilo:self.ihi+1] = 0.5 * (coarse_data[self.ilo+1:self.ihi+2] -
+                                          coarse_data[self.ilo-1:self.ihi])
+
+        # fill the &#39;1&#39; children
+        fine_data[ilo_f:ihi_f+1:2] = \
+            coarse_data[self.ilo:self.ihi+1] - 0.25 * m_x[self.ilo:self.ihi+1]
+
+        # fill the &#39;2&#39; children
+        fine_data[ilo_f+1:ihi_f+1:2] = \
+            coarse_data[self.ilo:self.ihi+1] + 0.25 * m_x[self.ilo:self.ihi+1]
+
+        return fine_data
+</pre></div>
+</div>
+</div>
+</div>
+<p>We also need the <code class="docutils literal notranslate"><span class="pre">relax</span></code> function we wrote previously.  Here we just paste it below:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">TooManyIterations</span><span class="p">(</span><span class="ne">Exception</span><span class="p">):</span>
+    <span class="k">pass</span>
+
+<span class="k">def</span> <span class="nf">relax</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="mi">200000</span><span class="p">):</span>
+    
+    <span class="nb">iter</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">fnorm</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">source_norm</span><span class="p">()</span>
+    <span class="k">if</span> <span class="n">fnorm</span> <span class="o">==</span> <span class="mf">0.0</span><span class="p">:</span>
+        <span class="n">fnorm</span> <span class="o">=</span> <span class="n">tol</span>
+        
+    <span class="n">r</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">()</span>
+    
+    <span class="k">if</span> <span class="n">tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">&lt;</span> <span class="n">max_iters</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">test</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">&lt;</span> <span class="n">max_iters</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">tol</span> <span class="o">*</span> <span class="n">fnorm</span>
+
+    <span class="n">g</span><span class="o">.</span><span class="n">fill_bcs</span><span class="p">()</span>
+
+    <span class="k">while</span> <span class="n">test</span><span class="p">:</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span>
+                                        <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+    
+        <span class="n">g</span><span class="o">.</span><span class="n">fill_bcs</span><span class="p">()</span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="p">(</span><span class="o">-</span><span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">f</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span>
+                                          <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">:</span><span class="mi">2</span><span class="p">]</span> <span class="o">+</span> <span class="n">g</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">g</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">g</span><span class="o">.</span><span class="n">ihi</span><span class="p">:</span><span class="mi">2</span><span class="p">])</span>
+        
+        <span class="n">g</span><span class="o">.</span><span class="n">fill_bcs</span><span class="p">()</span>
+        
+        <span class="n">r</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">residual_norm</span><span class="p">()</span>
+        
+        <span class="nb">iter</span> <span class="o">+=</span> <span class="mi">1</span>
+        
+        <span class="k">if</span> <span class="n">tol</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">&lt;</span> <span class="n">max_iters</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">test</span> <span class="o">=</span> <span class="nb">iter</span> <span class="o">&lt;</span> <span class="n">max_iters</span> <span class="ow">and</span> <span class="n">r</span> <span class="o">&gt;</span> <span class="n">tol</span> <span class="o">*</span> <span class="n">fnorm</span>
+
+    <span class="k">if</span> <span class="n">tol</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span> <span class="ow">and</span> <span class="nb">iter</span> <span class="o">&gt;=</span> <span class="n">max_iters</span><span class="p">:</span>
+        <span class="k">raise</span> <span class="n">TooManyIterations</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;too many iterations, niter = </span><span class="si">{</span><span class="nb">iter</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we can write our two-grid solver.  We’ll solve the same system as before:</p>
+<div class="math notranslate nohighlight">
+\[\phi^{\prime\prime} = \sin(x)\]</div>
+<p>on <span class="math notranslate nohighlight">\([0, 1]\)</span> with homogeneous Dirichlet BCs.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">analytic</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span> <span class="o">+</span> <span class="n">x</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">f</span><span class="p">(</span><span class="n">x</span><span class="p">):</span>
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+<span class="n">n_smooth</span> <span class="o">=</span> <span class="mi">10</span>
+
+<span class="c1"># create the grids</span>
+<span class="n">fine</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">Grid</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+<span class="n">coarse</span> <span class="o">=</span> <span class="n">grid</span><span class="o">.</span><span class="n">Grid</span><span class="p">(</span><span class="n">nx</span><span class="o">//</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="c1"># initialize the RHS</span>
+<span class="n">fine</span><span class="o">.</span><span class="n">f</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">f</span><span class="p">(</span><span class="n">fine</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+
+<span class="c1"># smooth on the fine grid</span>
+<span class="n">relax</span><span class="p">(</span><span class="n">fine</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="n">n_smooth</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+
+<span class="c1"># compute the residual</span>
+<span class="n">fine</span><span class="o">.</span><span class="n">compute_residual</span><span class="p">()</span>
+
+<span class="c1"># restrict the residual down to the coarse grid as the coarse rhs</span>
+<span class="n">coarse</span><span class="o">.</span><span class="n">f</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">fine</span><span class="o">.</span><span class="n">restrict</span><span class="p">(</span><span class="s2">&quot;r&quot;</span><span class="p">)</span>
+
+<span class="c1"># solve the coarse problem:</span>
+<span class="n">relax</span><span class="p">(</span><span class="n">coarse</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="mf">1.e-8</span><span class="p">)</span>
+
+<span class="c1"># prolong the error up from the coarse grid and correct the fine grid solution</span>
+<span class="n">fine</span><span class="o">.</span><span class="n">v</span> <span class="o">+=</span> <span class="n">coarse</span><span class="o">.</span><span class="n">prolong</span><span class="p">(</span><span class="s2">&quot;v&quot;</span><span class="p">)</span>
+
+<span class="c1"># smooth on the fine grid</span>
+<span class="n">relax</span><span class="p">(</span><span class="n">fine</span><span class="p">,</span> <span class="n">max_iters</span><span class="o">=</span><span class="n">n_smooth</span><span class="p">,</span> <span class="n">tol</span><span class="o">=</span><span class="kc">None</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s look at the solution:</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fine</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">fine</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">fine</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">fine</span><span class="o">.</span><span class="n">v</span><span class="p">[</span><span class="n">fine</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">fine</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">fine</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">fine</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">fine</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">],</span> <span class="n">analytic</span><span class="p">(</span><span class="n">fine</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="n">fine</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">fine</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]),</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;analytic&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">)</span>
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7febd8e93a30&gt;
+</pre></div>
+</div>
+<img alt="../../_images/multigrid-two-grid_15_1.png" src="../../_images/multigrid-two-grid_15_1.png" />
+</div>
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./elliptic_multigrid/multigrid"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="multigrid-restrict-prolong.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Restriction and Prolongation</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="multigrid-vcycles.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">V-Cycles</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+  
+    <div class="extra_footer">
+      <p>
+&copy; 2021-2022; CC-BY-NC-SA 4.0
+<p>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

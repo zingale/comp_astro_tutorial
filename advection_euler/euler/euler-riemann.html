@@ -1,0 +1,1127 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Euler Riemann problem &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Sampling the Riemann solution" href="euler-riemann-sampling.html" />
+    <link rel="prev" title="Euler equations eigensystem" href="euler-eigen.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../basics/roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/ODEs/ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partII.html">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/boundary-value-problems.html">
+     Two Point Boundary Value Problems
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/linear-algebra/la-overview.html">
+   Linear Algebra
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/linear-algebra/la-basics.html">
+     Linear Algebra
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/advection.html">
+   Linear Advection Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partIII.html">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="euler.html">
+   Euler Equations
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Elliptic Problems and Multigrid
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../elliptic_multigrid/intro/elliptic-problems.html">
+   Poisson problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/relaxation/relaxation.html">
+   Relaxation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-relaxation.html">
+     Relaxation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-residual.html">
+     Residual
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-modes.html">
+     Behavior of Single Modes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid.html">
+   Multigrid
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-restrict-prolong.html">
+     Restriction and Prolongation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-two-grid.html">
+     Two Grid Correction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-vcycles.html">
+     V-Cycles
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Stars
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/stars.html">
+   Stars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/lane-emden.html">
+   Lane-Emden polytrope equation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reaction_networks/stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-systems.html">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/zingale/comp_astro_tutorial/main?urlpath=tree/content/advection_euler/euler/euler-riemann.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://colab.research.google.com/github/zingale/comp_astro_tutorial/blob/main/content/advection_euler/euler/euler-riemann.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="headerbtn__text-container">Colab</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Fadvection_euler/euler/euler-riemann.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/advection_euler/euler/euler-riemann.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-star-state">
+   Finding the star state
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shock-jump-conditions">
+     Shock jump conditions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rarefaction-solution">
+     Rarefaction solution
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Euler Riemann problem</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#finding-the-star-state">
+   Finding the star state
+  </a>
+  <ul class="nav section-nav flex-column">
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#shock-jump-conditions">
+     Shock jump conditions
+    </a>
+   </li>
+   <li class="toc-h3 nav-item toc-entry">
+    <a class="reference internal nav-link" href="#rarefaction-solution">
+     Rarefaction solution
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">scipy.optimize</span> <span class="k">as</span> <span class="nn">optimize</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="euler-riemann-problem">
+<h1>Euler Riemann problem<a class="headerlink" href="#euler-riemann-problem" title="Permalink to this headline">#</a></h1>
+<p>To compute the fluxes through the interface, we will need to solve the Riemann
+problem for the Euler equations.  We will formulate it such that we have
+left and right primitive variable states and we want to find the unique state on the interface:</p>
+<div class="math notranslate nohighlight">
+\[{\bf q}_{i+1/2} = \mathcal{R}({\bf q}_{i+1/2,L}, {\bf q}_{i+1/2,R})\]</div>
+<p>Information about the jump across this interface will be carried away from the interface by the 3 hydrodynamic waves (<span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(u\pm c\)</span>).  We can define 4 regions separated by the three waves, which we’ll call <span class="math notranslate nohighlight">\(L\)</span>, <span class="math notranslate nohighlight">\(L_\star\)</span>, <span class="math notranslate nohighlight">\(R_\star\)</span>, and <span class="math notranslate nohighlight">\(R\)</span>.</p>
+<p><img alt="Riemann solution structure" src="../../_images/riemann-waves.png" /></p>
+<p><span class="math notranslate nohighlight">\(L\)</span> and <span class="math notranslate nohighlight">\(R\)</span> are just our original states—since no waves have reached them yet, the state is unchanged.  The star states are between the left and right state.  We know from the eigenvectors that all 3 primitive variables, <span class="math notranslate nohighlight">\((\rho, u, p)\)</span> jump across the left and right state.  But from the center eigenvector, we know only the density jumps.  That means in the star region, the only unknowns are:</p>
+<div class="math notranslate nohighlight">
+\[u_\star, p_\star, \rho_{\star,L}, \rho_{\star,R}\]</div>
+<section id="finding-the-star-state">
+<h2>Finding the star state<a class="headerlink" href="#finding-the-star-state" title="Permalink to this headline">#</a></h2>
+<p>Our first goal is to find the star state.  To do this,
+we need to know how much each variable changes across each of the three waves.  To complicate matters, the left and right waves can be either shocks or rarefactions.</p>
+<div class="alert alert-info">
+<p><strong>Note:</strong> We will assume a gamma-law gas for the rest of this notebook.  Keep
+in mind that many astrophysical environments need a more general gas, and
+while the expressions are different, the basic ideas will carry over to
+the general gas case.</p>
+</div>
+<p>For a gamma-law gas, we can write down analytic expressions for the change in the primitive variables across both a rarefaction and shock.  We can then solve these to find the state inbetween the left and right waver—the star state.</p>
+<section id="shock-jump-conditions">
+<h3>Shock jump conditions<a class="headerlink" href="#shock-jump-conditions" title="Permalink to this headline">#</a></h3>
+<p>For the case where the left or right wave is a shock, we use the Rankine-Hugoniot jump conditions to connect the states across the wave.</p>
+<p>We can write the jump conditions in the frame of the shock as (for the left wave):</p>
+<div class="amsmath math notranslate nohighlight">
+\[\begin{align*}
+\rho_L \hat{u}_L &amp;= \rho_\star \hat{u}_\star \\
+\rho_L \hat{u}_L^2 + p_L &amp;= \rho_\star {\hat{u}_\star}^2 + p_\star \\
+\rho_L e_L \hat{u}_L + p_L \hat{u}_L + \frac{1}{2} \rho_L \hat{u}_L^3 &amp;=
+       \rho_\star e_\star \hat{u}_\star + p_\star \hat{u}_\star + \frac{1}{2}\rho_\star {\hat{u}_\star}^3
+\end{align*}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\hat{u} = u - S\)</span>, and <span class="math notranslate nohighlight">\(S\)</span> is the shock speed.</p>
+<p>With a lot of algebra, you can find the relation of <span class="math notranslate nohighlight">\(u_\star\)</span> to <span class="math notranslate nohighlight">\(u_L\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[u_\star = u_L + \frac{2 c_L}{\sqrt{2 \gamma(\gamma-1)}} \frac{1 - \frac{p_\star}{p_L}}{\sqrt{1 + \frac{\gamma + 1}{\gamma -1} \frac{p_\star}{p_L}}}\]</div>
+<p>and similarly for a shock across the right wave:</p>
+<div class="math notranslate nohighlight">
+\[u_\star = u_R - \frac{2 c_R}{\sqrt{2 \gamma(\gamma-1)}} \frac{1 - \frac{p_\star}{p_R}}{\sqrt{1 + \frac{\gamma + 1}{\gamma -1} \frac{p_\star}{p_R}}}\]</div>
+</section>
+<section id="rarefaction-solution">
+<h3>Rarefaction solution<a class="headerlink" href="#rarefaction-solution" title="Permalink to this headline">#</a></h3>
+<p>To understand a rarefaction, let’s replace the pressure equation in our system with an entropy equation.  Entropy evolves according to:</p>
+<div class="math notranslate nohighlight">
+\[\frac{Ds}{Dt} = 0\]</div>
+<p>but now we need to replace the pressure gradient in the momentum equation:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial p(\rho, s)}{\partial x} = 
+  \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
+  \left . \frac{\partial p}{\partial \rho} \right |_s \frac{\partial \rho}{\partial x}
+=
+  \left . \frac{\partial p}{\partial s} \right |_\rho \frac{\partial s}{\partial x} +
+  \frac{p\Gamma_1}{\rho} \frac{\partial \rho}{\partial x}
+\]</div>
+<p>and our system becomes:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left ( \begin{array}{c} \rho \\ u \\ s \end{array} \right )_t +
+     \left ( \begin{array}{ccc} u &amp; \rho &amp; 0 \\
+                                c^2/\rho &amp; u &amp; \frac{p_s}{\rho}\\
+                                0 &amp; 0 &amp; u \end{array} \right )
+\left ( \begin{array}{c} \rho \\ u \\ s \end{array} \right )_x
+\end{split}\]</div>
+<p>with <span class="math notranslate nohighlight">\(p_s = \partial p / \partial s |_\rho\)</span>.
+This has the same eigenvalues as our primitive variable system, but now the right eigenvectors are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+{\bf r}^{(-)} = \left (\begin{array}{c} 1 \\ -c/\rho \\ 0 \end{array} \right )
+\qquad
+{\bf r}^{(0)} = \left (\begin{array}{c} 1 \\ 0 \\ -c^2 / p_s \end{array} \right )
+\qquad
+{\bf r}^{(+)} = \left (\begin{array}{c} 1 \\ c/\rho \\ 0 \end{array} \right )
+\end{split}\]</div>
+<p>We see that entropy is constant across a rarefaction.  We can use this to find the solution linking
+the states across a rarefaction.
+Note: we can only use this system when describing rarefactions.  Shocks are dissipative, so entropy will increase across them.</p>
+<p>We’ll work back with the primitive variables now.
+Across the left wave (’<span class="math notranslate nohighlight">\(-\)</span>’ ), the characteristic variable <span class="math notranslate nohighlight">\(w^{(+)}\)</span> is constant, which is defined as:</p>
+<div class="math notranslate nohighlight">
+\[{\bf l}^{(+)} \cdot d{\bf q} = 0\]</div>
+<p>Finding the left eigenvalue and doing the dot product gives:</p>
+<div class="math notranslate nohighlight">
+\[du + \frac{dp}{\rho c} = 0\]</div>
+<p>across the left wave.  The general solution to this is:</p>
+<div class="math notranslate nohighlight">
+\[u = - \int \frac{dp}{\rho c}\]</div>
+<p>For a gamma-law equation of state, constant entropy means:</p>
+<div class="math notranslate nohighlight">
+\[P = K \rho^\gamma\]</div>
+<p>and we can do the integral and we find:</p>
+<div class="math notranslate nohighlight">
+\[u + \frac{2c}{\gamma - 1} = \mbox{constant}\]</div>
+<p>Similarly across the right wave we find:</p>
+<div class="math notranslate nohighlight">
+\[u - \frac{2c}{\gamma - 1} = \mbox{constant}\]</div>
+<p>These are called the <em>Riemann invariants</em>.</p>
+<p>We can use these to link the states across the rarefaction, and we find:</p>
+<div class="math notranslate nohighlight">
+\[u_\star = u_L + \frac{2 c_L}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_L} \right )^{(\gamma-1)/2\gamma} \right ]\]</div>
+<p>for the left rarefaction, and</p>
+<div class="math notranslate nohighlight">
+\[u_\star = u_R - \frac{2 c_R}{\gamma - 1} \left [ 1 - \left ( \frac{p_\star}{p_R} \right )^{(\gamma-1)/2\gamma} \right ]\]</div>
+<p>for the right rarefaction.</p>
+<p>To describe the Riemann problem, we’ll create a <code class="docutils literal notranslate"><span class="pre">State</span></code> object that holds the left or right state</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">State</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; a simple object to hold a primitive variable state &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">p</span> <span class="o">=</span> <span class="n">p</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">u</span> <span class="o">=</span> <span class="n">u</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rho</span> <span class="o">=</span> <span class="n">rho</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;rho: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">rho</span><span class="si">}</span><span class="s2">; u: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">u</span><span class="si">}</span><span class="s2">; p: </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">p</span><span class="si">}</span><span class="s2">&quot;</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we will define a class that find the star state.  This needs to find the <span class="math notranslate nohighlight">\(p_\star\)</span> such that:</p>
+<div class="math notranslate nohighlight">
+\[u_{\star,L}(p_\star) = u_{\star,R}(p_\star)\]</div>
+<p>If <span class="math notranslate nohighlight">\(p_\star &gt; p_s\)</span>, for <span class="math notranslate nohighlight">\(s \in {L, R}\)</span>, then we are a shock (compression), otherwise we are a rarefaction.  So our functions are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u_{\star,L}(p_\star) = u_L + \left \{ \begin{array}{cc} 
+\frac{2 c_L}{\sqrt{2 \gamma (\gamma -1)}} \frac{1 - {p_\star}/{p_L}}{\sqrt{1 + \frac{\gamma+1}{\gamma-1} \frac{p_\star}{p_L}} } &amp; p_\star &gt; p_L \\[4 mm]
+\frac{2 c_L}{\gamma -1} \left [ 1 - \left ( {p_\star}/{p_L} \right )^{(\gamma-1)/(2\gamma)} \right ]
+ &amp; p_\star \le p_L \end{array} \right .
+ \end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+u_{\star,R}(p_\star) = u_R - \left \{ \begin{array}{cc} 
+\frac{2 c_R}{\sqrt{2 \gamma (\gamma -1)}} \frac{1 - {p_\star}/{p_R}}{\sqrt{1 + \frac{\gamma+1}{\gamma-1} \frac{p_\star}{p_R}} } &amp; p_\star &gt; p_R \\[4 mm]
+\frac{2 c_R}{\gamma -1} \left [ 1 - \left ( {p_\star}/{p_R} \right )^{(\gamma-1)/(2\gamma)} \right ]
+ &amp; p_\star \le p_R \end{array} \right .
+\end{split}\]</div>
+<p>We solve this by picking a guess for <span class="math notranslate nohighlight">\(p_\star\)</span> and then root finding on the constraint that the velocity in the star region is the same when we come from the left as when we come from the right.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">RiemannProblem</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; a class to define a Riemann problem.  It takes a left</span>
+<span class="sd">        and right state.  Note: we assume a constant gamma &quot;&quot;&quot;</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">left_state</span><span class="p">,</span> <span class="n">right_state</span><span class="p">,</span> <span class="n">gamma</span><span class="o">=</span><span class="mf">1.4</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">left</span> <span class="o">=</span> <span class="n">left_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">right</span> <span class="o">=</span> <span class="n">right_state</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">gamma</span> <span class="o">=</span> <span class="n">gamma</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">ustar</span> <span class="o">=</span> <span class="kc">None</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pstar</span> <span class="o">=</span> <span class="kc">None</span>
+
+    <span class="k">def</span> <span class="fm">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="k">return</span> <span class="sa">f</span><span class="s2">&quot;pstar = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">pstar</span><span class="si">}</span><span class="s2">, ustar = </span><span class="si">{</span><span class="bp">self</span><span class="o">.</span><span class="n">ustar</span><span class="si">}</span><span class="s2">&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">u_hugoniot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p</span><span class="p">,</span> <span class="n">side</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;define the Hugoniot curve, u(p).&quot;&quot;&quot;</span>
+
+        <span class="k">if</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;left&quot;</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">left</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="mf">1.0</span>
+        <span class="k">elif</span> <span class="n">side</span> <span class="o">==</span> <span class="s2">&quot;right&quot;</span><span class="p">:</span>
+            <span class="n">state</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">right</span>
+            <span class="n">s</span> <span class="o">=</span> <span class="o">-</span><span class="mf">1.0</span>
+
+        <span class="n">c</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">*</span><span class="n">state</span><span class="o">.</span><span class="n">p</span><span class="o">/</span><span class="n">state</span><span class="o">.</span><span class="n">rho</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">p</span> <span class="o">&lt;</span> <span class="n">state</span><span class="o">.</span><span class="n">p</span><span class="p">:</span>
+            <span class="c1"># rarefaction</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">s</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1.0</span><span class="p">))</span><span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="p">(</span><span class="n">p</span><span class="o">/</span><span class="n">state</span><span class="o">.</span><span class="n">p</span><span class="p">)</span><span class="o">**</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="p">)))</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="c1"># shock</span>
+            <span class="n">beta</span> <span class="o">=</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)</span>
+            <span class="n">u</span> <span class="o">=</span> <span class="n">state</span><span class="o">.</span><span class="n">u</span> <span class="o">+</span> <span class="n">s</span><span class="o">*</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">c</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">*</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">gamma</span><span class="o">-</span><span class="mf">1.0</span><span class="p">)))</span><span class="o">*</span> \
+                <span class="p">(</span><span class="mf">1.0</span> <span class="o">-</span> <span class="n">p</span><span class="o">/</span><span class="n">state</span><span class="o">.</span><span class="n">p</span><span class="p">)</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="mf">1.0</span> <span class="o">+</span> <span class="n">beta</span><span class="o">*</span><span class="n">p</span><span class="o">/</span><span class="n">state</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">u</span>
+
+    <span class="k">def</span> <span class="nf">find_star_state</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">p_min</span><span class="o">=</span><span class="mf">0.001</span><span class="p">,</span> <span class="n">p_max</span><span class="o">=</span><span class="mf">1000.0</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; root find the Hugoniot curve to find ustar, pstar &quot;&quot;&quot;</span>
+
+        <span class="c1"># we need to root-find on</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">pstar</span> <span class="o">=</span> <span class="n">optimize</span><span class="o">.</span><span class="n">brentq</span><span class="p">(</span>
+            <span class="k">lambda</span> <span class="n">p</span><span class="p">:</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_hugoniot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">)</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_hugoniot</span><span class="p">(</span><span class="n">p</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">),</span>
+            <span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ustar</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">u_hugoniot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">pstar</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, let’s visualize the solution.  This function will plot the Hugoniot curves (allowed values of <span class="math notranslate nohighlight">\(u\)</span> and <span class="math notranslate nohighlight">\(p\)</span> that pass through our state) for both states.  Their intersection is the solution to the Riemann problem—the star state.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">plot_hugoniot</span><span class="p">(</span><span class="n">riemann_problem</span><span class="p">,</span> <span class="n">p_min</span> <span class="o">=</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">p_max</span><span class="o">=</span><span class="mf">1.5</span><span class="p">,</span> <span class="n">N</span><span class="o">=</span><span class="mi">500</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot; plot the Hugoniot curves &quot;&quot;&quot;</span>
+
+    <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+    <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+    
+    <span class="n">p</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">linspace</span><span class="p">(</span><span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">,</span> <span class="n">num</span><span class="o">=</span><span class="n">N</span><span class="p">)</span>
+    <span class="n">u_left</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">u_right</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros_like</span><span class="p">(</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">u_left</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">u_hugoniot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="s2">&quot;left&quot;</span><span class="p">)</span>
+
+    <span class="c1"># shock for p &gt; p_s; rarefaction otherwise</span>
+    <span class="n">ish</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">ir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">ish</span><span class="p">],</span> <span class="n">u_left</span><span class="p">[</span><span class="n">ish</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">ir</span><span class="p">],</span> <span class="n">u_left</span><span class="p">[</span><span class="n">ir</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">p</span><span class="p">],</span> <span class="p">[</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">u</span><span class="p">],</span>
+               <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C0&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">du</span> <span class="o">=</span> <span class="mf">0.025</span><span class="o">*</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">u_left</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">max</span><span class="p">(</span><span class="n">u_right</span><span class="p">))</span> <span class="o">-</span>
+                <span class="nb">min</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">u_left</span><span class="p">),</span> <span class="n">np</span><span class="o">.</span><span class="n">min</span><span class="p">(</span><span class="n">u_right</span><span class="p">)))</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">left</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="n">du</span><span class="p">,</span> <span class="s2">&quot;left&quot;</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C0&quot;</span><span class="p">)</span>
+
+
+    <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">N</span><span class="p">):</span>
+        <span class="n">u_right</span><span class="p">[</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">u_hugoniot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">n</span><span class="p">],</span> <span class="s2">&quot;right&quot;</span><span class="p">)</span>
+
+    <span class="n">ish</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span> <span class="o">&gt;</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+    <span class="n">ir</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">p</span> <span class="o">&lt;</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">p</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">ish</span><span class="p">],</span> <span class="n">u_right</span><span class="p">[</span><span class="n">ish</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;-&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">p</span><span class="p">[</span><span class="n">ir</span><span class="p">],</span> <span class="n">u_right</span><span class="p">[</span><span class="n">ir</span><span class="p">],</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">ls</span><span class="o">=</span><span class="s2">&quot;:&quot;</span><span class="p">,</span> <span class="n">lw</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">p</span><span class="p">],</span> <span class="p">[</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">u</span><span class="p">],</span>
+               <span class="n">marker</span><span class="o">=</span><span class="s2">&quot;x&quot;</span><span class="p">,</span> <span class="n">c</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">40</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">text</span><span class="p">(</span><span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">p</span><span class="p">,</span> <span class="n">riemann_problem</span><span class="o">.</span><span class="n">right</span><span class="o">.</span><span class="n">u</span><span class="o">+</span><span class="n">du</span><span class="p">,</span> <span class="s2">&quot;right&quot;</span><span class="p">,</span>
+            <span class="n">horizontalalignment</span><span class="o">=</span><span class="s2">&quot;center&quot;</span><span class="p">,</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;C1&quot;</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlim</span><span class="p">(</span><span class="n">p_min</span><span class="p">,</span> <span class="n">p_max</span><span class="p">)</span>
+
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$p$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+    <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="sa">r</span><span class="s2">&quot;$u$&quot;</span><span class="p">,</span> <span class="n">fontsize</span><span class="o">=</span><span class="s2">&quot;large&quot;</span><span class="p">)</span>
+    
+    <span class="k">return</span> <span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s look at the solution for the same initial conditions we saw earlier</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">0.1</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">0.125</span><span class="p">)</span>
+
+<span class="n">rp</span> <span class="o">=</span> <span class="n">RiemannProblem</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+<span class="n">rp</span><span class="o">.</span><span class="n">find_star_state</span><span class="p">()</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_hugoniot</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pstar = 0.30313017805064685, ustar = 0.9274526200489498
+</pre></div>
+</div>
+<img alt="../../_images/euler-riemann_13_1.png" src="../../_images/euler-riemann_13_1.png" />
+</div>
+</div>
+<p>In this figure, a shock is shown as a solid line and a rarefaction is shown as a dotted line.  The solution is where the curves intersect, and we see that the a shock connects the right state to the star state and a rarefaction connects the left state to the star state.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">10.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">rp</span> <span class="o">=</span> <span class="n">RiemannProblem</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+<span class="n">rp</span><span class="o">.</span><span class="n">find_star_state</span><span class="p">()</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_hugoniot</span><span class="p">(</span><span class="n">rp</span><span class="p">,</span> <span class="n">p_max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pstar = 5.2191112238136865, ustar = 1.6596103391841412
+</pre></div>
+</div>
+<img alt="../../_images/euler-riemann_15_1.png" src="../../_images/euler-riemann_15_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">left</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=-</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+<span class="n">right</span> <span class="o">=</span> <span class="n">State</span><span class="p">(</span><span class="n">p</span><span class="o">=</span><span class="mf">1.0</span><span class="p">,</span> <span class="n">u</span><span class="o">=</span><span class="mf">2.0</span><span class="p">,</span> <span class="n">rho</span><span class="o">=</span><span class="mf">1.0</span><span class="p">)</span>
+
+<span class="n">rp</span> <span class="o">=</span> <span class="n">RiemannProblem</span><span class="p">(</span><span class="n">left</span><span class="p">,</span> <span class="n">right</span><span class="p">)</span>
+<span class="n">rp</span><span class="o">.</span><span class="n">find_star_state</span><span class="p">()</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plot_hugoniot</span><span class="p">(</span><span class="n">rp</span><span class="p">,</span> <span class="n">p_max</span><span class="o">=</span><span class="mi">10</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">rp</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>pstar = 0.05568299200702868, ustar = 0.0
+</pre></div>
+</div>
+<img alt="../../_images/euler-riemann_16_1.png" src="../../_images/euler-riemann_16_1.png" />
+</div>
+</div>
+</section>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./advection_euler/euler"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="euler-eigen.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Euler equations eigensystem</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="euler-riemann-sampling.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Sampling the Riemann solution</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+  
+    <div class="extra_footer">
+      <p>
+&copy; 2021-2022; CC-BY-NC-SA 4.0
+<p>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

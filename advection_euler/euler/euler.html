@@ -1,0 +1,939 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Euler Equations &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Euler equations eigensystem" href="euler-eigen.html" />
+    <link rel="prev" title="Exercises" href="../burgers/exercises.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../basics/roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/ODEs/ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partII.html">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/boundary-value-problems.html">
+     Two Point Boundary Value Problems
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/linear-algebra/la-overview.html">
+   Linear Algebra
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/linear-algebra/la-basics.html">
+     Linear Algebra
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../advection/advection.html">
+   Linear Advection Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../advection/advection-partIII.html">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="current reference internal" href="#">
+   Euler Equations
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-riemann.html">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Elliptic Problems and Multigrid
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../elliptic_multigrid/intro/elliptic-problems.html">
+   Poisson problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/relaxation/relaxation.html">
+   Relaxation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-relaxation.html">
+     Relaxation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-residual.html">
+     Residual
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-modes.html">
+     Behavior of Single Modes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid.html">
+   Multigrid
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-restrict-prolong.html">
+     Restriction and Prolongation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-two-grid.html">
+     Two Grid Correction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-vcycles.html">
+     V-Cycles
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Stars
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/stars.html">
+   Stars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/lane-emden.html">
+   Lane-Emden polytrope equation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reaction_networks/stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-systems.html">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Fadvection_euler/euler/euler.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/advection_euler/euler/euler.md"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.md</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conservative-form">
+   Conservative form
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#primitive-variable-form">
+   Primitive variable form
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#characteristic-form">
+   Characteristic form
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Euler Equations</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#conservative-form">
+   Conservative form
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#primitive-variable-form">
+   Primitive variable form
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#characteristic-form">
+   Characteristic form
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <section class="tex2jax_ignore mathjax_ignore" id="euler-equations">
+<h1>Euler Equations<a class="headerlink" href="#euler-equations" title="Permalink to this headline">#</a></h1>
+<p>The Euler equations describe compressible flow in the absence of
+dissipative effects (like viscosity).  In one-dimension, they appear
+as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\frac{\partial \rho}{\partial t} + \frac{\partial (\rho u)}{\partial x} &amp;= 0 \\
+\frac{\partial (\rho u)}{\partial t} + \frac{\partial}{\partial x} (\rho u^2 + p) &amp;= 0 \\
+\frac{\partial (\rho E)}{\partial t} + \frac{\partial}{\partial x} \left [ (\rho E + p) u \right ] &amp;= 0
+\end{align*}
+\end{split}\]</div>
+<p>Here, <span class="math notranslate nohighlight">\(E\)</span> is the specific total energy which is related to the specific internal energy as:</p>
+<div class="math notranslate nohighlight">
+\[
+\rho E = \rho e + \frac{1}{2} \rho u^2
+\]</div>
+<p>and the system is closed by an equation of state:</p>
+<div class="math notranslate nohighlight">
+\[p = p(\rho, e)\]</div>
+<p>A common equation of state is a <em>gamma-law EOS</em>:</p>
+<div class="math notranslate nohighlight">
+\[ p = \rho e (\gamma - 1)\]</div>
+<p>where <span class="math notranslate nohighlight">\(\gamma\)</span> is a constant.  For an ideal gas, <span class="math notranslate nohighlight">\(\gamma\)</span> is the ratio of specific heats, <span class="math notranslate nohighlight">\(c_p / c_v\)</span>.</p>
+<section id="conservative-form">
+<h2>Conservative form<a class="headerlink" href="#conservative-form" title="Permalink to this headline">#</a></h2>
+<p>As expressed above, the Euler equations are in conservative form.  We can define the conservative
+state, <span class="math notranslate nohighlight">\({\bf U}\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{\bf U} = \left ( \begin{array}{c} \rho \\ \rho u \\ \rho E \end{array} \right )\end{split}\]</div>
+<p>and the flux, <span class="math notranslate nohighlight">\({\bf F}({\bf U})\)</span> as:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{\bf F} = \left ( \begin{array}{c} \rho u \\ \rho u^2 + p  \\ (\rho E + p) u \end{array} \right )\end{split}\]</div>
+<p>and then our system in conservative form is:</p>
+<div class="math notranslate nohighlight">
+\[{\bf U}_t + [{\bf F}({\bf U})]_x = 0\]</div>
+<p>and we can do the same technique of discretizing the domain into cells
+and integrating over the volume of a cell to get the finite-volume
+conservative update for the system:</p>
+<div class="math notranslate nohighlight">
+\[\frac{\partial {\bf U}_i}{\partial t} =
+  - \frac{1}{\Delta x} \left [ {\bf F}({\bf U}_{i+1/2}) - {\bf F}({\bf U}_{i+1/2}) \right ]\]</div>
+<p>This means that we will be able to use the same basic solution methodology
+from advection and Burgers’ equation with the Euler equations, so long
+as we can find the fluxes.  This primarily means that we need to understand the Riemann
+problem for the Euler equations.</p>
+</section>
+<section id="primitive-variable-form">
+<h2>Primitive variable form<a class="headerlink" href="#primitive-variable-form" title="Permalink to this headline">#</a></h2>
+<p>We can alternately express the Euler equations in terms of the primitive variables, <span class="math notranslate nohighlight">\({\bf q}\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}{\bf q} = \left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )\end{split}\]</div>
+<p>and the evolution equations are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )_t +
+   \left ( \begin{array}{c} u &amp; \rho &amp; 0 \\ 0 &amp; u &amp; 1/\rho \\ 0 &amp; \Gamma_1 p &amp; u \end{array} \right )
+   \left ( \begin{array}{c} \rho \\ u \\ p \end{array} \right )_x = 0
+\end{split}\]</div>
+<p>where <span class="math notranslate nohighlight">\(\Gamma_1 = d \log p/d \log \rho |_s\)</span></p>
+<p>or compactly:</p>
+<div class="math notranslate nohighlight">
+\[{\bf q}_t + {\bf A}({\bf q}) {\bf q}_x = 0\]</div>
+<p>Another useful quantity is the speed of sound, defined as:</p>
+<div class="math notranslate nohighlight">
+\[c = \sqrt{\frac{\Gamma_1 p}{\rho}}\]</div>
+</section>
+<section id="characteristic-form">
+<h2>Characteristic form<a class="headerlink" href="#characteristic-form" title="Permalink to this headline">#</a></h2>
+<p>We call a system <em>hyperbolic</em> if the eigenvalues are real and finite.
+For our matrix <span class="math notranslate nohighlight">\({\bf A}({\bf q})\)</span> above, the eigenvalues are:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align}
+\lambda^{(-)} &amp;= u - c \\
+\lambda^{(0)} &amp;= u \\
+\lambda^{(+)} &amp;= u + c \\
+\end{align}
+\end{split}\]</div>
+<p>These are the speeds at which information propagates in our system.</p>
+<p>We can also find the right and left eigenvectors:</p>
+<div class="math notranslate nohighlight">
+\[{\bf A} {\bf r}^{(\nu)} = \lambda^{(\nu)} {\bf r}^{(\nu)}\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf l}^{(\nu)} {\bf A}  = \lambda^{(\nu)} {\bf l}^{(\nu)}\]</div>
+<p>giving:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+{\bf r}^{(-)} = \left ( \begin{array}{c} 1 \\ -c/\rho \\ c^2 \end{array} \right )
+%
+\qquad
+{\bf r}^{(0)} = \left ( \begin{array}{c} 1 \\ 0 \\ 0  \end{array} \right )
+%
+\qquad
+{\bf r}^{(+)} = \left ( \begin{array}{c} 1 \\ c/\rho \\ c^2 \end{array} \right )
+\end{split}\]</div>
+<p>and</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+{\bf l}^{(-)} &amp;= \left ( \begin{array}{ccc} 0 &amp; -\frac{\rho}{2c} &amp; \frac{1}{2c^2} \end{array} \right ) \\
+{\bf l}^{(0)} &amp;= \left ( \begin{array}{ccc} 1 &amp; 0 &amp; -\frac{1}{c^2} \end{array} \right ) \\
+{\bf l}^{(+)} &amp;= \left ( \begin{array}{ccc} 0 &amp; \frac{\rho}{2c} &amp; \frac{1}{2c^2} \end{array} \right ) \\
+\end{align*}
+\end{split}\]</div>
+<p>These are normalized such that</p>
+<div class="math notranslate nohighlight">
+\[{\bf l}^{(i)} \cdot {\bf r}^{(j)} = \delta_{ij}\]</div>
+<p>The final form of the Euler equations we will need is the <em>characteristic form</em>.  We can
+construct square matrices <span class="math notranslate nohighlight">\({\bf R}\)</span> and <span class="math notranslate nohighlight">\({\bf L}\)</span> by grouping together the eigenvectors:</p>
+<div class="math notranslate nohighlight">
+\[{\bf R} = \left ( {\bf r}^{(-)} | {\bf r}^{(0)} | {\bf r}^{(+)} \right )\]</div>
+<div class="math notranslate nohighlight">
+\[\begin{split}{\bf L} = \left ( \begin{array}{c} {\bf l}^{(-)} \\
+                                     {\bf l}^{(0)} \\
+                                     {\bf l}^{(+)} \end{array} \right )\end{split}\]</div>
+<p>These satisfy:</p>
+<div class="math notranslate nohighlight">
+\[{\bf L}{\bf R} = {\bf R} {\bf L} = {\bf I}\]</div>
+<p>We then define the characteristic variables via:</p>
+<div class="math notranslate nohighlight">
+\[d{\bf w} = {\bf L} d{\bf q}\]</div>
+<p>Since we are nonlinear, we cannot simply integrate this.  Using this definition, we can
+rewrite our system as:</p>
+<div class="math notranslate nohighlight">
+\[{\bf w}_t + {\bf \Lambda} {\bf w}_x = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\({\bf \Lambda}\)</span> is a diagonal matrix with the eigenvalues on the diagonal:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+{\bf \Lambda} = {\bf LAR} =
+   \left ( \begin{array}{ccc}
+             \lambda^{(-)} &amp;              &amp; \\
+                          &amp; \lambda^{(0)} &amp; \\
+                          &amp;              &amp; \lambda^{(+)} \end{array} \right )
+\end{split}\]</div>
+<p>In this form, the 3 equations are decoupled and are just advection
+equations for each of the characteristic variables.  If our system
+were linear, we’d be done – each characteristic variable would advect
+at its given wave speed without interacting with one-another.</p>
+<p>Since we are nonlinear, our solution is more difficult, but the
+characteristic system still tells us a lot.</p>
+<blockquote>
+<div><p>Consider an initial discontinuity in the primitive variables.  Each
+of the 3 characteristic waves will carry a jump in their associated
+characteristic quantity away from the discontinuity at their
+characteristic speed.</p>
+</div></blockquote>
+<p><img alt="Riemann waves carrying a jump" src="../../_images/riemann-waves-jump.png" /></p>
+<p>The corresponding jump in the primitive variable is then just</p>
+<div class="math notranslate nohighlight">
+\[d{\bf q} = {\bf L}^{-1} d{\bf w} = {\bf R}d{\bf w}\]</div>
+<p>Looking at the right eigenvectors, we see that all primitive variables
+jump across the left and right waves, but only density jumps across
+the middle wave.</p>
+<ul class="simple">
+<li><p>The middle wave is called a <em>contact discontinuity</em>.  Since the velocity
+does not jump across it, there can be no compression or expansion, so
+shocks and rarefactions are not allowed.</p></li>
+<li><p>The left and right waves can be either a shock or a rarefaction.</p></li>
+</ul>
+<p>Here’s an example of the solution of a Riemann problem for the Euler equations.
+The state on the left is initialized to:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\rho_L &amp;= 1 \\
+u_L &amp;= 0 \\
+p_L &amp;= 1 \\
+\end{align*}
+\end{split}\]</div>
+<p>and on the right:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\begin{align*}
+\rho_R &amp;= 1/8 \\
+u_R &amp;= 0 \\
+p_R &amp;= 1/10 \\
+\end{align*}
+\end{split}\]</div>
+<p><img alt="Riemann Sod problem" src="../../_images/riemann-sod.png" /></p>
+<p>The jumps we see are just as the right eigenvectors indicated.  Only
+the density jumps across the middle wave.  The left wave is a shock
+and the right wave is a rarefaction.</p>
+</section>
+<div class="toctree-wrapper compound">
+</div>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./advection_euler/euler"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="../burgers/exercises.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Exercises</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="euler-eigen.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Euler equations eigensystem</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+  
+    <div class="extra_footer">
+      <p>
+&copy; 2021-2022; CC-BY-NC-SA 4.0
+<p>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,1141 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Second-order advection &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Burgers’ Equation" href="../burgers/burgers.html" />
+    <link rel="prev" title="Finite-Volumes" href="advection-partII.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../basics/roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/ODEs/ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/ODEs-partII.html">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/boundary-value-problems.html">
+     Two Point Boundary Value Problems
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/ODEs/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../basics/linear-algebra/la-overview.html">
+   Linear Algebra
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../basics/linear-algebra/la-basics.html">
+     Linear Algebra
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="advection.html">
+   Linear Advection Equation
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../euler/euler.html">
+   Euler Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../euler/euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../euler/euler-riemann.html">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../euler/euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../euler/euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Elliptic Problems and Multigrid
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../elliptic_multigrid/intro/elliptic-problems.html">
+   Poisson problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/relaxation/relaxation.html">
+   Relaxation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-relaxation.html">
+     Relaxation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-residual.html">
+     Residual
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-modes.html">
+     Behavior of Single Modes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid.html">
+   Multigrid
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-restrict-prolong.html">
+     Restriction and Prolongation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-two-grid.html">
+     Two Grid Correction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-vcycles.html">
+     V-Cycles
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Stars
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/stars.html">
+   Stars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/lane-emden.html">
+   Lane-Emden polytrope equation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reaction_networks/stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-systems.html">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/zingale/comp_astro_tutorial/main?urlpath=tree/content/advection_euler/advection/advection-partIII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://colab.research.google.com/github/zingale/comp_astro_tutorial/blob/main/content/advection_euler/advection/advection-partIII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="headerbtn__text-container">Colab</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Fadvection_euler/advection/advection-partIII.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/advection_euler/advection/advection-partIII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#piecewise-linear-reconstruction">
+   Piecewise linear reconstruction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation">
+   Implementation
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Second-order advection</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#piecewise-linear-reconstruction">
+   Piecewise linear reconstruction
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#implementation">
+   Implementation
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="second-order-advection">
+<h1>Second-order advection<a class="headerlink" href="#second-order-advection" title="Permalink to this headline">#</a></h1>
+<p>To get a more accurate solution, we need to handle both the space and time discretizations in a higher order fashion.</p>
+<p>First, let’s look again at the definition of the average:</p>
+<div class="math notranslate nohighlight">
+\[\langle a \rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx\]</div>
+<p>let’s substitute in a Taylor expansion about <span class="math notranslate nohighlight">\(x_i\)</span>:</p>
+<div class="math notranslate nohighlight">
+\[a(x) = a(x_i) + \left . \frac{\partial a}{\partial x} \right |_i (x - x_i) + \frac{1}{2} \left . \frac{\partial^2 a}{\partial x^2} \right |_i (x - x_i)^2 + \mathcal{O}(\Delta x^3)\]</div>
+<p>inserting this into our integral, we have:</p>
+<div class="math notranslate nohighlight">
+\[\langle a \rangle_i = \frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} 
+    \left [a(x_i) + \left . \frac{\partial a}{\partial x} \right |_i (x - x_i) + \frac{1}{2} \left . \frac{\partial^2 a}{\partial x^2} \right |_i (x - x_i)^2 + \mathcal{O}(\Delta x^3) \right ] dx\]</div>
+<p>Look at the terms:</p>
+<ul class="simple">
+<li><p>the first term is just a constant, so it’s integral is just <span class="math notranslate nohighlight">\(a(x_i) \Delta x\)</span></p></li>
+<li><p>the second term is odd over the interface <span class="math notranslate nohighlight">\([x_{i-1/2},x_{i+1/2}]\)</span>, so it integrates to 0</p></li>
+<li><p>the third term will integrate to something like <span class="math notranslate nohighlight">\((\Delta x)^3\)</span> (before we divide by the <span class="math notranslate nohighlight">\(\Delta x\)</span> out front)</p></li>
+</ul>
+<p>This means that</p>
+<div class="math notranslate nohighlight">
+\[\langle a \rangle_i = a(x_i) + \mathcal{O}(\Delta x^2)\]</div>
+<p>So if we work to second-order in space, then we don’t need to worry about the difference between the cell average and cell-center.</p>
+<p>To make the notation easier, we’ll drop the <span class="math notranslate nohighlight">\(\langle \rangle\)</span> from now forward.</p>
+<p>There are 2 broad ways that we can handle the time integration to get more accuracy:</p>
+<ul class="simple">
+<li><p>Predict our interface states at the midpoint in time using a Taylor expansion (in both space and time).  This would result in a time-centered interface state.  This procedure is sometimes called <em>characteristic tracing</em>.</p></li>
+<li><p>Just construct high-order interface states in space, ignoring how they evolve in time, and use a high-order integrator (like Runge-Kutta) to handle the time integration.  This is called the <em>method-of-lines</em> approach.</p></li>
+</ul>
+<p>We’ll focus on the second approach (method-of-lines).  For details on the first, see my notes: <a class="reference external" href="https://github.com/Open-Astrophysics-Bookshelf/numerical_exercises">Computational Hydrodynamics for Astrophysics</a></p>
+<section id="piecewise-linear-reconstruction">
+<h2>Piecewise linear reconstruction<a class="headerlink" href="#piecewise-linear-reconstruction" title="Permalink to this headline">#</a></h2>
+<p>For the first order method, we did the reconstruction to the interfaces by assuming that <span class="math notranslate nohighlight">\(a(x)\)</span> is constant in a cell.  This is called <em>piecewise constant reconstruction</em>.</p>
+<p>To be higher-order accurate, we need to allow for some variation in the zone.  The next easiest approach is to allow <span class="math notranslate nohighlight">\(a(x)\)</span> to vary linearly in the zone.  This is called <em>piecewise linear reconstruction</em>.</p>
+<p><img alt="piecewise linear reconstruction" src="../../_images/riemann-mol.png" /></p>
+<p>In the figure above, the cell-average is represented by the dotted gray line and the reconstructed slopes, <span class="math notranslate nohighlight">\(\Delta a_i\)</span>, are the red solid lines.  We can use a centered-difference for the slope, e.g.,</p>
+<div class="math notranslate nohighlight">
+\[\Delta a_i = \frac{a_{i+1} - a_{i-1}}{2}\]</div>
+<p>Our reconstructed form of <span class="math notranslate nohighlight">\(a(x)\)</span> in this case is:</p>
+<div class="math notranslate nohighlight">
+\[a(x) = \frac{\Delta a_i}{\Delta x} (x - x_i) + a_i\]</div>
+<p>and this is conservative, e.g.,</p>
+<div class="math notranslate nohighlight">
+\[\frac{1}{\Delta x} \int_{x_{i-1/2}}^{x_{i+1/2}} a(x) dx = a_i\]</div>
+<p>Then we construct the interface states by following this slope from the value <span class="math notranslate nohighlight">\(a_i\)</span> at <span class="math notranslate nohighlight">\(x_i\)</span> to the two interfaces for that zone.  Note that zone <span class="math notranslate nohighlight">\(i\)</span> connects to the right state on the left interface (<span class="math notranslate nohighlight">\(i-1/2\)</span>) and the left state on the right interface (<span class="math notranslate nohighlight">\(i+1/2\)</span>):</p>
+<p><img alt="advection states" src="../../_images/advection-states.png" /></p>
+<p>Therefore, we have:</p>
+<div class="math notranslate nohighlight">
+\[a_{i-1/2,R} = a(x_i - \Delta x/2) = a_i - \frac{1}{2} \Delta a_i\]</div>
+<div class="math notranslate nohighlight">
+\[a_{i+1/2,L} = a(x_i + \Delta x/2) = a_i + \frac{1}{2} \Delta a_i\]</div>
+<p>There is one additional complication: we need the interface state just outside the physical domain, which means that we need to construct a slope there, which in turn means that we need to have an additional ghost cell to allow us to compute the centered-difference slope.  So for this method, we need 2 ghost cells on each side.</p>
+<p><img alt="ghost cells in the finite-volume method" src="../../_images/fv_ghost.png" /></p>
+</section>
+<section id="implementation">
+<h2>Implementation<a class="headerlink" href="#implementation" title="Permalink to this headline">#</a></h2>
+<p>To start, we need a class that hold the data on a finite-volume grid and knows how to fill ghost cells on <em>any array</em> that lives on our domain.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">FVGrid</span><span class="p">:</span>
+
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">nx</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span> <span class="n">xmin</span><span class="o">=</span><span class="mf">0.0</span><span class="p">,</span> <span class="n">xmax</span><span class="o">=</span><span class="mf">1.0</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span> <span class="o">=</span> <span class="n">xmin</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">=</span> <span class="n">xmax</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">=</span> <span class="n">ng</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">nx</span> <span class="o">=</span> <span class="n">nx</span>
+
+        <span class="c1"># python is zero-based.  Make easy intergers to know where the</span>
+        <span class="c1"># real data lives</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ilo</span> <span class="o">=</span> <span class="n">ng</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ihi</span> <span class="o">=</span> <span class="n">ng</span><span class="o">+</span><span class="n">nx</span><span class="o">-</span><span class="mi">1</span>
+
+        <span class="c1"># physical coords -- cell-centered, left and right edges</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">dx</span> <span class="o">=</span> <span class="p">(</span><span class="n">xmax</span> <span class="o">-</span> <span class="n">xmin</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="n">nx</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">ng</span><span class="p">)</span><span class="o">-</span><span class="n">ng</span><span class="o">+</span><span class="mf">0.5</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xl</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">ng</span><span class="p">)</span><span class="o">-</span><span class="n">ng</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">xr</span> <span class="o">=</span> <span class="n">xmin</span> <span class="o">+</span> <span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">arange</span><span class="p">(</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="n">ng</span><span class="p">)</span><span class="o">-</span><span class="n">ng</span><span class="o">+</span><span class="mf">1.0</span><span class="p">)</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span>
+
+        <span class="c1"># storage for the solution</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">a</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">ainit</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+
+    <span class="k">def</span> <span class="nf">period</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">u</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return the period for advection with velocity u &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">xmax</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">xmin</span><span class="p">)</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">scratch_array</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return a scratch array dimensioned for our grid &quot;&quot;&quot;</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">((</span><span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="o">+</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="n">np</span><span class="o">.</span><span class="n">float64</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">fill_BCs</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">atmp</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; fill all ghostcells with periodic boundary conditions &quot;&quot;&quot;</span>
+
+        <span class="c1"># left boundary</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+            <span class="n">atmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="o">-</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">atmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">-</span><span class="n">n</span><span class="p">]</span>
+
+        <span class="c1"># right boundary</span>
+        <span class="k">for</span> <span class="n">n</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span><span class="p">):</span>
+            <span class="n">atmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="o">+</span><span class="n">n</span><span class="p">]</span> <span class="o">=</span> <span class="n">atmp</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="n">n</span><span class="p">]</span>
+
+    <span class="k">def</span> <span class="nf">norm</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">e</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot; return the norm of quantity e which lives on the grid &quot;&quot;&quot;</span>
+        <span class="k">if</span> <span class="ow">not</span> <span class="nb">len</span><span class="p">(</span><span class="n">e</span><span class="p">)</span> <span class="o">==</span> <span class="p">(</span><span class="mi">2</span><span class="o">*</span><span class="bp">self</span><span class="o">.</span><span class="n">ng</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">nx</span><span class="p">):</span>
+            <span class="k">return</span> <span class="kc">None</span>
+
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">dx</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">sum</span><span class="p">(</span><span class="n">e</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="bp">self</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">))</span>
+    
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+        <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">ainit</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;initial conditions&quot;</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+        <span class="k">return</span> <span class="n">fig</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now, we’ll use 2nd order Runge-Kutta.  If we use the implementation ideas from before, then we want a RHS function that we can call that just gives us the update.  Here we are thinking of our equation as:</p>
+<div class="math notranslate nohighlight">
+\[\dot{y}_i = g(y_i)\]</div>
+<p>where</p>
+<div class="math notranslate nohighlight">
+\[g(y_i) = -\frac{1}{\Delta x} \left [ F(a_{i+1/2}) - F(a_{i-1/2}) \right ]\]</div>
+<p>We need to store interface values (which we’ve been denoting with half-integer subscripts, like <span class="math notranslate nohighlight">\(a_{i-1/2}\)</span>) as arrays which only take integer indices.  We will adopt the common convention that when an array refers to an interface state, it denotes the left interface of a cell.</p>
+<p>E.g., <code class="docutils literal notranslate"><span class="pre">aint[i]}</span></code> means <span class="math notranslate nohighlight">\(a_{i-1/2}\)</span></p>
+<p>This is illustrated below for arrays <code class="docutils literal notranslate"><span class="pre">a[]</span></code> which stores cell center quantities and <code class="docutils literal notranslate"><span class="pre">aint[]</span></code> which stores interface values:</p>
+<p><img alt="array notation for interfaces" src="../../_images/array-labels.png" /></p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">flux_update</span><span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute -div{F} for linear advection&quot;&quot;&quot;</span>
+
+    <span class="c1"># slope</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">da</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">])</span>
+
+    <span class="c1"># upwinding means that we take the left state always</span>
+    <span class="c1"># convection: aint[i] = a_{i-1/2}</span>
+    <span class="n">aint</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">da</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">flux_diff</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">flux_diff</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">gr</span><span class="o">.</span><span class="n">dx</span>
+
+    <span class="k">return</span> <span class="n">flux_diff</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Now we write the time update.  This is going to look a lot what we did with orbits.  The main thing we need to remember is that we need to fill the ghost cells before we compute the RHS</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">advection_mol</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">num_periods</span><span class="o">=</span><span class="mi">1</span><span class="p">,</span> <span class="n">init_cond</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+
+    <span class="c1"># create a grid</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">FVGrid</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">ng</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="n">tmax</span> <span class="o">=</span> <span class="n">num_periods</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">period</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="c1"># setup initial conditions</span>
+    <span class="n">init_cond</span><span class="p">(</span><span class="n">g</span><span class="p">)</span>
+
+    <span class="n">g</span><span class="o">.</span><span class="n">ainit</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span>
+    
+    <span class="c1"># compute the timestep</span>
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">C</span> <span class="o">*</span> <span class="n">g</span><span class="o">.</span><span class="n">dx</span> <span class="o">/</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">u</span><span class="p">)</span>
+
+    <span class="n">t</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">tmax</span><span class="p">:</span>
+
+        <span class="k">if</span> <span class="n">t</span> <span class="o">+</span> <span class="n">dt</span> <span class="o">&gt;</span> <span class="n">tmax</span><span class="p">:</span>
+            <span class="n">dt</span> <span class="o">=</span> <span class="n">tmax</span> <span class="o">-</span> <span class="n">t</span>
+
+        <span class="c1"># second-order RK integration</span>
+        <span class="n">g</span><span class="o">.</span><span class="n">fill_BCs</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="n">flux_update</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">)</span>
+
+        <span class="n">atmp</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+        <span class="n">atmp</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">k1</span><span class="p">[:]</span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">fill_BCs</span><span class="p">(</span><span class="n">atmp</span><span class="p">)</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="n">flux_update</span><span class="p">(</span><span class="n">g</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">atmp</span><span class="p">)</span>
+
+        <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span> <span class="o">+=</span> <span class="n">dt</span> <span class="o">*</span> <span class="n">k2</span><span class="p">[:]</span>
+
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">dt</span>
+
+    <span class="k">return</span> <span class="n">g</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">tophat</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">0.0</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[</span><span class="n">np</span><span class="o">.</span><span class="n">logical_and</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span> <span class="o">&gt;=</span> <span class="mf">1.</span><span class="o">/</span><span class="mi">3</span><span class="p">,</span> <span class="n">g</span><span class="o">.</span><span class="n">x</span> <span class="o">&lt;=</span> <span class="mf">2.</span><span class="o">/</span><span class="mf">3.</span><span class="p">)]</span> <span class="o">=</span> <span class="mf">1.0</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">advection_mol</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">init_cond</span><span class="o">=</span><span class="n">tophat</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/advection-partIII_15_0.png" src="../../_images/advection-partIII_15_0.png" />
+</div>
+</div>
+<div class="alert alert-block alert-info">
+<p><strong>Exercise:</strong></p>
+<p>Implement initial conditions corresponding to a Gaussian and run the solver with these initial conditions—how do they compare?</p>
+</div><div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">gaussian</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">x</span> <span class="o">-</span> <span class="mf">0.5</span><span class="p">)</span><span class="o">**</span><span class="mi">2</span><span class="o">/</span><span class="mf">0.1</span><span class="p">)</span>
+    
+<span class="n">g</span> <span class="o">=</span> <span class="n">advection_mol</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">init_cond</span><span class="o">=</span><span class="n">gaussian</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/advection-partIII_17_0.png" src="../../_images/advection-partIII_17_0.png" />
+</div>
+</div>
+<p>One thing you’ll notice is that with tophat initial conditions, there are oscillations near the discontinuities.  We don’t see these with the smooth run.</p>
+<p>Godunov’s theorem says:</p>
+<blockquote>
+<div><p><em>Any monotonic linear method for advection is first order accurate</em></p>
+</div></blockquote>
+<p>and the converse is true as well.  This means that in order to be monotonic and second-order accurate, we need to make our method nonlinear.</p>
+<p>This is accomplished through the use of slope limiters.  A limiter modifies the piecewise linear slopes near extrema to prevent overshoots.  Mathematically they enforce a property called <em>total variation diminshing</em>.</p>
+<p>A simple limiter is the <em>minmod limiter</em>:</p>
+<div class="math notranslate nohighlight">
+\[\Delta a_i = \mathtt{minmod} \left (
+  {a_i - a_{i-1}}, {a_{i+1} - a_i} \right )\]</div>
+<p>with:</p>
+<div class="math notranslate nohighlight">
+\[\begin{split}
+\mathtt{minmod}(a,b) = \left \{
+    \begin{array}{ll}
+    a &amp; \mathit{if~} |a| &lt; |b| \mathrm{~and~} a\cdot b &gt; 0 \\
+    b &amp; \mathit{if~} |b| &lt; |a| \mathrm{~and~} a\cdot b &gt; 0 \\
+    0 &amp; \mathit{otherwise}
+    \end{array}
+  \right .
+\end{split}\]</div>
+<p>Most limiters have a form like this.  The key is the check <span class="math notranslate nohighlight">\(a \cdot b &gt; 0\)</span>.  That is checking if the slopes on the left and right of the interface are the same sign.  If they are not the same sign, then we are at an extrema (a minimum or maximum) and those are the situations where we want to limit.</p>
+<p>Here’s a visualization of the effect of the limiter:</p>
+<p><img alt="limited slopes" src="../../_images/generalgrid.png" /></p>
+<p>The gray lines are the original unlimited slopes.  Notice that the slope at <span class="math notranslate nohighlight">\(i - 2\)</span> goes well above the original data on the right edge of the domain.  That zone is a maximum.  The limited slopes are shown in red.  For zone <span class="math notranslate nohighlight">\(i-2\)</span> the result of the limiting is to completely flatten the profile—we go to piecewise constant in that zone.</p>
+<div class="alert alert-block alert-info">
+<p><strong>Exercise:</strong></p>
+<p>Adapt the second-order advection code to limit the slopes using the <code class="docutils literal notranslate"><span class="pre">minmod</span></code> limtier and rerun the Gaussian and tophat initial conditions.</p>
+</div><div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">flux_update</span><span class="p">(</span><span class="n">gr</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">a</span><span class="p">):</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;compute -div{F} for linear advection&quot;&quot;&quot;</span>
+
+    <span class="c1"># slope</span>
+    
+    <span class="c1"># dl = a_i - a_{i-1}</span>
+    <span class="n">dl</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">dl</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">2</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="c1"># dr = a_{i+1} - a_i</span>
+    <span class="n">dr</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">dr</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">3</span><span class="p">]</span> <span class="o">-</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span>
+    
+    <span class="n">d1</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">dl</span><span class="p">)</span> <span class="o">&lt;</span> <span class="n">np</span><span class="o">.</span><span class="n">fabs</span><span class="p">(</span><span class="n">dr</span><span class="p">),</span> <span class="n">dl</span><span class="p">,</span> <span class="n">dr</span><span class="p">)</span>
+    <span class="n">da</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">where</span><span class="p">(</span><span class="n">dl</span><span class="o">*</span><span class="n">dr</span> <span class="o">&gt;</span> <span class="mf">0.0</span><span class="p">,</span> <span class="n">d1</span><span class="p">,</span> <span class="mf">0.0</span><span class="p">)</span>
+    
+    <span class="c1"># upwinding means that we take the left state always</span>
+    <span class="c1"># convection: aint[i] = a_{i-1/2}</span>
+    <span class="n">aint</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">]</span> <span class="o">=</span> <span class="n">a</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">da</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">-</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span>
+
+    <span class="n">flux_diff</span> <span class="o">=</span> <span class="n">gr</span><span class="o">.</span><span class="n">scratch_array</span><span class="p">()</span>
+    <span class="n">flux_diff</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">=</span> <span class="n">u</span> <span class="o">*</span> <span class="p">(</span><span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">1</span><span class="p">]</span> <span class="o">-</span> <span class="n">aint</span><span class="p">[</span><span class="n">gr</span><span class="o">.</span><span class="n">ilo</span><span class="o">+</span><span class="mi">1</span><span class="p">:</span><span class="n">gr</span><span class="o">.</span><span class="n">ihi</span><span class="o">+</span><span class="mi">2</span><span class="p">])</span> <span class="o">/</span> <span class="n">gr</span><span class="o">.</span><span class="n">dx</span>
+
+    <span class="k">return</span> <span class="n">flux_diff</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">C</span> <span class="o">=</span> <span class="mf">0.5</span>
+<span class="n">u</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">nx</span> <span class="o">=</span> <span class="mi">128</span>
+
+<span class="n">g</span> <span class="o">=</span> <span class="n">advection_mol</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">init_cond</span><span class="o">=</span><span class="n">tophat</span><span class="p">)</span>
+<span class="n">fig</span> <span class="o">=</span> <span class="n">g</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/advection-partIII_21_0.png" src="../../_images/advection-partIII_21_0.png" />
+</div>
+</div>
+<div class="alert alert-block alert-info">
+<p><strong>Exercise:</strong></p>
+<p>Now let’s see if we are really second-order accurate.  Compute the norm of the error after 1 period with and without the limiters for the sine initial conditions used previous.  Does it converge 2nd order?</p>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">sine</span><span class="p">(</span><span class="n">g</span><span class="p">):</span>
+    <span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="p">[:]</span> <span class="o">=</span> <span class="mf">1.0</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">np</span><span class="o">.</span><span class="n">sin</span><span class="p">(</span><span class="mf">2.0</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">*</span><span class="n">g</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">u</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">C</span> <span class="o">=</span> <span class="mf">0.5</span>
+
+<span class="k">for</span> <span class="n">nx</span> <span class="ow">in</span> <span class="p">[</span><span class="mi">32</span><span class="p">,</span> <span class="mi">64</span><span class="p">,</span> <span class="mi">128</span><span class="p">,</span> <span class="mi">256</span><span class="p">]:</span>
+    <span class="n">g</span> <span class="o">=</span> <span class="n">advection_mol</span><span class="p">(</span><span class="n">nx</span><span class="p">,</span> <span class="n">u</span><span class="p">,</span> <span class="n">C</span><span class="p">,</span> <span class="n">init_cond</span><span class="o">=</span><span class="n">sine</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="si">{</span><span class="n">nx</span><span class="si">:</span><span class="s2">3d</span><span class="si">}</span><span class="s2">: </span><span class="si">{</span><span class="n">g</span><span class="o">.</span><span class="n">norm</span><span class="p">(</span><span class="n">g</span><span class="o">.</span><span class="n">a</span><span class="w"> </span><span class="o">-</span><span class="w"> </span><span class="n">g</span><span class="o">.</span><span class="n">ainit</span><span class="p">)</span><span class="si">:</span><span class="s2">10.8f</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> 32: 0.03721840
+ 64: 0.01323005
+128: 0.00421420
+256: 0.00132975
+</pre></div>
+</div>
+</div>
+</div>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./advection_euler/advection"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="advection-partII.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Finite-Volumes</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="../burgers/burgers.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Burgers’ Equation</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+  
+    <div class="extra_footer">
+      <p>
+&copy; 2021-2022; CC-BY-NC-SA 4.0
+<p>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>

@@ -1,0 +1,1268 @@
+
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="generator" content="Docutils 0.17.1: http://docutils.sourceforge.net/" />
+
+    <title>Higher-order Accurate ODE Integration &#8212; Tutorial on Computational Astrophysics</title>
+    
+  <!-- Loaded before other Sphinx assets -->
+  <link href="../../_static/styles/theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+<link href="../../_static/styles/pydata-sphinx-theme.css?digest=1999514e3f237ded88cf" rel="stylesheet">
+
+    
+  <link rel="stylesheet"
+    href="../../_static/vendor/fontawesome/5.13.0/css/all.min.css">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-solid-900.woff2">
+  <link rel="preload" as="font" type="font/woff2" crossorigin
+    href="../../_static/vendor/fontawesome/5.13.0/webfonts/fa-brands-400.woff2">
+
+    <link rel="stylesheet" type="text/css" href="../../_static/pygments.css" />
+    <link rel="stylesheet" href="../../_static/styles/sphinx-book-theme.css?digest=5115cc725059bd94278eecd172e13a965bf8f5a9" type="text/css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/togglebutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/copybutton.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/mystnb.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/sphinx-thebe.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/myfile.css" />
+    <link rel="stylesheet" type="text/css" href="../../_static/design-style.b7bb847fb20b106c3d81b95245e65545.min.css" />
+    
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf">
+
+    <script data-url_root="../../" id="documentation_options" src="../../_static/documentation_options.js"></script>
+    <script src="../../_static/jquery.js"></script>
+    <script src="../../_static/underscore.js"></script>
+    <script src="../../_static/doctools.js"></script>
+    <script src="../../_static/clipboard.min.js"></script>
+    <script src="../../_static/copybutton.js"></script>
+    <script src="../../_static/scripts/sphinx-book-theme.js?digest=9c920249402e914e316237a7dbc6769907cce411"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="../../_static/togglebutton.js"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown, .tag_hide_input div.cell_input, .tag_hide-input div.cell_input, .tag_hide_output div.cell_output, .tag_hide-output div.cell_output, .tag_hide_cell.cell, .tag_hide-cell.cell';</script>
+    <script src="../../_static/design-tabs.js"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"
+const thebe_selector = ".thebe,.cell"
+const thebe_selector_input = "pre"
+const thebe_selector_output = ".output, .cell_output"
+</script>
+    <script async="async" src="../../_static/sphinx-thebe.js"></script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
+    <link rel="index" title="Index" href="../../genindex.html" />
+    <link rel="search" title="Search" href="../../search.html" />
+    <link rel="next" title="Two Point Boundary Value Problems" href="boundary-value-problems.html" />
+    <link rel="prev" title="Basic Methods for ODEs" href="ODEs-partI.html" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="docsearch:language" content="None">
+    
+
+    <!-- Google Analytics -->
+    
+  </head>
+  <body data-spy="scroll" data-target="#bd-toc-nav" data-offset="60">
+<!-- Checkboxes to toggle the left sidebar -->
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation" aria-label="Toggle navigation sidebar">
+<label class="overlay overlay-navbar" for="__navigation">
+    <div class="visually-hidden">Toggle navigation sidebar</div>
+</label>
+<!-- Checkboxes to toggle the in-page toc -->
+<input type="checkbox" class="sidebar-toggle" name="__page-toc" id="__page-toc" aria-label="Toggle in-page Table of Contents">
+<label class="overlay overlay-pagetoc" for="__page-toc">
+    <div class="visually-hidden">Toggle in-page Table of Contents</div>
+</label>
+<!-- Headers at the top -->
+<div class="announcement header-item noprint"></div>
+<div class="header header-item noprint"></div>
+
+    
+    <div class="container-fluid" id="banner"></div>
+
+    
+
+    <div class="container-xl">
+      <div class="row">
+          
+<!-- Sidebar -->
+<div class="bd-sidebar noprint" id="site-navigation">
+    <div class="bd-sidebar__content">
+        <div class="bd-sidebar__top"><div class="navbar-brand-box">
+    <a class="navbar-brand text-wrap" href="../../index.html">
+      
+        <!-- `logo` is deprecated in Sphinx 4.0, so remove this when we stop supporting 3 -->
+        
+      
+      
+      <img src="../../_static/rt_small.png" class="logo" alt="logo">
+      
+      
+      <h1 class="site-logo" id="site-title">Tutorial on Computational Astrophysics</h1>
+      
+    </a>
+</div><form class="bd-search d-flex align-items-center" action="../../search.html" method="get">
+  <i class="icon fas fa-search"></i>
+  <input type="search" class="form-control" name="q" id="search-input" placeholder="Search this book..." aria-label="Search this book..." autocomplete="off" >
+</form><nav class="bd-links" id="bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="../../intro.html">
+                    Introduction
+                </a>
+            </li>
+        </ul>
+        <p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Basics
+ </span>
+</p>
+<ul class="current nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../floating-point/floating-point.html">
+   Floating Point and Numerical Error
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" type="checkbox"/>
+  <label for="toctree-checkbox-1">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../floating-point/numerical_error.html">
+     Numerical Errors: Roundoff and Truncation
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../diff-int/diff-int.html">
+   Differentiation and Integration
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" type="checkbox"/>
+  <label for="toctree-checkbox-2">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../diff-int/differentiation.html">
+     Differentiation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../diff-int/integration.html">
+     Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../diff-int/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../roots/root-finding.html">
+   Root finding
+  </a>
+ </li>
+ <li class="toctree-l1 current active has-children">
+  <a class="reference internal" href="ODEs.html">
+   Ordinary Differential Equations
+  </a>
+  <input checked="" class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" type="checkbox"/>
+  <label for="toctree-checkbox-3">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul class="current">
+   <li class="toctree-l2">
+    <a class="reference internal" href="ODEs-partI.html">
+     Basic Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2 current active">
+    <a class="current reference internal" href="#">
+     Higher-order Accurate ODE Integration
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="boundary-value-problems.html">
+     Two Point Boundary Value Problems
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../linear-algebra/la-overview.html">
+   Linear Algebra
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" type="checkbox"/>
+  <label for="toctree-checkbox-4">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../linear-algebra/la-basics.html">
+     Linear Algebra
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Advection and Hydrodynamics
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/advection/advection.html">
+   Linear Advection Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" type="checkbox"/>
+  <label for="toctree-checkbox-5">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partI.html">
+     Linear Advection
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partII.html">
+     Finite-Volumes
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/advection/advection-partIII.html">
+     Second-order advection
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/burgers/burgers.html">
+   Burgers’ Equation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" type="checkbox"/>
+  <label for="toctree-checkbox-6">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/burgers/burgers-methods.html">
+     Burgers’ equation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/burgers/exercises.html">
+     Exercises
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../advection_euler/euler/euler.html">
+   Euler Equations
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" type="checkbox"/>
+  <label for="toctree-checkbox-7">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-eigen.html">
+     Euler equations eigensystem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-riemann.html">
+     Euler Riemann problem
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-riemann-sampling.html">
+     Sampling the Riemann solution
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../advection_euler/euler/euler-solver.html">
+     Second-order Euler solver
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../advection_euler/projects/projects.html">
+   Practice Projects
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Elliptic Problems and Multigrid
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../elliptic_multigrid/intro/elliptic-problems.html">
+   Poisson problem
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/relaxation/relaxation.html">
+   Relaxation
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" type="checkbox"/>
+  <label for="toctree-checkbox-8">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-relaxation.html">
+     Relaxation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-residual.html">
+     Residual
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/relaxation/elliptic-modes.html">
+     Behavior of Single Modes
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid.html">
+   Multigrid
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" type="checkbox"/>
+  <label for="toctree-checkbox-9">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-restrict-prolong.html">
+     Restriction and Prolongation
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-two-grid.html">
+     Two Grid Correction
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../elliptic_multigrid/multigrid/multigrid-vcycles.html">
+     V-Cycles
+    </a>
+   </li>
+  </ul>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Stars
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/stars.html">
+   Stars
+  </a>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../stars/lane-emden.html">
+   Lane-Emden polytrope equation
+  </a>
+ </li>
+</ul>
+<p aria-level="2" class="caption" role="heading">
+ <span class="caption-text">
+  Integrating Stiff Reaction Networks
+ </span>
+</p>
+<ul class="nav bd-sidenav">
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/reactions.html">
+   Nuclear Reactions
+  </a>
+ </li>
+ <li class="toctree-l1 has-children">
+  <a class="reference internal" href="../../reaction_networks/stiff-ODEs.html">
+   Integrating Stiff ODEs
+  </a>
+  <input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" type="checkbox"/>
+  <label for="toctree-checkbox-10">
+   <i class="fas fa-chevron-down">
+   </i>
+  </label>
+  <ul>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit.html">
+     Implicit Methods for ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-systems.html">
+     Implicit Methods for Systems of ODEs
+    </a>
+   </li>
+   <li class="toctree-l2">
+    <a class="reference internal" href="../../reaction_networks/ODEs-implicit-nonlinear-systems.html">
+     Implicit Methods and Nonlinear Systems
+    </a>
+   </li>
+  </ul>
+ </li>
+ <li class="toctree-l1">
+  <a class="reference internal" href="../../reaction_networks/integration-example.html">
+   Integration Example
+  </a>
+ </li>
+</ul>
+
+    </div>
+</nav></div>
+        <div class="bd-sidebar__bottom">
+             <!-- To handle the deprecated key -->
+            
+            <div class="navbar_extra_footer">
+            Powered by <a href="https://jupyterbook.org">Jupyter Book</a>
+            </div>
+            
+        </div>
+    </div>
+    <div id="rtd-footer-container"></div>
+</div>
+
+
+          
+
+
+          
+<!-- A tiny helper pixel to detect if we've scrolled -->
+<div class="sbt-scroll-pixel-helper"></div>
+<!-- Main content -->
+<div class="col py-0 content-container">
+    
+    <div class="header-article row sticky-top noprint">
+        
+
+
+
+<div class="col py-1 d-flex header-article-main">
+    <div class="header-article__left">
+        
+        <label for="__navigation"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="right"
+title="Toggle navigation"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-bars"></i>
+  </span>
+
+</label>
+
+        
+    </div>
+    <div class="header-article__right">
+<div class="menu-dropdown menu-dropdown-launch-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Launch interactive content">
+      <i class="fas fa-rocket"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://mybinder.org/v2/gh/zingale/comp_astro_tutorial/main?urlpath=tree/content/basics/ODEs/ODEs-partII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Binder"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_binder.svg">
+  </span>
+<span class="headerbtn__text-container">Binder</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://colab.research.google.com/github/zingale/comp_astro_tutorial/blob/main/content/basics/ODEs/ODEs-partII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Launch on Colab"
+>
+  
+
+<span class="headerbtn__icon-container">
+  
+    <img src="../../_static/images/logo_colab.png">
+  </span>
+<span class="headerbtn__text-container">Colab</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<button onclick="toggleFullScreen()"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="bottom"
+title="Fullscreen mode"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+<div class="menu-dropdown menu-dropdown-repository-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Source repositories">
+      <i class="fab fa-github"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Source repository"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="headerbtn__text-container">repository</span>
+</a>
+
+      </li>
+      
+      <li>
+        <a href="https://github.com/zingale/comp_astro_tutorial/issues/new?title=Issue%20on%20page%20%2Fbasics/ODEs/ODEs-partII.html&body=Your%20issue%20content%20here."
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Open an issue"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="headerbtn__text-container">open issue</span>
+</a>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+
+<div class="menu-dropdown menu-dropdown-download-buttons">
+  <button class="headerbtn menu-dropdown__trigger"
+      aria-label="Download this page">
+      <i class="fas fa-download"></i>
+  </button>
+  <div class="menu-dropdown__content">
+    <ul>
+      <li>
+        <a href="../../_sources/basics/ODEs/ODEs-partII.ipynb"
+   class="headerbtn"
+   data-toggle="tooltip"
+data-placement="left"
+title="Download source file"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="headerbtn__text-container">.ipynb</span>
+</a>
+
+      </li>
+      
+      <li>
+        
+<button onclick="printPdf(this)"
+  class="headerbtn"
+  data-toggle="tooltip"
+data-placement="left"
+title="Print to PDF"
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="headerbtn__text-container">.pdf</span>
+</button>
+
+      </li>
+      
+    </ul>
+  </div>
+</div>
+<label for="__page-toc"
+  class="headerbtn headerbtn-page-toc"
+  
+>
+  
+
+<span class="headerbtn__icon-container">
+  <i class="fas fa-list"></i>
+  </span>
+
+</label>
+
+    </div>
+</div>
+
+<!-- Table of contents -->
+<div class="col-md-3 bd-toc show noprint">
+    <div class="tocsection onthispage pt-5 pb-3">
+        <i class="fas fa-list"></i> Contents
+    </div>
+    <nav id="bd-toc-nav" aria-label="Page">
+        <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nd-order-runge-kutta-midpoint-method">
+   2nd-order Runge Kutta / Midpoint method
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#th-order-runge-kutta">
+   4th-order Runge-Kutta
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#timestepping">
+   Timestepping
+  </a>
+ </li>
+</ul>
+
+    </nav>
+</div>
+    </div>
+    <div class="article row">
+        <div class="col pl-md-3 pl-lg-5 content-container">
+            <!-- Table of contents that is only displayed when printing the page -->
+            <div id="jb-print-docs-body" class="onlyprint">
+                <h1>Higher-order Accurate ODE Integration</h1>
+                <!-- Table of contents -->
+                <div id="print-main-content">
+                    <div id="jb-print-toc">
+                        
+                        <div>
+                            <h2> Contents </h2>
+                        </div>
+                        <nav aria-label="Page">
+                            <ul class="visible nav section-nav flex-column">
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#nd-order-runge-kutta-midpoint-method">
+   2nd-order Runge Kutta / Midpoint method
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#th-order-runge-kutta">
+   4th-order Runge-Kutta
+  </a>
+ </li>
+ <li class="toc-h2 nav-item toc-entry">
+  <a class="reference internal nav-link" href="#timestepping">
+   Timestepping
+  </a>
+ </li>
+</ul>
+
+                        </nav>
+                    </div>
+                </div>
+            </div>
+            <main id="main-content" role="main">
+                
+              <div>
+                
+  <div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">import</span> <span class="nn">matplotlib</span> <span class="k">as</span> <span class="nn">mpl</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.dpi&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="mi">100</span>
+<span class="n">mpl</span><span class="o">.</span><span class="n">rcParams</span><span class="p">[</span><span class="s1">&#39;figure.figsize&#39;</span><span class="p">]</span> <span class="o">=</span> <span class="p">(</span><span class="mi">10</span><span class="p">,</span> <span class="mi">8</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section class="tex2jax_ignore mathjax_ignore" id="higher-order-accurate-ode-integration">
+<h1>Higher-order Accurate ODE Integration<a class="headerlink" href="#higher-order-accurate-ode-integration" title="Permalink to this headline">#</a></h1>
+<p>We’ll continue to work on the orbit problem, so let’s define our RHS.</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">G</span> <span class="o">=</span> <span class="mi">4</span><span class="o">*</span><span class="n">np</span><span class="o">.</span><span class="n">pi</span><span class="o">**</span><span class="mi">2</span>
+<span class="n">M_sun</span> <span class="o">=</span> <span class="mf">1.0</span>
+
+<span class="k">def</span> <span class="nf">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+    
+    <span class="c1"># unpack just to make things easier to read</span>
+    <span class="n">x</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">vx</span><span class="p">,</span> <span class="n">vy</span> <span class="o">=</span> <span class="n">Y</span>
+    
+    <span class="n">xdot</span> <span class="o">=</span> <span class="n">vx</span>
+    <span class="n">ydot</span> <span class="o">=</span> <span class="n">vy</span>
+    
+    <span class="n">r</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span> <span class="o">*</span> <span class="n">x</span> <span class="o">+</span> <span class="n">y</span> <span class="o">*</span> <span class="n">y</span><span class="p">)</span>
+    
+    <span class="n">vxdot</span> <span class="o">=</span> <span class="o">-</span><span class="n">G</span> <span class="o">*</span> <span class="n">M_sun</span> <span class="o">*</span> <span class="n">x</span> <span class="o">/</span> <span class="n">r</span><span class="o">**</span><span class="mi">3</span>
+    <span class="n">vydot</span> <span class="o">=</span> <span class="o">-</span><span class="n">G</span> <span class="o">*</span> <span class="n">M_sun</span> <span class="o">*</span> <span class="n">y</span> <span class="o">/</span> <span class="n">r</span><span class="o">**</span><span class="mi">3</span>
+    
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">xdot</span><span class="p">,</span> <span class="n">ydot</span><span class="p">,</span> <span class="n">vxdot</span><span class="p">,</span> <span class="n">vydot</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>We’ll also define our <code class="docutils literal notranslate"><span class="pre">OrbitHistory</span></code> class again, this time adding a method to return the error we explored previously, and to mae a plot.</p>
+<div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">class</span> <span class="nc">OrbitHistory</span><span class="p">:</span>
+<span class="w">    </span><span class="sd">&quot;&quot;&quot;store the time history of the orbit solution&quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="fm">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vx</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vy</span> <span class="o">=</span> <span class="p">[]</span>
+        
+    <span class="k">def</span> <span class="nf">store_current_solution</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">t</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">t</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">1</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vx</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">2</span><span class="p">])</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">vy</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">Y</span><span class="p">[</span><span class="mi">3</span><span class="p">])</span>
+        
+    <span class="k">def</span> <span class="nf">error_radius</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;return the difference in the distance from the Sun&quot;&quot;&quot;</span>
+        <span class="n">R_orig</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">R_new</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">abs</span><span class="p">(</span><span class="n">R_new</span> <span class="o">-</span> <span class="n">R_orig</span><span class="p">)</span>        
+
+    <span class="k">def</span> <span class="nf">error_position</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;return the difference in the distance from the Sun&quot;&quot;&quot;</span>
+        <span class="n">dx</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="n">dy</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="o">-</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]</span>
+        <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">dx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">dy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">plot</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">ax</span><span class="o">=</span><span class="kc">None</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="kc">None</span><span class="p">):</span>
+<span class="w">        </span><span class="sd">&quot;&quot;&quot;make a plot of the solution.  If ax is None we setup a figure</span>
+<span class="sd">        and make the entire plot returning the figure object, otherwise, we</span>
+<span class="sd">        just append the plot to a current axis&quot;&quot;&quot;</span>
+
+        <span class="n">fig</span> <span class="o">=</span> <span class="kc">None</span>
+        
+        <span class="k">if</span> <span class="n">ax</span> <span class="ow">is</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+            <span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+            <span class="c1"># draw the Sun</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">scatter</span><span class="p">([</span><span class="mi">0</span><span class="p">],</span> <span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">marker</span><span class="o">=</span><span class="p">(</span><span class="mi">20</span><span class="p">,</span><span class="mi">1</span><span class="p">),</span> <span class="n">color</span><span class="o">=</span><span class="s2">&quot;y&quot;</span><span class="p">,</span> <span class="n">s</span><span class="o">=</span><span class="mi">250</span><span class="p">)</span>
+
+        <span class="c1"># draw the orbit</span>
+        <span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">x</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="n">label</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="n">fig</span> <span class="ow">is</span> <span class="ow">not</span> <span class="kc">None</span><span class="p">:</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_aspect</span><span class="p">(</span><span class="s2">&quot;equal&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_xlabel</span><span class="p">(</span><span class="s2">&quot;x [AU]&quot;</span><span class="p">)</span>
+            <span class="n">ax</span><span class="o">.</span><span class="n">set_ylabel</span><span class="p">(</span><span class="s2">&quot;y [AU]&quot;</span><span class="p">)</span>
+            
+            <span class="k">return</span> <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span>
+</pre></div>
+</div>
+</div>
+</div>
+<section id="nd-order-runge-kutta-midpoint-method">
+<h2>2nd-order Runge Kutta / Midpoint method<a class="headerlink" href="#nd-order-runge-kutta-midpoint-method" title="Permalink to this headline">#</a></h2>
+<p>The Euler method was based on a first-order difference approximation to the derivative.  But we know that a centered-derivative is second order accurate, so we can try to update our system in the form:</p>
+<div class="math notranslate nohighlight">
+\[\frac{{\bf r}^{n+1} - {\bf r}^n}{\tau} = {\bf v}^{n+1/2} + \mathcal{O}(\tau^2)\]</div>
+<div class="math notranslate nohighlight">
+\[\frac{{\bf v}^{n+1} - {\bf v}^n}{\tau} = {\bf a}^{n+1/2} + \mathcal{O}(\tau^2)\]</div>
+<p>Then the updates are:</p>
+<div class="math notranslate nohighlight">
+\[{\bf r}^{n+1} = {\bf r}^n + \tau \, {\bf v}^{n+1/2} + \mathcal{O}(\tau^3)\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf v}^{n+1} = {\bf v}^n + \tau \, {\bf a}^{n+1/2} + \mathcal{O}(\tau^3)\]</div>
+<p>This is locally third-order accurate (but globally second-order accurate), but we don’t know how to compute the state at the half-time.</p>
+<p>To find the <span class="math notranslate nohighlight">\(n+1/2\)</span> state, we first use Euler’s method to predict the state at the midpoint in time.  We then use this provisional state to evaluate the accelerations at the midpoint and use those to update the state fully through <span class="math notranslate nohighlight">\(\tau\)</span>.</p>
+<p>The two step process appears as:</p>
+<div class="math notranslate nohighlight">
+\[{\bf r}^\star = {\bf r}^n + (\tau / 2) {\bf v}^n\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf v}^\star = {\bf v}^n + (\tau / 2) {\bf a}^n\]</div>
+<p>then we use this for the full update:</p>
+<div class="math notranslate nohighlight">
+\[{\bf r}^{n+1} = {\bf r}^n + \tau \,  {\bf v}^\star\]</div>
+<div class="math notranslate nohighlight">
+\[{\bf v}^{n+1} = {\bf v}^n + \tau \, {\bf a}({\bf r}^\star)\]</div>
+<p>Graphically this looks like the following:</p>
+<p>First we take a half step and we evaluate the slope at the midpoint:</p>
+<p><img alt="RK2 half step" src="../../_images/rk2_halfEuler.png" /></p>
+<p>Then we go back to <span class="math notranslate nohighlight">\(t^n\)</span> but follow the slope we found above all the way to <span class="math notranslate nohighlight">\(t^{n+1}\)</span>:</p>
+<p><img alt="RK2 final" src="../../_images/rk2_final.png" /></p>
+<p>Notice how the final step (the red line) is parallel to the slope we computed at <span class="math notranslate nohighlight">\(t^{n+1/2}\)</span>.  Also note that the solution at <span class="math notranslate nohighlight">\(t^{n+1}\)</span> is much closer to the analytic solution than in the figure from Euler’s method.</p>
+<p>Let’s see how this method does with the orbit problem.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euler_rk2</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+
+    <span class="c1"># we&#39;ll return an orbit history object</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">OrbitHistory</span><span class="p">()</span>
+    
+    <span class="c1"># storage for the new solution</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">Y0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="c1"># initialize time</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># store the initial conditions</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">store_current_solution</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y0</span><span class="p">)</span>
+    
+    <span class="c1"># main timestep loop</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">:</span>
+        
+        <span class="c1"># make sure that the last step does not take us past T</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">:</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">t</span>
+
+        <span class="c1"># get the RHS</span>
+        <span class="n">Ydot</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+    
+        <span class="c1"># predict the state at the midpoint</span>
+        <span class="n">Ytmp</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">Ydot</span>
+        
+        <span class="c1"># evaluate the RHS at the midpoint</span>
+        <span class="n">Ydot</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">tau</span><span class="p">,</span> <span class="n">Ytmp</span><span class="p">)</span>
+        
+        <span class="c1"># do the final update</span>
+        <span class="n">Y</span> <span class="o">+=</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">Ydot</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">tau</span>
+        
+        <span class="c1"># store the state</span>
+        <span class="n">o</span><span class="o">.</span><span class="n">store_current_solution</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">o</span>
+ 
+</pre></div>
+</div>
+</div>
+</div>
+<p>Setup our initial conditions as before with Earth on the +y axis and a counterclockwise circular velocity.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">initial_conditions</span><span class="p">():</span>
+    <span class="n">x0</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">y0</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">vx0</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G</span><span class="o">*</span><span class="n">M_sun</span><span class="o">/</span><span class="n">y0</span><span class="p">)</span>
+    <span class="n">vy0</span> <span class="o">=</span> <span class="mi">0</span>
+
+    <span class="k">return</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">vx0</span><span class="p">,</span> <span class="n">vy0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Integrate our orbit.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">T</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">tau</span> <span class="o">=</span> <span class="n">T</span><span class="o">/</span><span class="mf">12.0</span>
+
+<span class="n">Y0</span> <span class="o">=</span> <span class="n">initial_conditions</span><span class="p">()</span>
+
+<span class="n">orbit</span> <span class="o">=</span> <span class="n">euler_rk2</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+</div>
+<p>Let’s plot our orbit</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">fig</span> <span class="o">=</span> <span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<img alt="../../_images/ODEs-partII_16_0.png" src="../../_images/ODEs-partII_16_0.png" />
+</div>
+</div>
+<p>This is substantially better than the first-order Euler method.  Now let’s look at a range of timesteps.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">taus</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">taus</span><span class="p">):</span>
+    <span class="n">orbit</span> <span class="o">=</span> <span class="n">euler_rk2</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">&quot;$\tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">&quot;$\tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+        
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa52b9122c0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/ODEs-partII_18_1.png" src="../../_images/ODEs-partII_18_1.png" />
+</div>
+</div>
+<p>and how does the error converge?</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="mf">0.00625</span><span class="p">]:</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">euler_rk2</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">8.5f</span><span class="si">}</span><span class="s2">, error = </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">error_radius</span><span class="p">()</span><span class="si">:</span><span class="s2">10.5g</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">error_position</span><span class="p">()</span><span class="si">:</span><span class="s2">10.5g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tau =  0.10000, error =     0.0116     1.0856
+tau =  0.05000, error =   0.011123    0.35694
+tau =  0.02500, error =  0.0024709   0.096669
+tau =  0.01250, error = 0.00036069   0.023906
+tau =  0.00625, error = 4.6926e-05  0.0058463
+</pre></div>
+</div>
+</div>
+</div>
+<p>Notice that once we get past the first, very coarse <span class="math notranslate nohighlight">\(\tau\)</span>, the errors seem to decrease by a factor of 4 when we halve the timestep—as we’d expect for a 2nd order accurate method. (Actually, it looks like the measure of radius converges better than position).</p>
+</section>
+<section id="th-order-runge-kutta">
+<h2>4th-order Runge-Kutta<a class="headerlink" href="#th-order-runge-kutta" title="Permalink to this headline">#</a></h2>
+<p>Now we consider a 4th order accurate method—4th order Runge-Kutta (RK4).  For many problems, this method will work very well and as a result, RK4 is widely used.</p>
+<p>We’ll consider a general system of first order differential equations:</p>
+<div class="math notranslate nohighlight">
+\[\dot{\bf y} = {\bf f}({\bf y})\]</div>
+<p>The advance begins by estimating the derivatives (righthand side or slope) at time <span class="math notranslate nohighlight">\(t^n\)</span>.  We’ll call this <span class="math notranslate nohighlight">\({\bf k}_1\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[{\bf k}_1 = {\bf f}(t^n, {\bf y}^n)\]</div>
+<p><img alt="4th order Runge-Kutta k1" src="../../_images/rk4_k1.png" /></p>
+<p>We then follow the slope <span class="math notranslate nohighlight">\({\bf k}_1\)</span> to the midpoint in time, <span class="math notranslate nohighlight">\(t^{n+1/2}\)</span> and evaluate the slope there.  We call the new slope <span class="math notranslate nohighlight">\({\bf k}_2\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[{\bf k}_2 = {\bf f}(t^n + \tau/2, {\bf y}^n + (\tau/2) {\bf k}_1)\]</div>
+<p><img alt="4th order Runge-Kutta k2" src="../../_images/rk4_k2.png" /></p>
+<p>We then go back to the start, but this time follow the new slope,
+<span class="math notranslate nohighlight">\({\bf k}_2\)</span> to the midpoint in time, <span class="math notranslate nohighlight">\(t^{n+1/2}\)</span>.  We again evaluate the slope here, and call it <span class="math notranslate nohighlight">\({\bf k}_3\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[{\bf k}_3 = {\bf f}(t^n + \tau/2, {\bf y}^n + (\tau/2) {\bf k}_2)\]</div>
+<p><img alt="4th order Runge-Kutta k3" src="../../_images/rk4_k3.png" /></p>
+<p>Finally, we go back to the start and follow <span class="math notranslate nohighlight">\({\bf k}_3\)</span> for the full
+timestep, to <span class="math notranslate nohighlight">\(t^{n+1}\)</span> and evaluate the slope there, calling it <span class="math notranslate nohighlight">\({\bf k}_4\)</span>.</p>
+<div class="math notranslate nohighlight">
+\[{\bf k}_4 = {\bf f}(t^n + \tau, {\bf y}^n + \tau {\bf k}_3)\]</div>
+<p><img alt="4th order Runge-Kutta k4" src="../../_images/rk4_k4.png" /></p>
+<p>We then get the updated solution using a linear combination of the 4 slopes:</p>
+<div class="math notranslate nohighlight">
+\[{\bf y}^{n+1} = {\bf y}^n + \frac{\tau}{6} ({\bf k}_1 + 2 {\bf k}_2 + 2 {\bf k}_3 + {\bf k}_4)\]</div>
+<p><img alt="4th order Runge-Kutta final" src="../../_images/rk4_final.png" /></p>
+<p>Note the similarity of RK4 to Simpson’s rule for integration.</p>
+<div class="alert alert-block alert-info">
+<p><strong>Exercise:</strong></p>
+<p>Implement RK4 as described above and use it to evolve the orbit problem and measure the convergence.</p>
+</div><div class="cell tag_hide-cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">def</span> <span class="nf">euler_rk4</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="n">T</span><span class="p">):</span>
+
+    <span class="c1"># we&#39;ll return an orbit history object</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">OrbitHistory</span><span class="p">()</span>
+    
+    <span class="c1"># storage for the new solution</span>
+    <span class="n">Y</span> <span class="o">=</span> <span class="n">Y0</span><span class="o">.</span><span class="n">copy</span><span class="p">()</span>
+    
+    <span class="c1"># initialize time</span>
+    <span class="n">t</span> <span class="o">=</span> <span class="mi">0</span>
+    
+    <span class="c1"># store the initial conditions</span>
+    <span class="n">o</span><span class="o">.</span><span class="n">store_current_solution</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y0</span><span class="p">)</span>
+    
+    <span class="c1"># main timestep loop</span>
+    <span class="k">while</span> <span class="n">t</span> <span class="o">&lt;</span> <span class="n">T</span><span class="p">:</span>
+        
+        <span class="c1"># make sure that the last step does not take us past T</span>
+        <span class="k">if</span> <span class="n">t</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">&gt;</span> <span class="n">T</span><span class="p">:</span>
+            <span class="n">tau</span> <span class="o">=</span> <span class="n">T</span> <span class="o">-</span> <span class="n">t</span>
+
+        <span class="c1"># get the RHS</span>
+        <span class="n">k1</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+         
+        <span class="n">Ytmp</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">k1</span>
+        <span class="n">k2</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">tau</span><span class="p">,</span> <span class="n">Ytmp</span><span class="p">)</span>
+        
+        <span class="n">Ytmp</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="mf">0.5</span> <span class="o">*</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">k2</span>
+        <span class="n">k3</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="mf">0.5</span><span class="o">*</span><span class="n">tau</span><span class="p">,</span> <span class="n">Ytmp</span><span class="p">)</span>
+        
+        <span class="n">Ytmp</span> <span class="o">=</span> <span class="n">Y</span> <span class="o">+</span> <span class="n">tau</span> <span class="o">*</span> <span class="n">k3</span>
+        <span class="n">k4</span> <span class="o">=</span> <span class="n">rhs</span><span class="p">(</span><span class="n">t</span> <span class="o">+</span> <span class="n">tau</span><span class="p">,</span> <span class="n">Ytmp</span><span class="p">)</span>
+        
+        <span class="c1"># do the final update</span>
+        <span class="n">Y</span> <span class="o">+=</span> <span class="n">tau</span> <span class="o">/</span> <span class="mf">6.0</span> <span class="o">*</span> <span class="p">(</span><span class="n">k1</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">k2</span> <span class="o">+</span> <span class="mi">2</span><span class="o">*</span><span class="n">k3</span> <span class="o">+</span> <span class="n">k4</span><span class="p">)</span>
+        <span class="n">t</span> <span class="o">+=</span> <span class="n">tau</span>
+        
+        <span class="c1"># store the state</span>
+        <span class="n">o</span><span class="o">.</span><span class="n">store_current_solution</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">Y</span><span class="p">)</span>
+        
+    <span class="k">return</span> <span class="n">o</span>
+
+<span class="n">Y0</span> <span class="o">=</span> <span class="n">initial_conditions</span><span class="p">()</span>
+
+<span class="n">tau</span> <span class="o">=</span> <span class="mf">1.0</span><span class="o">/</span><span class="mf">12.0</span>
+
+<span class="n">orbit</span> <span class="o">=</span> <span class="n">euler_rk4</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1000x800 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x [AU]&#39;, ylabel=&#39;y [AU]&#39;&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/ODEs-partII_26_1.png" src="../../_images/ODEs-partII_26_1.png" />
+</div>
+</div>
+<p>We can look at the convergence of RK4</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">taus</span> <span class="o">=</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">]</span>
+
+<span class="k">for</span> <span class="n">n</span><span class="p">,</span> <span class="n">tau</span> <span class="ow">in</span> <span class="nb">enumerate</span><span class="p">(</span><span class="n">taus</span><span class="p">):</span>
+    <span class="n">orbit</span> <span class="o">=</span> <span class="n">euler_rk4</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    
+    <span class="k">if</span> <span class="n">n</span> <span class="o">==</span> <span class="mi">0</span><span class="p">:</span>
+        <span class="n">fig</span><span class="p">,</span> <span class="n">ax</span> <span class="o">=</span> <span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">&quot;$\tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+    <span class="k">else</span><span class="p">:</span>
+        <span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">ax</span><span class="o">=</span><span class="n">ax</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="sa">rf</span><span class="s2">&quot;$\tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">6.4f</span><span class="si">}</span><span class="s2">$&quot;</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">legend</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>&lt;matplotlib.legend.Legend at 0x7fa52b8a7ee0&gt;
+</pre></div>
+</div>
+<img alt="../../_images/ODEs-partII_28_1.png" src="../../_images/ODEs-partII_28_1.png" />
+</div>
+</div>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="k">for</span> <span class="n">tau</span> <span class="ow">in</span> <span class="p">[</span><span class="mf">0.1</span><span class="p">,</span> <span class="mf">0.05</span><span class="p">,</span> <span class="mf">0.025</span><span class="p">,</span> <span class="mf">0.0125</span><span class="p">,</span> <span class="mf">0.00625</span><span class="p">]:</span>
+    <span class="n">o</span> <span class="o">=</span> <span class="n">euler_rk4</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;tau = </span><span class="si">{</span><span class="n">tau</span><span class="si">:</span><span class="s2">8.5f</span><span class="si">}</span><span class="s2">, error = </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">error_radius</span><span class="p">()</span><span class="si">:</span><span class="s2">10.5g</span><span class="si">}</span><span class="s2"> </span><span class="si">{</span><span class="n">o</span><span class="o">.</span><span class="n">error_position</span><span class="p">()</span><span class="si">:</span><span class="s2">10.5g</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>tau =  0.10000, error =   0.020244     0.1074
+tau =  0.05000, error = 0.00054733  0.0039053
+tau =  0.02500, error = 1.6779e-05 0.00016588
+tau =  0.01250, error = 5.2225e-07 7.9308e-06
+tau =  0.00625, error = 1.6305e-08 4.1917e-07
+</pre></div>
+</div>
+</div>
+</div>
+<p>This is clearly converging faster than 2nd order.  4th order means that as we cut the timestep in half, the error should go down by <span class="math notranslate nohighlight">\(2^4\)</span> or 16.</p>
+</section>
+<section id="timestepping">
+<h2>Timestepping<a class="headerlink" href="#timestepping" title="Permalink to this headline">#</a></h2>
+<p>In the above examples, we always kept the timestep <span class="math notranslate nohighlight">\(\tau\)</span> fixed, but in general, finding the solution to a system of ODEs might have portions in time where the solution is changing rapidly and a smaller <span class="math notranslate nohighlight">\(\tau\)</span> would be needed.  Likewise, is the solution is changing slowly, we can use a larger timestep.</p>
+<p>Most ODE libraries use some form of local error estimation to measure how the large the error is in the solution and adjust the timestep (up or down) to achieve a desired accuracy.</p>
+<p>To see why this might be needed, consider an elliptical orbit.</p>
+<p><img alt="elliptical orbit" src="../../_images/ellipse_initial_cond.png" /></p>
+<p>The initial conditions for a planet at perihelion (on the +y axis) are:</p>
+<div class="math notranslate nohighlight">
+\[x = 0\]</div>
+<div class="math notranslate nohighlight">
+\[y = a (1 - e)\]</div>
+<div class="math notranslate nohighlight">
+\[v_x = -\sqrt{\frac{GM_\star}{a} \frac{1+e}{1-e}}\]</div>
+<div class="math notranslate nohighlight">
+\[v_y = 0\]</div>
+<p>where <span class="math notranslate nohighlight">\(a\)</span> is the length of the semi-major axis and <span class="math notranslate nohighlight">\(0 \le e &lt; 1\)</span> is the eccentricity.  For an eccentric orbit, the velocity changes throughout the orbit, so when the planet is at perihelion, the solution is changing rapidly.</p>
+<div class="alert alert-block alert-info">
+<p><strong>Exercise:</strong></p>
+<p>Integrate an orbit with a large eccentricity (like <span class="math notranslate nohighlight">\(e = 0.8\)</span>).  Pick a timestep such that visually the orbit looks okay.  Now make a plot of the total energy per unit mass, <span class="math notranslate nohighlight">\(\mathcal{E}\)</span> vs time:</p>
+<div class="math notranslate nohighlight">
+\[\mathcal{E} = \frac{1}{2} |{\bf v}|^2 - \frac{GM_\star}{r}\]</div>
+<p>At what point in the orbit is the energy conservation the worst?</p>
+</div><div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">a</span> <span class="o">=</span> <span class="mf">1.0</span>
+<span class="n">e</span> <span class="o">=</span> <span class="mf">0.6</span>
+
+<span class="n">T</span> <span class="o">=</span> <span class="mi">1</span>
+<span class="n">x0</span> <span class="o">=</span> <span class="mi">0</span>
+<span class="n">y0</span> <span class="o">=</span> <span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="p">)</span>
+<span class="n">vx0</span> <span class="o">=</span> <span class="o">-</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">G</span><span class="o">*</span><span class="n">M_sun</span><span class="o">/</span><span class="n">a</span> <span class="o">*</span> <span class="p">(</span><span class="mi">1</span> <span class="o">+</span> <span class="n">e</span><span class="p">)</span><span class="o">/</span><span class="p">(</span><span class="mi">1</span> <span class="o">-</span> <span class="n">e</span><span class="p">))</span>
+<span class="n">vy0</span> <span class="o">=</span> <span class="mi">0</span>
+
+<span class="n">Y0</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">([</span><span class="n">x0</span><span class="p">,</span> <span class="n">y0</span><span class="p">,</span> <span class="n">vx0</span><span class="p">,</span> <span class="n">vy0</span><span class="p">])</span>
+
+<span class="n">tau</span> <span class="o">=</span> <span class="mf">0.025</span>
+
+<span class="n">orbit</span> <span class="o">=</span> <span class="n">euler_rk4</span><span class="p">(</span><span class="n">Y0</span><span class="p">,</span> <span class="n">tau</span><span class="p">,</span> <span class="mi">1</span><span class="p">)</span>
+
+<span class="n">orbit</span><span class="o">.</span><span class="n">plot</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>(&lt;Figure size 1000x800 with 1 Axes&gt;, &lt;Axes: xlabel=&#39;x [AU]&#39;, ylabel=&#39;y [AU]&#39;&gt;)
+</pre></div>
+</div>
+<img alt="../../_images/ODEs-partII_34_1.png" src="../../_images/ODEs-partII_34_1.png" />
+</div>
+</div>
+<p>We can compute the energy / unit mass now.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">x</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbit</span><span class="o">.</span><span class="n">x</span><span class="p">)</span>
+<span class="n">y</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbit</span><span class="o">.</span><span class="n">y</span><span class="p">)</span>
+<span class="n">vx</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbit</span><span class="o">.</span><span class="n">vx</span><span class="p">)</span>
+<span class="n">vy</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbit</span><span class="o">.</span><span class="n">vy</span><span class="p">)</span>
+<span class="n">t</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">(</span><span class="n">orbit</span><span class="o">.</span><span class="n">t</span><span class="p">)</span>
+
+<span class="n">E</span> <span class="o">=</span> <span class="mf">0.5</span><span class="o">*</span><span class="p">(</span><span class="n">vx</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">vy</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span> <span class="o">-</span> <span class="n">G</span><span class="o">*</span><span class="n">M_sun</span><span class="o">/</span><span class="n">np</span><span class="o">.</span><span class="n">sqrt</span><span class="p">(</span><span class="n">x</span><span class="o">**</span><span class="mi">2</span> <span class="o">+</span> <span class="n">y</span><span class="o">**</span><span class="mi">2</span><span class="p">)</span>
+
+<span class="n">fig</span> <span class="o">=</span> <span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">()</span>
+<span class="n">ax</span> <span class="o">=</span> <span class="n">fig</span><span class="o">.</span><span class="n">add_subplot</span><span class="p">(</span><span class="mi">111</span><span class="p">)</span>
+
+<span class="n">ax</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">t</span><span class="p">,</span> <span class="n">E</span><span class="o">/</span><span class="n">E</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output text_plain highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>[&lt;matplotlib.lines.Line2D at 0x7fa52b635210&gt;]
+</pre></div>
+</div>
+<img alt="../../_images/ODEs-partII_36_1.png" src="../../_images/ODEs-partII_36_1.png" />
+</div>
+</div>
+<p>Notice that the energy conservation is not good, and the conservation is worst at perihelion when the solution is changing fastest.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./basics/ODEs"
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+              </div>
+              
+            </main>
+            <footer class="footer-article noprint">
+                
+    <!-- Previous / next buttons -->
+<div class='prev-next-area'>
+    <a class='left-prev' id="prev-link" href="ODEs-partI.html" title="previous page">
+        <i class="fas fa-angle-left"></i>
+        <div class="prev-next-info">
+            <p class="prev-next-subtitle">previous</p>
+            <p class="prev-next-title">Basic Methods for ODEs</p>
+        </div>
+    </a>
+    <a class='right-next' id="next-link" href="boundary-value-problems.html" title="next page">
+    <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title">Two Point Boundary Value Problems</p>
+    </div>
+    <i class="fas fa-angle-right"></i>
+    </a>
+</div>
+            </footer>
+        </div>
+    </div>
+    <div class="footer-content row">
+        <footer class="col footer"><p>
+  
+    By <a href="https://zingale.github.io">Michael Zingale</a><br/>
+  
+    <div class="extra_footer">
+      <p>
+&copy; 2021-2022; CC-BY-NC-SA 4.0
+<p>
+
+    </div>
+</p>
+        </footer>
+    </div>
+    
+</div>
+
+
+      </div>
+    </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="../../_static/scripts/pydata-sphinx-theme.js?digest=1999514e3f237ded88cf"></script>
+
+
+  </body>
+</html>
